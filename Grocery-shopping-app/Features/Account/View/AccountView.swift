@@ -1,5 +1,5 @@
 //
-//  SignupView.swift
+//  AccountView.swift
 //  Grocery-shopping-app
 //
 //  Created by tanmaydeep on 04/02/26.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct SignupView: View {
+struct AccountView: View {
     var body: some View {
-        Text("Signup")
+        Text("Accounts")
     }
 }
 
 #Preview {
-    SignupView()
+    AccountView()
 }

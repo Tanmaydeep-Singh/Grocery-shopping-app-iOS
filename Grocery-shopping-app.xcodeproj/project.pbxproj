@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		144EE8C92F3311E20030FBCA /* Grocery-shopping-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grocery-shopping-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		144EE8C92F3311E20030FBCA /* Nectar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nectar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,7 +40,7 @@
 		144EE8CA2F3311E20030FBCA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				144EE8C92F3311E20030FBCA /* Grocery-shopping-app.app */,
+				144EE8C92F3311E20030FBCA /* Nectar.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		144EE8C82F3311E20030FBCA /* Grocery-shopping-app */ = {
+		144EE8C82F3311E20030FBCA /* Nectar */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 144EE8D42F3311E40030FBCA /* Build configuration list for PBXNativeTarget "Grocery-shopping-app" */;
+			buildConfigurationList = 144EE8D42F3311E40030FBCA /* Build configuration list for PBXNativeTarget "Nectar" */;
 			buildPhases = (
 				144EE8C52F3311E20030FBCA /* Sources */,
 				144EE8C62F3311E20030FBCA /* Frameworks */,
@@ -63,11 +63,11 @@
 			fileSystemSynchronizedGroups = (
 				144EE8CB2F3311E20030FBCA /* Grocery-shopping-app */,
 			);
-			name = "Grocery-shopping-app";
+			name = Nectar;
 			packageProductDependencies = (
 			);
 			productName = "Grocery-shopping-app";
-			productReference = 144EE8C92F3311E20030FBCA /* Grocery-shopping-app.app */;
+			productReference = 144EE8C92F3311E20030FBCA /* Nectar.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -99,7 +99,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				144EE8C82F3311E20030FBCA /* Grocery-shopping-app */,
+				144EE8C82F3311E20030FBCA /* Nectar */,
 			);
 		};
 /* End PBXProject section */
@@ -256,6 +256,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -287,6 +288,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -318,7 +320,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		144EE8D42F3311E40030FBCA /* Build configuration list for PBXNativeTarget "Grocery-shopping-app" */ = {
+		144EE8D42F3311E40030FBCA /* Build configuration list for PBXNativeTarget "Nectar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				144EE8D52F3311E40030FBCA /* Debug */,

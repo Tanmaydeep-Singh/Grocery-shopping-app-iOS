@@ -9,6 +9,9 @@ import SwiftUI
 import SwiftUI
 
 struct LoginView: View {
+    
+    @Binding var path: NavigationPath
+    @Binding var isLoggedIn: Bool
 
     @State private var email = ""
     @State private var password = ""
@@ -70,7 +73,7 @@ struct LoginView: View {
                 }
 
                 Button {
-                    // Login Logic
+                    isLoggedIn = true
                 } label: {
                     Text("Log In")
                         .font(.system(size: 18, weight: .semibold))
@@ -85,9 +88,13 @@ struct LoginView: View {
                 HStack {
                     Text("Don’t have an account?")
                         .font(.system(size: 14, weight: .semibold))
-                    Text("Signup")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color("Splash"))
+                    Button{
+                        path.append(OnboardingRoutes.signup)
+                    } label: {
+                        Text("Signup")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(Color("Splash"))
+                    }
                 }
             }
             .padding(25)
@@ -108,5 +115,7 @@ struct LoginView: View {
     }
 }
 #Preview {
-    LoginView()
+    @Previewable @State var isLoggedIn = false
+    
+    LoginView( path: .constant(NavigationPath()), isLoggedIn: $isLoggedIn )
 }

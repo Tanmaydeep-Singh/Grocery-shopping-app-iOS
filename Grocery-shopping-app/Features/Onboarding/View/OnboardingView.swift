@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    
+    @Binding var path: NavigationPath
 
     var body: some View {
         ZStack {
@@ -49,7 +51,7 @@ struct OnboardingView: View {
                 Spacer().frame(height: 24)
 
                 Button {
-                    // Navigate to next screen
+                    path.append(OnboardingRoutes.socialLogin)
                 } label: {
                     Text("Get Started")
                         .font(.system(size: 15))
@@ -68,5 +70,5 @@ struct OnboardingView: View {
 }
 
 #Preview {
-    OnboardingView()
+    OnboardingView(path: .constant(NavigationPath()))
 }

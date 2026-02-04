@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct SocialLoginView: View {
+    
+    @Binding var path: NavigationPath
+    
     var body: some View {
         VStack {
             
@@ -21,15 +24,12 @@ struct SocialLoginView: View {
             
             VStack( alignment: .leading, spacing: 20) {
                 Text("Get your groceries \n with nectar")
-                    .font(.title)
-                    .lineLimit(2)
-                    .bold()
-                    .foregroundColor(.primary)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                
+                    .font(.system(size: 26, weight: .semibold))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                                
                 Button {
-                    // Navigate to next screen
+                    path.append(OnboardingRoutes.login)
                 } label: {
                     Text("Login with Number")
                         .font(.system(size: 15))
@@ -39,7 +39,7 @@ struct SocialLoginView: View {
                 }
                 .background(Color("Splash"))
                 .cornerRadius(12)
-                .padding(.horizontal, 24)
+                .padding(.vertical, 10)
             }
             .padding(20)
             
@@ -48,9 +48,8 @@ struct SocialLoginView: View {
             VStack(alignment: .center, spacing: 20) {
                 
                 Text("Sign in with your social media account")
-                    .font(.subheadline)
+                    .font(.system(size: 16))
                     .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
                 
                 VStack(spacing: 16){
                     
@@ -65,7 +64,6 @@ struct SocialLoginView: View {
                     }
                     .background(Color("Splash"))
                     .cornerRadius(12)
-                    .padding(.horizontal, 24)
                     
                     Button {
                         // Navigate to next screen
@@ -78,7 +76,7 @@ struct SocialLoginView: View {
                     }
                     .background(Color("Splash"))
                     .cornerRadius(12)
-                    .padding(.horizontal, 24)
+                    .padding(.vertical , 10)
                 }.padding(.bottom,20)
             }
             .padding(16)
@@ -87,5 +85,5 @@ struct SocialLoginView: View {
 }
 
 #Preview {
-    SocialLoginView()
+    SocialLoginView(path: .constant(NavigationPath()))
 }

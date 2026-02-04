@@ -15,6 +15,8 @@ import SwiftUI
 
 struct SignupView: View {
 
+    @Binding var path: NavigationPath
+    
     @State private var username = ""
     @State private var email = ""
     @State private var password = ""
@@ -86,9 +88,14 @@ struct SignupView: View {
                 HStack {
                     Text("Already have an account?")
                         .font(.system(size: 14, weight: .semibold))
-                    Text("Login")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color("Splash"))
+                    Button{
+                        path.append(OnboardingRoutes.login)
+                    }
+                    label: {
+                        Text("Login")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(Color("Splash"))
+                    }
                 }
             }
             .padding(25)
@@ -109,5 +116,5 @@ struct SignupView: View {
     }
 }
 #Preview {
-    SignupView()
+    SignupView(path: .constant(NavigationPath()))
 }

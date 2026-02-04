@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var selectedTab: Tab = .home
 
     var body: some View {
+        
         TabView(selection: $selectedTab) {
 
             HomeView()
@@ -43,7 +44,7 @@ struct ContentView: View {
                     Label("Account", systemImage: "person.fill")
                 }
                 .tag(Tab.account)
-        }.tint(.green) 
+        }.tint(.green)
     }
 }
 

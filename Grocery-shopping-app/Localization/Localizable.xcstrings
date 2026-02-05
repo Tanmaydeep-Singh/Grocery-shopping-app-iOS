@@ -1,6 +1,105 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "email_placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your email"
+          }
+        }
+      }
+    },
+    "email_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email"
+          }
+        }
+      }
+    },
+    "forgot_password" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forgot Password?"
+          }
+        }
+      }
+    },
+    "login_button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log In"
+          }
+        }
+      }
+    },
+    "login_subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your Email and Password."
+          }
+        }
+      }
+    },
+    "login_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login"
+          }
+        }
+      }
+    },
+    "no_account_text" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Don’t have an account?"
+          }
+        }
+      }
+    },
+    "password_placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your password"
+          }
+        }
+      }
+    },
+    "password_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password"
+          }
+        }
+      }
+    },
     "select_location_subtitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -22,6 +121,9 @@
           }
         }
       }
+    },
+    "signup_button" : {
+      "extractionState" : "manual"
     },
     "your_area" : {
       "extractionState" : "manual",

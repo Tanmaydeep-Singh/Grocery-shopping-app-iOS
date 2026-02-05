@@ -27,11 +27,11 @@ struct LoginView: View {
                     .padding(.vertical, 30)
                 
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Login")
+                    Text("login_title")
                         .font(.system(size: 26, weight: .semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Text("Enter your Email and Password.")
+                    Text("login_subtitle.")
                         .font(.system(size: 16))
                         .foregroundColor(.secondary)
                 }
@@ -39,18 +39,18 @@ struct LoginView: View {
 
                 
                 VStack(spacing: 25) {
-                    customInputField(title: "Email", placeholder: "Enter your email", text: $email)
+                    customInputField(title: "email_title", placeholder: "email_placeholder", text: $email)
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Password")
+                        Text("password_title")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
                         
                         HStack {
                             if isPasswordVisible {
-                                TextField("Enter your password", text: $password)
+                                TextField("password_placeholder", text: $password)
                             } else {
-                                SecureField("Enter your password", text: $password)
+                                SecureField("password_placeholder", text: $password)
                             }
                             
                             Button {
@@ -65,7 +65,7 @@ struct LoginView: View {
                 }
                 
                 Button { } label: {
-                    Text("Forgot Password?")
+                    Text("forgot_password")
                         .font(.system(size: 14))
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .foregroundColor(.primary)
@@ -74,7 +74,7 @@ struct LoginView: View {
                 Button {
                     path.append(OnboardingRoutes.verification)
                 } label: {
-                    Text("Log In")
+                    Text("login_button")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -85,12 +85,12 @@ struct LoginView: View {
                 .padding(.top, 10)
                 
                 HStack {
-                    Text("Don’t have an account?")
+                    Text("no_account_text")
                         .font(.system(size: 14, weight: .semibold))
                     Button{
                         path.append(OnboardingRoutes.signup)
                     } label: {
-                        Text("Signup")
+                        Text("login_button")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(Color("Splash"))
                     }
@@ -113,6 +113,6 @@ struct LoginView: View {
         }
     }
 }
-#Preview {    
+#Preview {
     LoginView( path: .constant(NavigationPath()))
 }

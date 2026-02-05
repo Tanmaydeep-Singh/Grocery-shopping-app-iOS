@@ -6,6 +6,7 @@ final class HomeViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var products: [Product] = []
     @Published var currentBannerIndex: Int = 0
+    @Published var categories: [Category] = []
     
     let bannerImages: [String] = [
         "banner_1",
@@ -17,6 +18,7 @@ final class HomeViewModel: ObservableObject {
     
     init() {
         products = MockProducts.products
+        loadCategories()
     }
     
     private var timer: AnyCancellable?
@@ -40,6 +42,12 @@ final class HomeViewModel: ObservableObject {
         currentBannerIndex =
         (currentBannerIndex + 1) % bannerImages.count
     }
+    
+    private func loadCategories() {
+            categories = ProductCategory
+                .allCases
+                .map { $0.toCategory() }
+        }
     
     func products(for section: HomeSectionType) -> [Product] {
         switch section {

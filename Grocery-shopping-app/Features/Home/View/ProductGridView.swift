@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ProductGridView: View {
 
-    let title: String
+    let title: String?
     let products: [Product]
 
     private let rows = [
@@ -12,9 +12,12 @@ struct ProductGridView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
 
-            Text(title)
-                .font(.headline)
-                .padding(.horizontal)
+            if let title {
+                Text(title)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding(.horizontal)
+            }
 
             ScrollView(.horizontal, showsIndicators: false) {
 

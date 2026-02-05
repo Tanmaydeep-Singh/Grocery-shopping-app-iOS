@@ -18,5 +18,20 @@ enum ProductCategory: String, Codable, CaseIterable {
         case .coffee: return "Coffee"
         }
     }
+    
+    var imageName: String {
+           switch self {
+           case .freshProduce: return "pulses"
+           case .meatSeafood: return "meat"
+           case .breadBakery: return "bakery"
+           case .dairy: return "dairy"
+           case .candy: return "candy"
+           case .coffee: return "coffee"
+           }
+       }
+    
+    func toCategory() -> Category {
+          Category(title: title, imageName: imageName)
+      }
 }
 

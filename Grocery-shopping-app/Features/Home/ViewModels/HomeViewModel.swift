@@ -1,15 +1,45 @@
 import Foundation
 import Combine
+import SwiftUI
 
 final class HomeViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var products: [Product] = []
+    @Published var currentBannerIndex: Int = 0
+    
+    let bannerImages: [String] = [
+        "banner_1",
+        "banner_2",
+        "banner_3"
+    ]
     
     let sections: [HomeSectionType] = HomeSectionType.allCases
     
     init() {
         products = MockProducts.products
     }
+    
+    private var timer: AnyCancellable?
+    
+    func startBannerAutoScroll() {
+           timer = Timer
+               .publish(every: 3.5, on: .main, in: .common)
+               .autoconnect()
+               .sink { [weak self] _ in
+                   guard let self else { return }
+                   self.advanceBanner()
+               }
+       }
+
+       func stopBannerAutoScroll() {
+           timer?.cancel()
+           timer = nil
+       }
+    
+    private func advanceBanner() {
+           currentBannerIndex =
+           (currentBannerIndex + 1) % bannerImages.count
+       }
     
     func products(for section: HomeSectionType) -> [Product] {
         switch section {

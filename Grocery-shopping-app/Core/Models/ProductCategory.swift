@@ -1,7 +1,6 @@
 import Foundation
 
 enum ProductCategory: String, Codable, CaseIterable {
-
     case freshProduce = "fresh-produce"
     case meatSeafood = "meat-seafood"
     case breadBakery = "bread-bakery"

@@ -12,7 +12,11 @@ struct HomeView: View {
 
     var body: some View {
         ScrollView {
-            
+            VStack(spacing: 24) {
+                HomeHeaderView()
+                SearchBarView(text: $viewModel.searchText)
+                OfferBannerView(viewModel: viewModel)
+            }
         }
     }
 }

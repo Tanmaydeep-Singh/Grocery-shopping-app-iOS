@@ -17,12 +17,12 @@ struct VerificationScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             
-            Text("Enter your 4-digit code")
+            Text("verification_title")
                 .font(.system(size: 26, weight: .semibold))
                 .fixedSize(horizontal: false, vertical: true)
             
             VStack(alignment: .leading, spacing: 10) {
-                Text("Code")
+                Text("verification_subtitle")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
@@ -42,7 +42,7 @@ struct VerificationScreen: View {
             Spacer()
             
             HStack {
-                Text("Resend Code")
+                Text("verification_resend_code")
                     .font(.system(size: 18))
                     .foregroundColor(Color("Splash"))
                 

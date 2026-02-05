@@ -60,24 +60,21 @@ struct AccountView: View {
             
             
             // MARK: - Logout Button
-            Button(action: {
+
+            
+            PrimaryButton(
+                title: "Log Out",
+                icon: "arrow.backward.square",
+                textColor: .green,
+                backgroundColor: Color.green.opacity(0.12),
+                height: 56,
+                cornerRadius: 14
+            ) {
                 viewModel.logout()
-            }) {
-                HStack(spacing: 12) {
-                    Image(systemName: "arrow.backward.square")
-                    Text("Log Out")
-                        .fontWeight(.bold)
-                }
-                .foregroundColor(.green)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 14)
-                        .fill(Color.green.opacity(0.15))
-                )
             }
-            .buttonStyle(.plain)
-            .padding()
+            .padding(.horizontal, 18)
+            .padding(.bottom, 20)
+
 
         }
         .navigationTitle("Account")

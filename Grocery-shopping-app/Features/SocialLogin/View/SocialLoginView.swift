@@ -23,15 +23,20 @@ struct SocialLoginView: View {
             Spacer()
             
             VStack( alignment: .leading, spacing: 20) {
-                Text("Get your groceries \n with nectar")
-                    .font(.system(size: 26, weight: .semibold))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+            
+                VStack(alignment: .leading, spacing: 0) {
+                                   Text("social_login_title_line1")
+                                   Text("social_login_title_line2")
+                               }
+                               .font(.system(size: 26, weight: .semibold))
+                               .frame(maxWidth: .infinity, alignment: .leading)
+
                     
                                 
                 Button {
                     path.append(OnboardingRoutes.login)
                 } label: {
-                    Text("Login with Number")
+                    Text("social_login_button_phone")
                         .font(.system(size: 15))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -47,8 +52,8 @@ struct SocialLoginView: View {
 
             VStack(alignment: .center, spacing: 20) {
                 
-                Text("Sign in with your social media account")
-                    .font(.system(size: 16))
+                Text("social_login_subtitle")
+                    .font(.system(size: 14))
                     .foregroundColor(.secondary)
                 
                 VStack(spacing: 16){
@@ -56,7 +61,7 @@ struct SocialLoginView: View {
                     Button {
                         // Navigate to next screen
                     } label: {
-                        Text("signup with google")
+                        Text("social_login_button_google")
                             .font(.system(size: 15))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -68,7 +73,7 @@ struct SocialLoginView: View {
                     Button {
                         // Navigate to next screen
                     } label: {
-                        Text("signup with facebook")
+                        Text("social_login_button_facebook")
                             .font(.system(size: 15))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)

@@ -26,10 +26,10 @@ struct LocationView: View {
             
             
             VStack(spacing: 10) {
-                Text("select_location_title")
+                Text("location_title")
                     .font(.system(size: 26, weight: .semibold))
                     .frame(maxWidth: .infinity)
-                Text("select_location_subtitle")
+                Text("location_subtitle")
                     .font(.system(size: 16))
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -41,7 +41,7 @@ struct LocationView: View {
                     
                     
                     // Zone
-                                Text("your_zone")
+                                Text("location_zone")
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(.secondary)
                                 
@@ -65,7 +65,7 @@ struct LocationView: View {
                                 Divider()
                     
 //                    Area
-                    Text("your_area")
+                    Text("location_area")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(.secondary)
                     

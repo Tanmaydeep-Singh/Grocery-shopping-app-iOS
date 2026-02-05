@@ -39,18 +39,28 @@ struct LoginView: View {
 
                 
                 VStack(spacing: 25) {
-                    customInputField(title: "email_title", placeholder: "email_placeholder", text: $email)
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("password_title")
+                        Text("login_email_title")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.secondary)
+                        TextField("login_email_placeholder", text: $email)
+                            .keyboardType("login_email_title" == "Email" ? .emailAddress : .default)
+                            .autocapitalization(.none)
+                        Divider()
+                    }
+                   
+                    
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("login_password_title")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
                         
                         HStack {
                             if isPasswordVisible {
-                                TextField("password_placeholder", text: $password)
+                                TextField("login_password_placeholder", text: $password)
                             } else {
-                                SecureField("password_placeholder", text: $password)
+                                SecureField("login_password_placeholder", text: $password)
                             }
                             
                             Button {
@@ -65,7 +75,7 @@ struct LoginView: View {
                 }
                 
                 Button { } label: {
-                    Text("forgot_password")
+                    Text("login_forgot_password")
                         .font(.system(size: 14))
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .foregroundColor(.primary)
@@ -85,7 +95,7 @@ struct LoginView: View {
                 .padding(.top, 10)
                 
                 HStack {
-                    Text("no_account_text")
+                    Text("login_no_account_text")
                         .font(.system(size: 14, weight: .semibold))
                     Button{
                         path.append(OnboardingRoutes.signup)
@@ -100,18 +110,7 @@ struct LoginView: View {
         }
     }
     
-    @ViewBuilder
-    func customInputField(title: String, placeholder: String, text: Binding<String>) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(title)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.secondary)
-            TextField(placeholder, text: text)
-                .keyboardType(title == "Email" ? .emailAddress : .default)
-                .autocapitalization(.none)
-            Divider()
-        }
-    }
+    
 }
 #Preview {
     LoginView( path: .constant(NavigationPath()))

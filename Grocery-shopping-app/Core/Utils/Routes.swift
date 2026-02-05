@@ -11,4 +11,6 @@ enum OnboardingRoutes: Hashable {
     case socialLogin
     case login
     case signup
+    case verification
+    case location
 }

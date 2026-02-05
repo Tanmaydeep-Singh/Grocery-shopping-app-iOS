@@ -59,10 +59,15 @@ struct ContentView: View {
                                case .socialLogin:
                                    SocialLoginView(path: $path)
                                case .login:
-                                   LoginView(path: $path, isLoggedIn : $isLoggedIn)
+                                   LoginView(path: $path)
                                case .signup:
                                    SignupView(path: $path)
+                               case .verification:
+                                   VerificationScreen(path: $path)
+                               case .location:
+                                   LocationView(path: $path, isLoggedIn: $isLoggedIn)
                                }
+                           
                            }
                    }
         }

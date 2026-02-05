@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct VerificationScreen: View {
+    
+    @Binding var path: NavigationPath
 
     @State private var otpCode: String = ""
     @FocusState private var isKeyboardFocused: Bool
@@ -15,8 +17,6 @@ struct VerificationScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             
-           
-           
             Text("Enter your 4-digit code")
                 .font(.system(size: 26, weight: .semibold))
                 .fixedSize(horizontal: false, vertical: true)
@@ -49,7 +49,7 @@ struct VerificationScreen: View {
                 Spacer()
                 
                 Button {
-                    // Verification Logic
+                    path.append(OnboardingRoutes.location)
                 } label: {
                     Image(systemName: "chevron.right")
                         .foregroundColor(.white)
@@ -61,7 +61,6 @@ struct VerificationScreen: View {
             }
         }
         .padding(25)
-        .navigationBarBackButtonHidden(true)
         .onAppear {
             isKeyboardFocused = true
         }
@@ -69,5 +68,5 @@ struct VerificationScreen: View {
 }
 
 #Preview {
-    VerificationScreen()
+    VerificationScreen(path: .constant(NavigationPath()))
 }

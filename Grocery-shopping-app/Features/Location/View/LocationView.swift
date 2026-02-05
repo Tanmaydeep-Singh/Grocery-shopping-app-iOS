@@ -9,6 +9,8 @@ import SwiftUI
 
 struct LocationView: View {
     @Binding var path: NavigationPath
+    @Binding var isLoggedIn: Bool
+    
     @State private var selectedZone = "Banasree"
         let zones = ["Banasree", "Gulshan", "Dhanmondi"]
     
@@ -97,7 +99,7 @@ struct LocationView: View {
                         
                         
                         Button {
-                            // Navigate to next screen
+                            isLoggedIn.toggle()
                         } label: {
                             Text("Submit")
                                 .font(.system(size: 15))
@@ -116,6 +118,9 @@ struct LocationView: View {
     }
 }
 #Preview {
-    LocationView(path: .constant(NavigationPath()))
+    LocationView(path: .constant(NavigationPath()),
+                 isLoggedIn: .constant(false)
+    
+    )
 }
 

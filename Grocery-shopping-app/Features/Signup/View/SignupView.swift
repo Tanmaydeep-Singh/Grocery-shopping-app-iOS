@@ -67,15 +67,21 @@ struct SignupView: View {
                             }
                         }
                         Divider()
+                        
+                        Text("By continuing you agree to our Terms of Service and Privacy Policy.")
+                            .font(.system(size: 14))
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(.secondary)
                     }
                 }
+                
                 
                
 
                 Button {
-                    // Login Logic
+                    path.append(OnboardingRoutes.verification)
                 } label: {
-                    Text("Log In")
+                    Text("Sign-up")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)

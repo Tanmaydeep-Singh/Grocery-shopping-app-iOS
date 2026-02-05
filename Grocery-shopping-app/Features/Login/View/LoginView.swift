@@ -11,7 +11,6 @@ import SwiftUI
 struct LoginView: View {
     
     @Binding var path: NavigationPath
-    @Binding var isLoggedIn: Bool
 
     @State private var email = ""
     @State private var password = ""
@@ -73,7 +72,7 @@ struct LoginView: View {
                 }
 
                 Button {
-                    isLoggedIn = true
+                    path.append(OnboardingRoutes.verification)
                 } label: {
                     Text("Log In")
                         .font(.system(size: 18, weight: .semibold))
@@ -114,8 +113,6 @@ struct LoginView: View {
         }
     }
 }
-#Preview {
-    @Previewable @State var isLoggedIn = false
-    
-    LoginView( path: .constant(NavigationPath()), isLoggedIn: $isLoggedIn )
+#Preview {    
+    LoginView( path: .constant(NavigationPath()))
 }

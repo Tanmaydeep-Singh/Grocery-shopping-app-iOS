@@ -1,0 +1,72 @@
+//
+//  VerificationScreen.swift
+//  Nectar
+//
+//  Created by tanmaydeep on 04/02/26.
+//
+
+import SwiftUI
+
+struct VerificationScreen: View {
+    
+    @Binding var path: NavigationPath
+
+    @State private var otpCode: String = ""
+    @FocusState private var isKeyboardFocused: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            
+            Text("verification_title")
+                .font(.system(size: 26, weight: .semibold))
+                .fixedSize(horizontal: false, vertical: true)
+            
+            VStack(alignment: .leading, spacing: 10) {
+                Text("verification_subtitle")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                
+                TextField("- - - -", text: $otpCode)
+                    .font(.system(size: 18, weight: .bold))
+                    .keyboardType(.numberPad)
+                    .focused($isKeyboardFocused)
+                    .onChange(of: otpCode) { oldValue, newValue in
+                        if newValue.count > 4 {
+                            otpCode = String(newValue.prefix(4))
+                        }
+                    }
+                
+                Divider()
+            }
+            
+            Spacer()
+            
+            HStack {
+                Text("verification_resend_code")
+                    .font(.system(size: 18))
+                    .foregroundColor(Color("Splash"))
+                
+                Spacer()
+                
+                Button {
+                    path.append(OnboardingRoutes.location)
+                } label: {
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.white)
+                        .frame(width: 60, height: 60)
+                        .background(Color("Splash"))
+                        .clipShape(Circle())
+                        .shadow(color: Color("Splash").opacity(0.3), radius: 10, x: 0, y: 5)
+                }
+            }
+        }
+        .padding(25)
+        .onAppear {
+            isKeyboardFocused = true
+        }
+    }
+}
+
+#Preview {
+    VerificationScreen(path: .constant(NavigationPath()))
+}

@@ -22,6 +22,9 @@ struct SignupView: View {
     @State private var password = ""
     @State private var isPasswordVisible = false
     
+    @EnvironmentObject var authViewModel : AuthViewModel
+
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
@@ -102,6 +105,11 @@ struct SignupView: View {
                
 
                 Button {
+                    
+                    Task{
+                        await authViewModel.createUser(email: email, password: password, username: username)
+                    }
+                    
                     path.append(OnboardingRoutes.verification)
                 } label: {
                     Text("signup_button_create_account")

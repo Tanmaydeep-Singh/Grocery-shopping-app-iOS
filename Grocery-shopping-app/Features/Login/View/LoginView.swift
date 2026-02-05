@@ -16,6 +16,8 @@ struct LoginView: View {
     @State private var password = ""
     @State private var isPasswordVisible = false
     
+    @EnvironmentObject var authViewModel : AuthViewModel
+
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
@@ -82,6 +84,11 @@ struct LoginView: View {
                 }
 
                 Button {
+                    Task{
+                        await authViewModel.loginUser(
+                            email: email, password: password
+                        )
+                    }
                     path.append(OnboardingRoutes.verification)
                 } label: {
                     Text("login_button")

@@ -31,15 +31,15 @@ final class HomeViewModel: ObservableObject {
                }
        }
 
-       func stopBannerAutoScroll() {
-           timer?.cancel()
-           timer = nil
-       }
+    func stopBannerAutoScroll() {
+        timer?.cancel()
+        timer = nil
+    }
     
     private func advanceBanner() {
-           currentBannerIndex =
-           (currentBannerIndex + 1) % bannerImages.count
-       }
+        currentBannerIndex =
+        (currentBannerIndex + 1) % bannerImages.count
+    }
     
     func products(for section: HomeSectionType) -> [Product] {
         switch section {

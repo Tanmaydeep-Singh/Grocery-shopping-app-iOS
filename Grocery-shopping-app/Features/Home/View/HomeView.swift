@@ -15,7 +15,7 @@ struct HomeView: View {
             VStack(spacing: 24) {
                 HomeHeaderView()
                 SearchBarView(text: $viewModel.searchText)
-                OfferBannerView(viewModel: viewModel)
+                OfferBannerView()
             }
         }
     }

@@ -37,12 +37,14 @@ struct OnboardingView: View {
                     .scaledToFit()
                     .frame(width: 50, height: 50)
 
-                Text("Welcome\nto our store")
-                    .font(.system(size: 50, weight: .bold))
+                VStack(spacing: 0) {
+                    Text("onboarding_title_welcome_line1")
+                    Text("onboarding_title_welcome_line2")
+                }                    .font(.system(size: 50, weight: .bold))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
 
-                Text("Get your groceries in as fast as one hour")
+                Text("onboarding_subtitle_welcome")
                     .font(.system(size: 16))
                     .foregroundColor(.white.opacity(0.85))
                     .multilineTextAlignment(.center)
@@ -53,7 +55,7 @@ struct OnboardingView: View {
                 Button {
                     path.append(OnboardingRoutes.socialLogin)
                 } label: {
-                    Text("Get Started")
+                    Text("onboarding_button_get_started")
                         .font(.system(size: 15))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)

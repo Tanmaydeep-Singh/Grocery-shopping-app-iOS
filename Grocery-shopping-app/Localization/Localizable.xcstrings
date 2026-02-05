@@ -78,6 +78,50 @@
         }
       }
     },
+    "onboarding_button_get_started" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Started"
+          }
+        }
+      }
+    },
+    "onboarding_subtitle_welcome" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get your groceries in as fast as one hour"
+          }
+        }
+      }
+    },
+    "onboarding_title_welcome_line1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome"
+          }
+        }
+      }
+    },
+    "onboarding_title_welcome_line2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "to our store"
+          }
+        }
+      }
+    },
     "password_placeholder" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -123,7 +167,15 @@
       }
     },
     "signup_button" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signup"
+          }
+        }
+      }
     },
     "your_area" : {
       "extractionState" : "manual",

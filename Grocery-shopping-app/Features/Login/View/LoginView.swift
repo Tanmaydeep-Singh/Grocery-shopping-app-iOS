@@ -31,7 +31,7 @@ struct LoginView: View {
                         .font(.system(size: 26, weight: .semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Text("login_subtitle.")
+                    Text("login_subtitle")
                         .font(.system(size: 16))
                         .foregroundColor(.secondary)
                 }

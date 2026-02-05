@@ -7,7 +7,7 @@ struct SearchBarView: View {
         ZStack{
             HStack {
                 Image(systemName: "magnifyingglass")
-                TextField("Search Store", text: $text)
+                TextField("home_search", text: $text)
             }
             .padding()
             .background(Color(.systemGray6))

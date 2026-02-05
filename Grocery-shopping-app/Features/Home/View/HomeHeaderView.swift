@@ -14,7 +14,7 @@ struct HomeHeaderView: View {
                     .scaledToFit()
                     .frame(width: 20)
                 
-                Text("Dhaka, Banassre")
+                Text("location_name")
                     .font(.title2)
                     .foregroundColor(.black.opacity(0.7))
                 }

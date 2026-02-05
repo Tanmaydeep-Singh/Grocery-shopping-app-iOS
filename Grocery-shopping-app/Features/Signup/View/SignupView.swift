@@ -33,30 +33,53 @@ struct SignupView: View {
                     .padding(.vertical, 30)
                 
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Sign-up")
+                    Text("signup_title")
                         .font(.system(size: 26, weight: .semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Text("Enter your credentials to continue.")
+                    Text("signup_subtitle")
                         .font(.system(size: 16))
                         .foregroundColor(.secondary)
                 }
                 .padding(.bottom, 20)
                 
                 VStack(spacing: 25) {
-                    customInputField(title: "Username", placeholder: "Enter your username", text: $username)
-                    customInputField(title: "Email", placeholder: "Enter your email", text: $email)
+                    
+                    VStack( alignment: .leading, spacing: 10) {
+                        Text("signup_field_username")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.secondary)
+                        
+                        TextField("signup_field_username_placeholder", text: $username)
+                            .keyboardType(.default)
+                            .autocapitalization(.none)
+                        
+                        Divider()
+                    }
+                    VStack( alignment: .leading, spacing: 10) {
+                        
+                        Text("signup_field_email")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.secondary)
+                        
+                        TextField("signup_field_email_placeholder", text: $email)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                        
+                        Divider()
+                    }
+
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Password")
+                        Text("signup_field_password")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
                         
                         HStack {
                             if isPasswordVisible {
-                                TextField("Enter your password", text: $password)
+                                TextField("signup_field_password_placeholder", text: $password)
                             } else {
-                                SecureField("Enter your password", text: $password)
+                                SecureField("signup_field_password_placeholder", text: $password)
                             }
                             
                             Button {
@@ -68,7 +91,7 @@ struct SignupView: View {
                         }
                         Divider()
                         
-                        Text("By continuing you agree to our Terms of Service and Privacy Policy.")
+                        Text("signup_terms_text")
                             .font(.system(size: 14))
                             .frame(maxWidth: .infinity)
                             .foregroundColor(.secondary)
@@ -81,7 +104,7 @@ struct SignupView: View {
                 Button {
                     path.append(OnboardingRoutes.verification)
                 } label: {
-                    Text("Sign-up")
+                    Text("signup_button_create_account")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -92,32 +115,19 @@ struct SignupView: View {
                 .padding(.top, 10)
                 
                 HStack {
-                    Text("Already have an account?")
+                    Text("signup_footer_existing_account")
                         .font(.system(size: 14, weight: .semibold))
                     Button{
                         path.append(OnboardingRoutes.login)
                     }
                     label: {
-                        Text("Login")
+                        Text("signup_footer_login_button")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(Color("Splash"))
                     }
                 }
             }
             .padding(25)
-        }
-    }
-    
-    @ViewBuilder
-    func customInputField(title: String, placeholder: String, text: Binding<String>) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(title)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.secondary)
-            TextField(placeholder, text: text)
-                .keyboardType(title == "Email" ? .emailAddress : .default)
-                .autocapitalization(.none)
-            Divider()
         }
     }
 }

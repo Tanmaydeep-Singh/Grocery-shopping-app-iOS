@@ -8,27 +8,15 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject private var viewModel = HomeViewModel()
+
     var body: some View {
-        VStack{
-            Image("CarrotOrange")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 40)
+        ScrollView {
             
-            HStack{
-                Image(systemName: "location.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20)
-                
-                Text("Dhaka, Banassre")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.black.opacity(0.7))
-            }
         }
     }
 }
+
 
 #Preview {
     HomeView()

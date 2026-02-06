@@ -46,7 +46,7 @@ struct ContentView: View {
                     }
                     .tag(Tab.favourite)
                 
-                AccountView()
+                AccountView(selectedTab: $selectedTab)
                     .tabItem {
                         Label("Account", systemImage: "person.fill")
                     }

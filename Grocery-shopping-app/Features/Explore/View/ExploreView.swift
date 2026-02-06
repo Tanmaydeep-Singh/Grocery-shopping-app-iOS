@@ -34,7 +34,8 @@ struct ExploreView: View {
                             } label: {
                                 CategoryCard(
                                     title: category.title,
-                                    imageName: category.imageName
+                                    imageName: category.imageName,
+                                    backgroundColor: colors.randomElement()?.uppercased() ?? "FFFFFF"
                                 )
                             }
                             .buttonStyle(.plain)

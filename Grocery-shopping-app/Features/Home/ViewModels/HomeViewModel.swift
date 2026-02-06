@@ -1,18 +1,73 @@
-//
-//  HomeViewModel.swift
-//  Grocery-shopping-app
-//
-//  Created by tanmaydeep on 04/02/26.
-//
-
+import Foundation
+import Combine
 import SwiftUI
 
-struct HomeViewModel: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+final class HomeViewModel: ObservableObject {
+    @Published var searchText: String = ""
+    @Published var products: [Product] = []
+    @Published var currentBannerIndex: Int = 0
+    @Published var categories: [Category] = []
+    
+    let bannerImages: [String] = [
+        "banner_1",
+        "banner_2",
+        "banner_3"
+    ]
+    
+    let sections: [HomeSectionType] = HomeSectionType.allCases
+    
+    init() {
+        products = MockProducts.products
+        loadCategories()
     }
-}
+    
+    private var timer: AnyCancellable?
+    
+    func startBannerAutoScroll() {
+           timer = Timer
+               .publish(every: 3.5, on: .main, in: .common)
+               .autoconnect()
+               .sink { [weak self] _ in
+                   guard let self else { return }
+                   self.advanceBanner()
+               }
+       }
 
-#Preview {
-    HomeViewModel()
+    func stopBannerAutoScroll() {
+        timer?.cancel()
+        timer = nil
+    }
+    
+    private func advanceBanner() {
+        currentBannerIndex =
+        (currentBannerIndex + 1) % bannerImages.count
+    }
+    
+    private func loadCategories() {
+            categories = ProductCategory
+                .allCases
+                .map { $0.toCategory() }
+        }
+    
+    func products(for section: HomeSectionType) -> [Product] {
+        switch section {
+        case .exclusiveOffer:
+            return Array(products.prefix(4))
+        case .bestSelling:
+            return Array(products.suffix(4))
+        case .groceries:
+            return products
+        }
+    }
+    
+    func products(for category: ProductCategory) -> [Product] {
+        products.filter { $0.category == category }
+    }
+    
+    var filteredProducts: [Product] {
+        guard !searchText.isEmpty else { return products }
+        return products.filter {
+            $0.name.lowercased().contains(searchText.lowercased())
+        }
+    }
 }

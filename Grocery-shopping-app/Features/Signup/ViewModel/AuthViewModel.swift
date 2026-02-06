@@ -9,8 +9,9 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 import Combine
-import FirebaseCore
 import GoogleSignIn
+import FirebaseCore
+
 
 @MainActor
 final class AuthViewModel: ObservableObject {
@@ -25,12 +26,12 @@ final class AuthViewModel: ObservableObject {
 
     init() {
     
-//            if let currentUser = auth.currentUser {
-//                self.userSession = currentUser
-//                Task {
-//                    await fetchUser(uid: currentUser.uid)
-//                }
-//            }
+            if let currentUser = auth.currentUser {
+                self.userSession = currentUser
+                Task {
+                    await fetchUser(uid: currentUser.uid)
+                }
+            }
         }
     
 //    Create User

@@ -1,1 +1,16 @@
+<<<<<<< HEAD
 **/GoogleService-Info.plist
+=======
+# Xcode user settings
+xcuserdata/
+*.xcuserstate
+
+# Ignore Google Services configuration
+GoogleService-Info.plist
+
+# Ignore all property list files (Optional: use only if you have many auto-generated plists)
+*.plist
+
+# EXCEPT specific ones you actually need (Uncomment if needed)
+# !Info.plist
+>>>>>>> ae4871ab400ef12fcdb0fd8cb29e09b22259c14e

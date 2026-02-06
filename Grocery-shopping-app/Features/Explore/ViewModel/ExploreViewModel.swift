@@ -13,6 +13,12 @@ struct ExploreViewModel: View {
     }
 }
 
+struct Category: Identifiable, Hashable {
+    let id = UUID()
+    let title: String
+    let imageName: String
+}
+
 #Preview {
     ExploreViewModel()
 }

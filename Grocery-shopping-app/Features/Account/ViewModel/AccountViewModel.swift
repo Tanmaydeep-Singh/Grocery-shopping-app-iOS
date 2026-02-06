@@ -1,18 +1,27 @@
-//
-//  AccountViewModel.swift
-//  Grocery-shopping-app
-//
-//  Created by tanmaydeep on 04/02/26.
-//
+import Foundation
+internal import Combine
 
-import SwiftUI
+final class AccountViewModel: ObservableObject {
 
-struct AccountViewModel: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+    // MARK: - User Info
+    @Published var userName: String = "Kushagra"
+    @Published var userEmail: String = "hello@gmail.com"
+
+    // MARK: - Menu Items
+    let menuItems: [AccountMenuItem] = [
+        .init(title: "Orders", icon: "bag"),
+        .init(title: "My Details", icon: "person"),
+        .init(title: "Delivery Address", icon: "location"),
+        .init(title: "Payment Methods", icon: "creditcard"),
+        .init(title: "Promo Card", icon: "tag"),
+        .init(title: "Notifications", icon: "bell"),
+        .init(title: "Help", icon: "questionmark.circle"),
+        .init(title: "About", icon: "info.circle")
+    ]
+
+    // MARK: - Actions
+    func logout() {
+        print("User logged out")
     }
 }
 
-#Preview {
-    AccountViewModel()
-}

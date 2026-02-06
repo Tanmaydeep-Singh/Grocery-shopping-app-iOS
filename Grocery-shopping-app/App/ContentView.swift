@@ -10,7 +10,9 @@ import SwiftUI
 struct ContentView: View {
 
     @State private var selectedTab: Tab = .home
-    @State private var isLoggedIn: Bool = false
+//    @State private var isLoggedIn: Bool = false
+    @State private var isLoggedIn: Bool = true
+
     @State private var path = NavigationPath()
 
     var body: some View {

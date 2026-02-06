@@ -17,7 +17,7 @@ struct AccountRowView: View {
 //            Divider()
 
             Image(systemName: "chevron.right")
-                .foregroundColor(.gray)
+                .foregroundColor(.black)
         }
         .padding(.vertical, 8)
     

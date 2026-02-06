@@ -9,10 +9,8 @@ import SwiftUI
 
 struct ExploreView: View {
     @State public var showFilter = false
-    let columns = [
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16)
-    ]
+    @State private var gridLayout: GridLayout = .twoColumn
+
     let categories: [Category] = [
         Category(title: "Fruits & Vegetables", imageName: "fruitsAndVegetables"),
         Category(title: "Fish & Meat", imageName: "MeatAndFish"),
@@ -21,6 +19,7 @@ struct ExploreView: View {
         Category(title: "Beverages", imageName: "Beverages"),
         Category(title: "Bakery & Snacks", imageName: "BakeryAndSnacks")
     ]
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 16) {
@@ -28,18 +27,17 @@ struct ExploreView: View {
                 SearchBox()
                 
                 ScrollView {
-                    LazyVGrid(columns: columns, spacing: 16) {
+                    LazyVGrid(columns: gridLayout.columns, spacing: 16) {
                         ForEach(categories) { category in
                             NavigationLink {
                                 CategoryProductsView(category: category)
-                            } label : {
+                            } label: {
                                 CategoryCard(
                                     title: category.title,
-                                    imageName: category
-                                        .imageName)
+                                    imageName: category.imageName
+                                )
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            
+                            .buttonStyle(.plain)
                         }
                     }
                 }

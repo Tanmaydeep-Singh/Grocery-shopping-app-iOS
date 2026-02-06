@@ -19,6 +19,34 @@ struct Category: Identifiable, Hashable {
     let imageName: String
 }
 
+enum GridLayout {
+    case twoColumn
+    case threeColumn
+    case adaptive(minWidth: CGFloat)
+
+    var columns: [GridItem] {
+        switch self {
+        case .twoColumn:
+            return [
+                GridItem(.flexible(), spacing: 16),
+                GridItem(.flexible(), spacing: 16)
+            ]
+
+        case .threeColumn:
+            return [
+                GridItem(.flexible(), spacing: 16),
+                GridItem(.flexible(), spacing: 16),
+                GridItem(.flexible(), spacing: 16)
+            ]
+
+        case .adaptive(let minWidth):
+            return [
+                GridItem(.adaptive(minimum: minWidth), spacing: 16)
+            ]
+        }
+    }
+}
+
 #Preview {
     ExploreViewModel()
 }

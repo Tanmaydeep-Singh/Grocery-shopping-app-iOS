@@ -23,8 +23,13 @@ struct ProductGridView: View {
 
                 LazyHGrid(rows: rows, spacing: 16) {
                     ForEach(products) { product in
-                        ProductCard(product: product)
-                            .frame(width: 180)
+                        NavigationLink {
+                            ProductDetailView(product: product)
+                        } label: {
+                            ProductCard(product: product)
+                                .frame(width: 180)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding(.horizontal)

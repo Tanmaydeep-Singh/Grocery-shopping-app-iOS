@@ -23,7 +23,7 @@ struct ProductDetailView: View {
                     // Name + favourite
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Naturel Red Apple")
+                            Text(product.name)
                                 .font(.title2)
                                 .fontWeight(.semibold)
 

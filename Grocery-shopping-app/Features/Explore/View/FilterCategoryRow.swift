@@ -7,20 +7,26 @@
 import SwiftUI
 
 struct FilterCategoryRow: View {
-    var title: String
+    let title: String
+    @Binding var isSelected: Bool
 
     var body: some View {
-        HStack {
-            Text(title)
-                .font(.body)
+        Button {
+            isSelected.toggle()
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: isSelected ? "checkmark.square.fill" : "square")
+                    .foregroundColor(isSelected ? .green : .gray)
+                    .font(.system(size: 20))
 
-            Spacer()
+                Text(title)
+                    .font(.body)
+                    .foregroundColor(isSelected ? .green : .primary)
 
-            Image(systemName: "checkmark.circle")
-                .foregroundColor(.gray)
+                Spacer()
+            }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
+        .buttonStyle(.plain)
     }
 }
+

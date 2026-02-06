@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct SignupView: View {
-
     @Binding var path: NavigationPath
     
     @State private var username = ""
@@ -17,9 +16,8 @@ struct SignupView: View {
     @State private var password = ""
     @State private var isPasswordVisible = false
     
-    @EnvironmentObject var authViewModel : AuthViewModel
+    @EnvironmentObject var authViewModel: AuthViewModel
 
-    
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
@@ -28,7 +26,7 @@ struct SignupView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 50, height: 50)
-                    .padding(.vertical, 30)
+                    .padding(.vertical, 20)
                 
                 VStack(alignment: .leading, spacing: 10) {
                     Text("signup_title")
@@ -42,32 +40,31 @@ struct SignupView: View {
                 .padding(.bottom, 20)
                 
                 VStack(spacing: 25) {
-                    
-                    VStack( alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 10) {
                         Text("signup_field_username")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
                         
                         TextField("signup_field_username_placeholder", text: $username)
-                            .keyboardType(.default)
-                            .autocapitalization(.none)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
                         
                         Divider()
                     }
-                    VStack( alignment: .leading, spacing: 10) {
-                        
+                    
+                    VStack(alignment: .leading, spacing: 10) {
                         Text("signup_field_email")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
                         
                         TextField("signup_field_email_placeholder", text: $email)
                             .keyboardType(.emailAddress)
-                            .autocapitalization(.none)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
                         
                         Divider()
                     }
 
-                    
                     VStack(alignment: .leading, spacing: 10) {
                         Text("signup_field_password")
                             .font(.system(size: 16, weight: .semibold))
@@ -88,40 +85,42 @@ struct SignupView: View {
                             }
                         }
                         Divider()
-                        
-                        Text("signup_terms_text")
-                            .font(.system(size: 14))
-                            .frame(maxWidth: .infinity)
-                            .foregroundColor(.secondary)
                     }
+                    
+                    Text("signup_terms_text")
+                        .font(.system(size: 14))
+                        .frame(maxWidth: .infinity)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
                 }
-                
 
                 Button {
-                    
-                    Task{
-                        await authViewModel.createUser(email: email, password: password, username: username)
-                    }
-                    
-                    path.append(OnboardingRoutes.verification)
+                    handleSignup()
                 } label: {
-                    Text("signup_button_create_account")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 67)
-                        .background(Color("Splash"))
-                        .cornerRadius(19)
+                    Group {
+                        if authViewModel.isLoading {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            Text("signup_button_create_account")
+                                .font(.system(size: 18, weight: .semibold))
+                        }
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 67)
+                    .background(isFormInvalid ? Color.gray : Color("Splash"))
+                    .cornerRadius(19)
                 }
+                .disabled(isFormInvalid || authViewModel.isLoading)
                 .padding(.top, 10)
                 
                 HStack {
                     Text("signup_footer_existing_account")
                         .font(.system(size: 14, weight: .semibold))
-                    Button{
+                    Button {
                         path.append(OnboardingRoutes.login)
-                    }
-                    label: {
+                    } label: {
                         Text("signup_footer_login_button")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(Color("Splash"))
@@ -129,13 +128,34 @@ struct SignupView: View {
                 }
             }
             .padding(25)
-            
         }
-        
-        
+        .alert("Error", isPresented: $authViewModel.isError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(authViewModel.errorMessage ?? "An unknown error occurred.")
+        }
     }
     
+    private var isFormInvalid: Bool {
+        username.isEmpty || email.isEmpty || password.count < 6
+    }
+    
+    private func handleSignup() {
+        Task {
+            let success = await authViewModel.createUser(
+                email: email,
+                password: password,
+                username: username
+            )
+            
+            if success {
+                path.append(OnboardingRoutes.verification)
+            }
+        }
+    }
 }
+
 #Preview {
     SignupView(path: .constant(NavigationPath()))
+        .environmentObject(AuthViewModel())
 }

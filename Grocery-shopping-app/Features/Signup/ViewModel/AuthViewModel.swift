@@ -8,10 +8,9 @@
 import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
-import Combine
 import GoogleSignIn
 import FirebaseCore
-
+import Combine
 
 @MainActor
 final class AuthViewModel: ObservableObject {
@@ -20,178 +19,168 @@ final class AuthViewModel: ObservableObject {
     @Published var user: User?
     @Published var isError: Bool = false
     @Published var errorMessage: String?
-
+    @Published var isLoading: Bool = false
+    
     private let auth = Auth.auth()
     private let firestore = Firestore.firestore()
 
     init() {
-    
-            if let currentUser = auth.currentUser {
-                self.userSession = currentUser
-                Task {
-                    await fetchUser(uid: currentUser.uid)
-                }
+        self.userSession = auth.currentUser
+        if let currentUser = auth.currentUser {
+            Task {
+                await fetchUser(uid: currentUser.uid)
             }
         }
-    
-//    Create User
-    func createUser(
-        email: String,
-        password: String,
-        username: String
-    ) async {
+    }
 
+//    Signup
+    func createUser(email: String, password: String, username: String) async -> Bool {
+        resetError()
+        isLoading = true
+        defer { isLoading = false }
+        
         do {
-            let authResult = try await auth.createUser(
-                withEmail: email,
-                password: password
-            )
-
+            let authResult = try await auth.createUser(withEmail: email, password: password)
             let firebaseUser = authResult.user
-            self.userSession = firebaseUser
-
+            
             let newUser = User(
                 id: firebaseUser.uid,
                 email: email,
                 username: username
             )
 
-            await storeUserInFirestore(user: newUser)
-            self.user = newUser
-
-        } catch {
-            
-//            Setting error
-            setError(error)
-            return
-
-        }
-    }
-    
-//    Save User
-
-    private func storeUserInFirestore(user: User) async {
-        do {
-            try firestore
-                .collection("users")
-                .document(user.id)
-                .setData(from: user)
-        } catch {
-            self.isError = true
-            self.errorMessage = error.localizedDescription
-        }
-    }
-    
-    // User Login
-    func loginUser(
-        email: String,
-        password: String
-    ) async {
-
-        do {
-            let authResult = try await auth.signIn(
-                withEmail: email,
-                password: password
-            )
-
-            let firebaseUser = authResult.user
+            try await storeUserInFirestore(user: newUser)
             self.userSession = firebaseUser
-
-            await fetchUser(uid: firebaseUser.uid)
-
+            self.user = newUser
+            return true
         } catch {
-            self.isError = true
-            self.errorMessage = error.localizedDescription
+            handleAuthError(error)
+            return false
         }
     }
 
-    // Get User
-    private func fetchUser(uid: String) async {
+//    Login
+    func loginUser(email: String, password: String) async -> Bool {
+        resetError()
+        isLoading = true
+        defer { isLoading = false }
+        
         do {
-            let document = try await firestore
-                .collection("users")
-                .document(uid)
-                .getDocument()
-
-            self.user = try document.data(as: User.self)
-
+            let authResult = try await auth.signIn(withEmail: email, password: password)
+            self.userSession = authResult.user
+            await fetchUser(uid: authResult.user.uid)
+            return true
         } catch {
-            self.isError = true
-            self.errorMessage = error.localizedDescription
+            handleAuthError(error)
+            return false
         }
     }
-    
-    // Logout:
-    func logout() async {
-        self.user = nil;
-        self.userSession = nil;
-        try? await auth.signOut()
-    }
-    
-    
+
     // Google SignIn
     func signInWithGoogle() {
+        resetError()
+        
         guard let clientID = FirebaseApp.app()?.options.clientID else {
-            print("DEBUG: Firebase Client ID not found")
+            setError("Firebase configuration error.")
             return
         }
-        
+
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
-        
+
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let rootViewController = windowScene.windows.first?.rootViewController else {
-            print("DEBUG: Could not find rootViewController")
+            setError("Unable to find root view controller.")
             return
         }
-        
+
         GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { [weak self] result, error in
             guard let self = self else { return }
-            
+
             if let error = error {
-                print("DEBUG: Google Sign-In Error: \(error.localizedDescription)")
+                self.handleAuthError(error)
                 return
             }
-            
+
             guard let user = result?.user,
-                  let idToken = user.idToken?.tokenString else { return }
-            
+                  let idToken = user.idToken?.tokenString else {
+                self.setError("Google authentication failed.")
+                return
+            }
+
             let credential = GoogleAuthProvider.credential(
                 withIDToken: idToken,
                 accessToken: user.accessToken.tokenString
             )
+
+            Task {
+                await self.signInToFirebaseWithGoogle(credential: credential, googleUser: user)
+            }
+        }
+    }
+
+    private func signInToFirebaseWithGoogle(credential: AuthCredential, googleUser: GIDGoogleUser) async {
+        do {
+            let authResult = try await auth.signIn(with: credential)
+            let firebaseUser = authResult.user
+            self.userSession = firebaseUser
             
-            Auth.auth().signIn(with: credential) { authResult, error in
-                if let error = error {
-                    print("DEBUG: Firebase Auth Error: \(error.localizedDescription)")
-                    return
-                }
-                
-                guard let result = authResult else { return }
-                let firebaseUser = result.user
-                
-                self.userSession = firebaseUser
-                
+            let doc = try await firestore.collection("users").document(firebaseUser.uid).getDocument()
+            
+            if doc.exists {
+                await fetchUser(uid: firebaseUser.uid)
+            } else {
                 let newUser = User(
                     id: firebaseUser.uid,
                     email: firebaseUser.email ?? "",
                     username: firebaseUser.displayName ?? "New User"
                 )
-                
-                Task {
-                    await self.storeUserInFirestore(user: newUser)
-                    await self.fetchUser(uid: firebaseUser.uid)
-                    print("DEBUG: Successfully logged in and stored user: \(newUser.username)")
-                }
+                try await storeUserInFirestore(user: newUser)
+                self.user = newUser
             }
+        } catch {
+            handleAuthError(error)
         }
     }
-    
-    
-    // Helper func to handle errors
-    private func setError(_ error: Error) {
+
+// Save user to firestore
+    private func storeUserInFirestore(user: User) async throws {
+        try firestore
+            .collection("users")
+            .document(user.id)
+            .setData(from: user)
+    }
+
+//    Get user from firebase
+    private func fetchUser(uid: String) async {
+        do {
+            self.user = try await firestore
+                .collection("users")
+                .document(uid)
+                .getDocument(as: User.self)
+        } catch {
+            print("DEBUG: Failed to fetch user: \(error.localizedDescription)")
+        }
+    }
+
+    func logout() {
+        try? auth.signOut()
+        self.userSession = nil
+        self.user = nil
+    }
+
+    private func handleAuthError(_ error: Error) {
         self.isError = true
         self.errorMessage = error.localizedDescription
     }
 
+    private func setError(_ message: String) {
+        self.isError = true
+        self.errorMessage = message
+    }
+    
+    private func resetError() {
+        self.isError = false
+        self.errorMessage = nil
+    }
 }

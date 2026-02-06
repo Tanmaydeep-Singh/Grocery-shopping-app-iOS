@@ -5,11 +5,6 @@
 //  Created by tanmaydeep on 04/02/26.
 //
 //
-//  LoginView.swift
-//  Grocery-shopping-app
-//
-//  Created by tanmaydeep on 04/02/26.
-//
 
 import SwiftUI
 
@@ -101,8 +96,6 @@ struct SignupView: View {
                     }
                 }
                 
-                
-               
 
                 Button {
                     
@@ -136,8 +129,12 @@ struct SignupView: View {
                 }
             }
             .padding(25)
+            
         }
+        
+        
     }
+    
 }
 #Preview {
     SignupView(path: .constant(NavigationPath()))

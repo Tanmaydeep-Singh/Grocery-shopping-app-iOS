@@ -60,8 +60,11 @@ final class AuthViewModel: ObservableObject {
             self.user = newUser
 
         } catch {
-            self.isError = true
-            self.errorMessage = error.localizedDescription
+            
+//            Setting error
+            setError(error)
+            return
+
         }
     }
     
@@ -183,4 +186,12 @@ final class AuthViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    // Helper func to handle errors
+    private func setError(_ error: Error) {
+        self.isError = true
+        self.errorMessage = error.localizedDescription
+    }
+
 }

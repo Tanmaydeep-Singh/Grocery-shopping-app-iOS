@@ -218,6 +218,17 @@
         }
       }
     },
+    "login_signup_button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign up"
+          }
+        }
+      }
+    },
     "login_subtitle" : {
       "extractionState" : "manual",
       "localizations" : {

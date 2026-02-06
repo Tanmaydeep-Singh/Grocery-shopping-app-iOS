@@ -149,8 +149,9 @@ struct SignupView: View {
             )
             
             if success {
-                path.append(OnboardingRoutes.verification)
+                path = NavigationPath()
             }
+            
         }
     }
 }

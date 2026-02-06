@@ -384,7 +384,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sign up with Facebook"
+            "value" : "Continue with Facebook"
           }
         }
       }
@@ -395,7 +395,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sign up with Google"
+            "value" : "Continue with Google"
           }
         }
       }
@@ -406,7 +406,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Login with Number"
+            "value" : "Login with email"
           }
         }
       }
@@ -417,7 +417,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sign in with your social media account"
+            "value" : "Or connect with social media"
           }
         }
       }

@@ -9,6 +9,8 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 import Combine
+import FirebaseCore
+import GoogleSignIn
 
 @MainActor
 final class AuthViewModel: ObservableObject {
@@ -21,8 +23,15 @@ final class AuthViewModel: ObservableObject {
     private let auth = Auth.auth()
     private let firestore = Firestore.firestore()
 
-    init() {}
-
+    init() {
+    
+//            if let currentUser = auth.currentUser {
+//                self.userSession = currentUser
+//                Task {
+//                    await fetchUser(uid: currentUser.uid)
+//                }
+//            }
+        }
     
 //    Create User
     func createUser(
@@ -105,6 +114,72 @@ final class AuthViewModel: ObservableObject {
         } catch {
             self.isError = true
             self.errorMessage = error.localizedDescription
+        }
+    }
+    
+    // Logout:
+    func logout() async {
+        self.user = nil;
+        self.userSession = nil;
+        try? await auth.signOut()
+    }
+    
+    
+    // Google SignIn
+    func signInWithGoogle() {
+        guard let clientID = FirebaseApp.app()?.options.clientID else {
+            print("DEBUG: Firebase Client ID not found")
+            return
+        }
+        
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+        
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let rootViewController = windowScene.windows.first?.rootViewController else {
+            print("DEBUG: Could not find rootViewController")
+            return
+        }
+        
+        GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { [weak self] result, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("DEBUG: Google Sign-In Error: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let user = result?.user,
+                  let idToken = user.idToken?.tokenString else { return }
+            
+            let credential = GoogleAuthProvider.credential(
+                withIDToken: idToken,
+                accessToken: user.accessToken.tokenString
+            )
+            
+            Auth.auth().signIn(with: credential) { authResult, error in
+                if let error = error {
+                    print("DEBUG: Firebase Auth Error: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let result = authResult else { return }
+                let firebaseUser = result.user
+                
+                self.userSession = firebaseUser
+                
+                let newUser = User(
+                    id: firebaseUser.uid,
+                    email: firebaseUser.email ?? "",
+                    username: firebaseUser.displayName ?? "New User"
+                )
+                
+                Task {
+                    await self.storeUserInFirestore(user: newUser)
+                    await self.fetchUser(uid: firebaseUser.uid)
+                    print("DEBUG: Successfully logged in and stored user: \(newUser.username)")
+                }
+            }
         }
     }
 }

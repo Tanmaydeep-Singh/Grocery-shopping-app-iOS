@@ -11,10 +11,14 @@
 		144EEA862F348CA20030FBCA /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 144EEA852F348CA20030FBCA /* FirebaseCore */; };
 		144EEA882F348CA20030FBCA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 144EEA872F348CA20030FBCA /* FirebaseFirestore */; };
 		144EEA8A2F348CA20030FBCA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 144EEA892F348CA20030FBCA /* FirebaseStorage */; };
+		144EEA932F34E6940030FBCA /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 144EEA922F34E6940030FBCA /* GoogleSignIn */; };
+		144EEA952F34E6940030FBCA /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 144EEA942F34E6940030FBCA /* GoogleSignInSwift */; };
+		144EEA9E2F34ED510030FBCA /* Nectar-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 144EEA9D2F34ED510030FBCA /* Nectar-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		144EE8C92F3311E20030FBCA /* Nectar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nectar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		144EEA9D2F34ED510030FBCA /* Nectar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Nectar-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -30,8 +34,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				144EEA932F34E6940030FBCA /* GoogleSignIn in Frameworks */,
 				144EEA862F348CA20030FBCA /* FirebaseCore in Frameworks */,
 				144EEA8A2F348CA20030FBCA /* FirebaseStorage in Frameworks */,
+				144EEA952F34E6940030FBCA /* GoogleSignInSwift in Frameworks */,
 				144EEA842F348CA20030FBCA /* FirebaseAuth in Frameworks */,
 				144EEA882F348CA20030FBCA /* FirebaseFirestore in Frameworks */,
 			);
@@ -43,6 +49,7 @@
 		144EE8C02F3311E20030FBCA = {
 			isa = PBXGroup;
 			children = (
+				144EEA9D2F34ED510030FBCA /* Nectar-Info.plist */,
 				144EE8CB2F3311E20030FBCA /* Grocery-shopping-app */,
 				144EE8CA2F3311E20030FBCA /* Products */,
 			);
@@ -80,6 +87,8 @@
 				144EEA852F348CA20030FBCA /* FirebaseCore */,
 				144EEA872F348CA20030FBCA /* FirebaseFirestore */,
 				144EEA892F348CA20030FBCA /* FirebaseStorage */,
+				144EEA922F34E6940030FBCA /* GoogleSignIn */,
+				144EEA942F34E6940030FBCA /* GoogleSignInSwift */,
 			);
 			productName = "Grocery-shopping-app";
 			productReference = 144EE8C92F3311E20030FBCA /* Nectar.app */;
@@ -111,6 +120,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				144EEA822F348CA20030FBCA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				144EEA912F34E6940030FBCA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 144EE8CA2F3311E20030FBCA /* Products */;
@@ -127,6 +137,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				144EEA9E2F34ED510030FBCA /* Nectar-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +284,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Nectar-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -305,6 +317,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Nectar-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -360,6 +373,14 @@
 				minimumVersion = 12.9.0;
 			};
 		};
+		144EEA912F34E6940030FBCA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -382,6 +403,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 144EEA822F348CA20030FBCA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		144EEA922F34E6940030FBCA /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 144EEA912F34E6940030FBCA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		144EEA942F34E6940030FBCA /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 144EEA912F34E6940030FBCA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

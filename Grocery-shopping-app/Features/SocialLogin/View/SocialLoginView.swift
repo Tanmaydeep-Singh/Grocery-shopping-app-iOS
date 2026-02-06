@@ -10,6 +10,8 @@ import SwiftUI
 struct SocialLoginView: View {
     
     @Binding var path: NavigationPath
+    @EnvironmentObject var authViewModel : AuthViewModel
+
     
     var body: some View {
         VStack {
@@ -48,7 +50,6 @@ struct SocialLoginView: View {
             }
             .padding(20)
             
-            Divider()
 
             VStack(alignment: .center, spacing: 20) {
                 
@@ -59,28 +60,43 @@ struct SocialLoginView: View {
                 VStack(spacing: 16){
                     
                     Button {
-                        // Navigate to next screen
+                        authViewModel.signInWithGoogle()
                     } label: {
-                        Text("social_login_button_google")
-                            .font(.system(size: 15))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 60)
+                        HStack(spacing: 12) {
+                            Image("GoogleLogo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+
+                            Text("social_login_button_google")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.white)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 60)
+                        .background(Color("GoogleButton"))
+                        .cornerRadius(14)
                     }
-                    .background(Color("Splash"))
-                    .cornerRadius(12)
+
                     
                     Button {
-                        // Navigate to next screen
+                        authViewModel.signInWithGoogle()
                     } label: {
-                        Text("social_login_button_facebook")
-                            .font(.system(size: 15))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 60)
+                        HStack(spacing: 12) {
+                            Image("FacebookLogo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+
+                            Text("social_login_button_facebook")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.white)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 60)
+                        .background(Color("FacebookButton"))
+                        .cornerRadius(14)
                     }
-                    .background(Color("Splash"))
-                    .cornerRadius(12)
                     .padding(.vertical , 10)
                 }.padding(.bottom,20)
             }
@@ -91,4 +107,5 @@ struct SocialLoginView: View {
 
 #Preview {
     SocialLoginView(path: .constant(NavigationPath()))
+    
 }

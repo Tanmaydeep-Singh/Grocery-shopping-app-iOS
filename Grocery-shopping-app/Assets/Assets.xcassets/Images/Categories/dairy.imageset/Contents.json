@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "a-variety-of-dairy-products-including-milk-cheese-and-butter-free-png.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

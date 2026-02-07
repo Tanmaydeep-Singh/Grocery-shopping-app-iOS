@@ -72,7 +72,6 @@ struct AccountView: View {
             ) {
                 viewModel.logout()
             }
-            .padding(.horizontal, 18)
             .padding(.bottom, 20)
 
 

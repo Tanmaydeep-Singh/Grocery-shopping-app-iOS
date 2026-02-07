@@ -39,17 +39,9 @@ struct ProductCard: View {
                 RoundedRectangle(cornerRadius: 18)
                     .stroke(Color.gray.opacity(0.25), lineWidth: 1)
             )
-
-            SwiftUI.Button {
-                // add to cart
-            } label: {
-                Image(systemName: "plus")
-                    .font(.title2)
-                    .foregroundColor(.white)
-                    .frame(width: 44, height: 44)
-                    .background(Color.green)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-                    .padding()  
+            
+            PrimaryButton(icon: "plus", height: 44, width: 44, cornerRadius: 14){
+                
             }
         }
     }

@@ -13,10 +13,12 @@ struct ContentView: View {
     @State private var isLoggedIn: Bool = true
 
     @State private var path = NavigationPath()
-
+    
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
     var body: some View {
         
-        if isLoggedIn {
+        if authViewModel.user != nil {
             
             TabView(selection: $selectedTab) {
                 
@@ -44,7 +46,7 @@ struct ContentView: View {
                     }
                     .tag(Tab.favourite)
                 
-                AccountView()
+                AccountView(selectedTab: $selectedTab)
                     .tabItem {
                         Label("Account", systemImage: "person.fill")
                     }
@@ -61,8 +63,11 @@ struct ContentView: View {
                                    SocialLoginView(path: $path)
                                case .login:
                                    LoginView(path: $path)
+                                       
+
                                case .signup:
                                    SignupView(path: $path)
+                                
                                case .verification:
                                    VerificationScreen(path: $path)
                                case .location:
@@ -77,4 +82,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(AuthViewModel())
 }

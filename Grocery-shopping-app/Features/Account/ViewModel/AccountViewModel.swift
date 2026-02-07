@@ -3,7 +3,6 @@ import Combine
 
 final class AccountViewModel: ObservableObject {
 
-    // MARK: - User Info
     @Published var userName: String = "Kushagra"
     @Published var userEmail: String = "hello@gmail.com"
 
@@ -18,10 +17,5 @@ final class AccountViewModel: ObservableObject {
         .init(title: "Help", icon: "questionmark.circle"),
         .init(title: "About", icon: "info.circle")
     ]
-
-    // MARK: - Actions
-    func logout() {
-        print("User logged out")
-    }
 }
 

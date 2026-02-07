@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUI
 
 struct LoginView: View {
     
@@ -16,6 +15,8 @@ struct LoginView: View {
     @State private var password = ""
     @State private var isPasswordVisible = false
     
+    @EnvironmentObject var authViewModel: AuthViewModel
+
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
@@ -37,20 +38,20 @@ struct LoginView: View {
                 }
                 .padding(.bottom, 20)
 
-                
                 VStack(spacing: 25) {
-                    
                     VStack(alignment: .leading, spacing: 10) {
                         Text("login_email_title")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
+                        
                         TextField("login_email_placeholder", text: $email)
-                            .keyboardType("login_email_title" == "Email" ? .emailAddress : .default)
-                            .autocapitalization(.none)
+                            .keyboardType(.emailAddress)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                        
                         Divider()
                     }
                    
-                    
                     VStack(alignment: .leading, spacing: 10) {
                         Text("login_password_title")
                             .font(.system(size: 16, weight: .semibold))
@@ -74,7 +75,8 @@ struct LoginView: View {
                     }
                 }
                 
-                Button { } label: {
+                Button {
+                } label: {
                     Text("login_forgot_password")
                         .font(.system(size: 14))
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -82,25 +84,33 @@ struct LoginView: View {
                 }
 
                 Button {
-                    path.append(OnboardingRoutes.verification)
+                    handleLogin()
                 } label: {
-                    Text("login_button")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 67)
-                        .background(Color("Splash"))
-                        .cornerRadius(19)
+                    Group {
+                        if authViewModel.isLoading {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            Text("login_button")
+                                .font(.system(size: 18, weight: .semibold))
+                        }
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 67)
+                    .background(isFormInvalid ? Color.gray : Color("Splash"))
+                    .cornerRadius(19)
                 }
+                .disabled(isFormInvalid || authViewModel.isLoading)
                 .padding(.top, 10)
                 
                 HStack {
                     Text("login_no_account_text")
                         .font(.system(size: 14, weight: .semibold))
-                    Button{
+                    Button {
                         path.append(OnboardingRoutes.signup)
                     } label: {
-                        Text("login_button")
+                        Text("login_signup_button")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(Color("Splash"))
                     }
@@ -108,10 +118,29 @@ struct LoginView: View {
             }
             .padding(25)
         }
+        .alert("Error", isPresented: $authViewModel.isError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(authViewModel.errorMessage ?? "An unknown error occurred.")
+        }
     }
     
     
+    private var isFormInvalid: Bool {
+        email.isEmpty || password.isEmpty
+    }
+    
+    private func handleLogin() {
+        Task {
+            let success = await authViewModel.loginUser(email: email, password: password)
+            if success {
+                path = NavigationPath()
+            }
+        }
+    }
 }
+
 #Preview {
-    LoginView( path: .constant(NavigationPath()))
+    LoginView(path: .constant(NavigationPath()))
+        .environmentObject(AuthViewModel())
 }

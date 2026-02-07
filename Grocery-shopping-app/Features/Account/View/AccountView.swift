@@ -1,13 +1,16 @@
 import SwiftUI
 
 struct AccountView: View {
+    
+    @Binding var selectedTab: Tab
 
     @StateObject private var viewModel = AccountViewModel()
+    @EnvironmentObject private var authViewModel: AuthViewModel
 
     var body: some View {
         VStack(spacing: 0) {
 
-            // MARK: - Profile Header
+            // Profile Header
             
             HStack(spacing: 14) {
 
@@ -70,7 +73,10 @@ struct AccountView: View {
                 height: 56,
                 cornerRadius: 14
             ) {
-                viewModel.logout()
+                Task{
+                    authViewModel.logout()
+                    selectedTab = Tab.home
+                }
             }
             .padding(.bottom, 20)
 
@@ -81,6 +87,6 @@ struct AccountView: View {
 }
 
 #Preview {
-    AccountView()
+    AccountView(selectedTab: .constant(.home))        .environmentObject(AuthViewModel())
 }
 

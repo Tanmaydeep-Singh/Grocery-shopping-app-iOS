@@ -25,5 +25,5 @@ struct AccountRowView: View {
 }
 
 #Preview {
-    AccountView()
+    AccountView(selectedTab: .constant(.home))   
 }

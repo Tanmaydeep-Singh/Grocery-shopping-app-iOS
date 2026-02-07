@@ -78,7 +78,6 @@ struct AccountView: View {
                     selectedTab = Tab.home
                 }
             }
-            .padding(.horizontal, 18)
             .padding(.bottom, 20)
 
 

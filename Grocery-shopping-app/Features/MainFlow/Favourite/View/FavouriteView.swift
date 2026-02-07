@@ -14,11 +14,11 @@ struct FavouriteView: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
-
+                
                 // Scrollable Content
                 ScrollView {
                     VStack(spacing: 0) {
-
+                        
                         // Header
                         Text("My Favourites")
                             .font(.title3)
@@ -26,17 +26,17 @@ struct FavouriteView: View {
                             .frame(maxWidth: .infinity)
                             .padding(.top, 20)
                             .padding(.bottom, 16)
-
+                        
                         Divider()
                             .padding(.bottom, 12)
-
+                        
                         // Favourite items
                         VStack(spacing: 0) {
                             ForEach(viewModel.favouriteItems.indices, id: \.self) { index in
                                 let item = viewModel.favouriteItems[index]
-
+                                
                                 favouriteItemRow(item: item)
-
+                                
                                 if index != viewModel.favouriteItems.count - 1 {
                                     Divider()
                                         .padding(.top, 22)
@@ -44,16 +44,17 @@ struct FavouriteView: View {
                             }
                         }
                         .padding(.horizontal)
-
+                        
                         // Space for bottom CTA
                         Color.clear
                             .frame(height: 90)
                     }
                 }
-
-                // MARK: - Add All To Cart Button
-                addAllToCartBar
+                
+                PrimaryButton(title:"Add to cart"){
+                }
             }
+            
             .background(Color.white)
         }
     }
@@ -103,22 +104,7 @@ struct FavouriteView: View {
         .padding(.vertical, 22)
     }
 
-    // MARK: - Bottom CTA
-    private var addAllToCartBar: some View {
-        Button {
-            // dummy action
-        } label: {
-            Text("Add All To Cart")
-                .font(.headline)
-                .fontWeight(.semibold)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.green)
-                .cornerRadius(16)
-                .padding()
-        }
-    }
+    
 }
 
 

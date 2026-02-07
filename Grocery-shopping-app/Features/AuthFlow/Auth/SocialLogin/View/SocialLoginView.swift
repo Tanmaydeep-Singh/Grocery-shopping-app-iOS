@@ -32,23 +32,14 @@ struct SocialLoginView: View {
                                }
                                .font(.system(size: 26, weight: .semibold))
                                .frame(maxWidth: .infinity, alignment: .leading)
+                               .padding(14)
 
-                    
-                                
-                Button {
+                PrimaryButton(title:"social_login_button_phone"){
                     path.append(OnboardingRoutes.login)
-                } label: {
-                    Text("social_login_button_phone")
-                        .font(.system(size: 15))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 60)
+
                 }
-                .background(Color("Splash"))
-                .cornerRadius(12)
-                .padding(.vertical, 10)
             }
-            .padding(20)
+            
             
 
             VStack(alignment: .center, spacing: 20) {

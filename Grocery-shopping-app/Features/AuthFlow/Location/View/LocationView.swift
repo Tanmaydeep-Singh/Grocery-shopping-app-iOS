@@ -98,18 +98,10 @@ struct LocationView: View {
                         
                         
                         
-                        Button {
-                            isLoggedIn.toggle()
-                        } label: {
-                            Text("Submit")
-                                .font(.system(size: 15))
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 60)
+                        PrimaryButton(title:"Submit"){
+                            path.append(OnboardingRoutes.login)
                         }
-                        .background(Color("Splash"))
-                        .cornerRadius(12)
-                        .padding(.vertical , 10)
+                        
                     }.padding(.bottom,20)
                 }
                 .padding(20)

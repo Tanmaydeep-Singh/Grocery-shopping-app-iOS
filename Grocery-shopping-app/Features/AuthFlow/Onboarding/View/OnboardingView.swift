@@ -51,19 +51,12 @@ struct OnboardingView: View {
                     .padding(.horizontal, 32)
 
                 Spacer().frame(height: 24)
-
-                Button {
+                
+                PrimaryButton(title:"onboarding_button_get_started"){
                     path.append(OnboardingRoutes.socialLogin)
-                } label: {
-                    Text("onboarding_button_get_started")
-                        .font(.system(size: 15))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 60)
                 }
-                .background(Color("Splash"))
-                .cornerRadius(12)
-                .padding(.horizontal, 24)
+                
+
 
                 Spacer().frame(height: 60)
             }

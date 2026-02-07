@@ -61,7 +61,7 @@ struct CartView: View {
         }
     }
 
-    // MARK: - Cart Item Row
+    //  Cart Item Row
     private func cartItemView(item: CartItem) -> some View {
         HStack(spacing: 14) {
 
@@ -161,13 +161,13 @@ struct CartView: View {
                         .fontWeight(.semibold)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 7)
-                        .background(Color.green.opacity(0.9))
+                        .background(Color("Splash"))
                         .cornerRadius(6)
                         .foregroundColor(.white)
                 }
             }
             .padding()
-            .background(Color.green)
+            .background(Color("Splash"))
             .cornerRadius(16)
             .padding()
         }

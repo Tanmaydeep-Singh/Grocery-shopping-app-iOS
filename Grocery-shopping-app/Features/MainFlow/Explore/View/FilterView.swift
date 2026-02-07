@@ -104,7 +104,8 @@ struct FilterView: View {
                             }
                             .padding(16)
                 }
-                CommonButton(ButtonText: "Apply Filters") {
+
+                PrimaryButton(title: "Apply Filters") {
                     
                 }
             }

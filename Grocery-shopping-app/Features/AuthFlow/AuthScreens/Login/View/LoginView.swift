@@ -97,7 +97,7 @@ struct LoginView: View {
                     }
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 67)
+                    .frame(height: 60)
                     .background(isFormInvalid ? Color.gray : Color("Splash"))
                     .cornerRadius(19)
                 }

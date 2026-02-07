@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PrimaryButton: View {
-    let title: String?
+    let title: LocalizedStringKey?
     let icon: String?
     let textColor: Color
     let backgroundColor: Color
@@ -18,11 +18,11 @@ struct PrimaryButton: View {
     let action: () -> Void
 
     init(
-        title: String? = nil,
+        title: LocalizedStringKey? = nil,
         icon: String? = nil,
         textColor: Color = .white,
         backgroundColor: Color = Color("Splash"),
-        height: CGFloat = 67,
+        height: CGFloat = 60,
         width: CGFloat? = nil,
         cornerRadius: CGFloat = 19,
         action: @escaping () -> Void
@@ -46,7 +46,7 @@ struct PrimaryButton: View {
                     }
                     if let title = title {
                         Text(title)
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 16, weight: .medium))
                     }
                 }
                 .foregroundColor(textColor)
@@ -54,6 +54,7 @@ struct PrimaryButton: View {
                 .frame(width: width, height: height)
                 .background(backgroundColor)
                 .cornerRadius(cornerRadius)
+                .padding(.vertical, 10)
             }
             .buttonStyle(.plain)
         }

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct LocationView: View {
     @Binding var path: NavigationPath
-    @Binding var isLoggedIn: Bool
     
     @State private var selectedZone = "Banasree"
         let zones = ["Banasree", "Gulshan", "Dhanmondi"]
@@ -110,9 +109,7 @@ struct LocationView: View {
     }
 }
 #Preview {
-    LocationView(path: .constant(NavigationPath()),
-                 isLoggedIn: .constant(false)
-    
+    LocationView(path: .constant(NavigationPath())    
     )
 }
 

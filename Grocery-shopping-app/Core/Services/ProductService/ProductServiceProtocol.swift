@@ -10,4 +10,5 @@ import Foundation
 
 protocol ProductServiceProtocol {
     func fetchAllProducts() async throws -> [Product]
+    func fetchProduct(id: String, showLabel: Bool) async throws -> Product
 }

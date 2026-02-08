@@ -23,6 +23,17 @@ final class ProductService: ProductServiceProtocol {
             endpoint: ProductEndpoints.allProducts
         )
     }
-
-
+    
+    // Get Product by ID
+    func fetchProduct(
+            id: String,
+            showLabel: Bool = true
+        ) async throws -> Product {
+            try await networkClient.request(
+                endpoint: ProductEndpoints.product(
+                    id: id,
+                    showLabel: showLabel
+                )
+            )
+        }
 }

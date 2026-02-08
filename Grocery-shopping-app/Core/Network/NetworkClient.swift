@@ -11,23 +11,31 @@ import Foundation
 
 final class NetworkClient {
 
-    // Singleton instance of Network Client.
+    //Singleton
     static let shared = NetworkClient()
     private init() {}
 
     func request<T: Decodable>(
-        endpoint: Endpoint, // Acceping Endpoint obj
-        body: Encodable? = nil
+        endpoint: Endpoint
     ) async throws -> T {
 
-        // URL construction for api call.
-        let url = NetworkConfig.baseURL.appendingPathComponent(endpoint.path)
+        var components = URLComponents(
+            url: NetworkConfig.baseURL.appendingPathComponent(endpoint.path),
+            resolvingAgainstBaseURL: false
+        )
+
+        components?.queryItems = endpoint.queryItems
+
+        // Complete URL construction.
+        guard let url = components?.url else {
+            throw NetworkError.invalidURL
+        }
 
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        if let body {
+        if let body = endpoint.body {
             request.httpBody = try JSONEncoder().encode(body)
         }
 

@@ -86,6 +86,15 @@ final class AuthViewModel: ObservableObject {
             return false
         }
     }
+    
+    // Forget pass
+        func resetPassword(email: String) async throws {
+            do {
+                try await Auth.auth().sendPasswordReset(withEmail: email)
+            } catch {
+                throw error
+            }
+        }
 
     // Google SignIn
     func signInWithGoogle() {

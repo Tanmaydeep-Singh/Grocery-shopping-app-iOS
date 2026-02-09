@@ -141,17 +141,18 @@ struct SignupView: View {
     }
     
     private func handleSignup() {
-        Task {
-            let success = await authViewModel.createUser(
-                email: email,
-                password: password,
-                username: username
-            )
-            
-            if success {
-                path = NavigationPath()
-            }
-            
+        print("called")
+                Task {
+                    let success = await authViewModel.createUser(
+                        email: email,
+                        password: password,
+                        username: username
+                    )
+        
+                    if success {
+                        path = NavigationPath()
+                    }
+    
         }
     }
 }

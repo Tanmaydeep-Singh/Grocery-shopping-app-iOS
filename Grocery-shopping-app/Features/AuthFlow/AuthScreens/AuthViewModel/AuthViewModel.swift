@@ -43,10 +43,21 @@ final class AuthViewModel: ObservableObject {
             let authResult = try await auth.createUser(withEmail: email, password: password)
             let firebaseUser = authResult.user
             
+            let user = RegisterUserRequest(
+                clientName: username,
+                clientEmail: email
+            )
+
+            let registerUserService = RegisterUserService()
+
+            let token = try await registerUserService.registerUser(body: user)
+
+            
             let newUser = User(
                 id: firebaseUser.uid,
                 email: email,
-                username: username
+                username: username,
+                token: token.accessToken
             )
 
             try await storeUserInFirestore(user: newUser)
@@ -130,10 +141,23 @@ final class AuthViewModel: ObservableObject {
             if doc.exists {
                 await fetchUser(uid: firebaseUser.uid)
             } else {
+                
+            
+                let user = RegisterUserRequest(
+                    clientName: firebaseUser.displayName ?? "New User",
+                    clientEmail: firebaseUser.email ?? ""
+                )
+
+                let registerUserService = RegisterUserService()
+
+                let token = try await registerUserService.registerUser(body: user)
+
+                
                 let newUser = User(
                     id: firebaseUser.uid,
                     email: firebaseUser.email ?? "",
-                    username: firebaseUser.displayName ?? "New User"
+                    username: firebaseUser.displayName ?? "New User",
+                    token: token.accessToken
                 )
                 try await storeUserInFirestore(user: newUser)
                 self.user = newUser

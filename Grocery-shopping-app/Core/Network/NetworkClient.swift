@@ -36,7 +36,7 @@ final class NetworkClient {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         if let body = endpoint.body {
-            request.httpBody = try JSONEncoder().encode(body)
+            request.httpBody = body
         }
 
         let (data, response) = try await URLSession.shared.data(for: request)

@@ -13,12 +13,13 @@ protocol Endpoint {
     var method: HTTPMethod { get }
     //Optional
     var queryItems: [URLQueryItem]? { get }
-    var body: Encodable? { get }
+    var body: Data? { get }
 }
 
 
 // Default Protocol Implementation
 extension Endpoint {
     var queryItems: [URLQueryItem]? { nil }
-    var body: Encodable? { nil }
+    var body: Data? { nil }
 }
+

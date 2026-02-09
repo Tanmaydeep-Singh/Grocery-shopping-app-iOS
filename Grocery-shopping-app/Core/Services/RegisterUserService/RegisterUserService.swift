@@ -17,11 +17,29 @@ final class RegisterUserService : RegisterUserServiceProtocol {
     }
     
     func registerUser(
-        body: RegisterUserRequest
-    ) async throws -> RegisterUserResponse {
-        try await networkClient.request(
-            endpoint: RegisterationEndpoint.register(
-                body
-            ))
+            body: RegisterUserRequest
+        ) async throws -> RegisterUserResponse {
+
+            print("RegisterUserService: called")
+
+            do {
+                if let encodedData = try? JSONEncoder().encode(body),
+                       let jsonString = String(data: encodedData, encoding: .utf8) {
+                        print("DEBUG: Sending JSON Body -> \(jsonString)")
+                    }
+                
+                let response: RegisterUserResponse =
+                    try await networkClient.request(
+                        endpoint: RegisterationEndpoint.register(body)
+                    )
+
+                print("✅ RegisterUserService: success")
+                return response
+
+            } catch {
+                print("❌ RegisterUserService ERROR:", error)
+                print("❌ TYPE:", type(of: error))
+                throw error
+            }
     }
 }

@@ -21,5 +21,12 @@ enum RegisterationEndpoint: Endpoint {
             return .post
         }
     }
+    
+    var body: Data? {
+            switch self {
+            case .register(let userRequest):
+                return try? JSONEncoder().encode(userRequest)
+            }
+        }
 
 }

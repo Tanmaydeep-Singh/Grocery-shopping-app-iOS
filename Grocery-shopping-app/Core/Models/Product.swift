@@ -8,6 +8,16 @@ struct Product: Identifiable, Codable {
     let imageName: String
 }
 
+extension Product {
+    init(dto: ProductDTO){
+        self.id = dto.id
+        self.category = dto.category
+        self.name = dto.name
+        self.inStock = dto.inStock
+        self.imageName = dto.category.imageName
+    }
+}
+
 enum MockProducts {
 
     static let products: [Product] = [

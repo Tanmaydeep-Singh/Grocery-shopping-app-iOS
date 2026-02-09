@@ -27,6 +27,9 @@ struct HomeView: View {
                     }
                 }
             }
+            .task {
+                await viewModel.fetchProducts()
+            }
         }
     }
 }

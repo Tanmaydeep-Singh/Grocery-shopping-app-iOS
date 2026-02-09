@@ -24,5 +24,11 @@ struct CategoryChipView: View {
         .frame(width: 180)
         .background(Color(red: 0.99, green: 0.95, blue: 0.90))
         .cornerRadius(16)
+        .onTapGesture {
+            Task {
+                await viewModel.fetchProducts(category: .coffee)
+            }
+        }
+
     }
 }

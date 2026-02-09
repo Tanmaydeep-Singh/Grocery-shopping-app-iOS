@@ -20,7 +20,9 @@ struct AccountView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text(viewModel.userName)
-                            .font(.headline)
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                        
 
                         Image(systemName: "pencil")
                             .foregroundColor(.green)

@@ -10,7 +10,7 @@ struct AccountRowView: View {
                 .frame(width: 24)
 
             Text(item.title)
-                .font(.body)
+                .font(.headline)
 //                .fontWeight(.semibold)
 
             Spacer()

@@ -9,12 +9,20 @@ import SwiftUI
 struct CategoryProductsView: View {
     let category: Category
     @State private var showFilter = false;
+    @State private var gridLayout: GridLayout = .twoColumn
     
     var body: some View {
-        VStack {
-            ScreenHeader(title: "show product list here")
-            Spacer()
-            
+        ScrollView {
+            LazyVGrid(columns: gridLayout.columns,spacing: 16) {
+                ForEach(
+                    MockProducts.products
+                        /*.filter { $0.category.rawValue == category.title }*/,
+                    id: \.id
+                ) { product in
+                    ProductCard(product: product)
+                }
+            }
+            .padding()
         }
         .toolbar {
             ToolbarItem(placement: .principal) {

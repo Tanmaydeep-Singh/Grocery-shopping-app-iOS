@@ -6,6 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		24CCB5DF2F39E224003E8383 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 24CCB5DE2F39E224003E8383 /* FirebaseAuth */; };
+		24CCB5E12F39E228003E8383 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 24CCB5E02F39E228003E8383 /* FirebaseCore */; };
+		24CCB5E32F39E231003E8383 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 24CCB5E22F39E231003E8383 /* FirebaseFirestore */; };
+		24CCB5E62F39E301003E8383 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 24CCB5E52F39E301003E8383 /* GoogleSignIn */; };
+		24CCB5E82F39E301003E8383 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 24CCB5E72F39E301003E8383 /* GoogleSignInSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		144EE8C92F3311E20030FBCA /* Nectar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nectar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +31,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24CCB5E82F39E301003E8383 /* GoogleSignInSwift in Frameworks */,
+				24CCB5E12F39E228003E8383 /* FirebaseCore in Frameworks */,
+				24CCB5E62F39E301003E8383 /* GoogleSignIn in Frameworks */,
+				24CCB5DF2F39E224003E8383 /* FirebaseAuth in Frameworks */,
+				24CCB5E32F39E231003E8383 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +46,7 @@
 			isa = PBXGroup;
 			children = (
 				144EE8CB2F3311E20030FBCA /* Grocery-shopping-app */,
+				24CCB5DD2F39E224003E8383 /* Frameworks */,
 				144EE8CA2F3311E20030FBCA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +57,13 @@
 				144EE8C92F3311E20030FBCA /* Nectar.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		24CCB5DD2F39E224003E8383 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -65,6 +86,11 @@
 			);
 			name = Nectar;
 			packageProductDependencies = (
+				24CCB5DE2F39E224003E8383 /* FirebaseAuth */,
+				24CCB5E02F39E228003E8383 /* FirebaseCore */,
+				24CCB5E22F39E231003E8383 /* FirebaseFirestore */,
+				24CCB5E52F39E301003E8383 /* GoogleSignIn */,
+				24CCB5E72F39E301003E8383 /* GoogleSignInSwift */,
 			);
 			productName = "Grocery-shopping-app";
 			productReference = 144EE8C92F3311E20030FBCA /* Nectar.app */;
@@ -94,6 +120,10 @@
 			);
 			mainGroup = 144EE8C02F3311E20030FBCA;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				24CCB5DC2F39DD81003E8383 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				24CCB5E42F39E301003E8383 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 144EE8CA2F3311E20030FBCA /* Products */;
 			projectDirPath = "";
@@ -184,6 +214,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -240,6 +271,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -330,6 +362,53 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		24CCB5DC2F39DD81003E8383 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.9.0;
+			};
+		};
+		24CCB5E42F39E301003E8383 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		24CCB5DE2F39E224003E8383 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24CCB5DC2F39DD81003E8383 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		24CCB5E02F39E228003E8383 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24CCB5DC2F39DD81003E8383 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		24CCB5E22F39E231003E8383 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24CCB5DC2F39DD81003E8383 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		24CCB5E52F39E301003E8383 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24CCB5E42F39E301003E8383 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		24CCB5E72F39E301003E8383 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24CCB5E42F39E301003E8383 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 144EE8C12F3311E20030FBCA /* Project object */;
 }

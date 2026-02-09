@@ -3,6 +3,7 @@ import SwiftUI
 struct CategoryChipView: View {
 
     let category: Category
+    let onTap: () -> Void
 
     var body: some View {
         HStack(spacing: 12) {
@@ -25,9 +26,7 @@ struct CategoryChipView: View {
         .background(Color(red: 0.99, green: 0.95, blue: 0.90))
         .cornerRadius(16)
         .onTapGesture {
-            Task {
-                await viewModel.fetchProducts(category: .coffee)
-            }
+            onTap()
         }
 
     }

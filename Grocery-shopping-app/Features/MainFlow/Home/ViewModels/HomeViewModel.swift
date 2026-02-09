@@ -7,6 +7,7 @@ final class HomeViewModel: ObservableObject {
     @Published var products: [Product] = []
     @Published var currentBannerIndex: Int = 0
     @Published var categories: [Category] = []
+    @Published var categoryProducts: [Product] = []
     
     let bannerImages: [String] = [
         "banner_1",
@@ -18,6 +19,7 @@ final class HomeViewModel: ObservableObject {
     
     init() {
         products = MockProducts.products
+        categoryProducts = MockProducts.products
         loadCategories()
     }
     
@@ -35,9 +37,14 @@ final class HomeViewModel: ObservableObject {
             var dtos: [ProductDTO] =
             try await NetworkClient.shared.request(endpoint: endpoint)
 
-            // If category filter is applied
-            if let category {
-                dtos = dtos.filter { $0.category == category }
+//            // If category filter is applied
+//            if let category {
+//                dtos = dtos.filter { $0.category == category }
+//            }
+            if let category{
+                categoryProducts = dtos
+                    .filter { $0.category == category }
+                    .map(Product.init)
             }
 
             // DTO → UI MODEL (Mapping)

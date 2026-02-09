@@ -21,9 +21,20 @@ struct HomeView: View {
                             .fontWeight(.semibold)
                             .padding(.horizontal)
                         
-                        CategorySectionView(categories: viewModel.categories)
+                        CategorySectionView(
+                            categories: viewModel.categories
+                        ) { category in
+                            Task {
+                                // Convert UI Category → ProductCategory
+                                if let productCategory = ProductCategory.allCases.first(
+                                    where: { $0.title == category.title }
+                                ) {
+                                    await viewModel.fetchProducts(category: productCategory)
+                                }
+                            }
+                        }
                         
-                        ProductGridView(title: nil, products: viewModel.products)
+                        ProductGridView(title: nil, products: viewModel.categoryProducts)
                     }
                 }
             }

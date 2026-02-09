@@ -28,12 +28,14 @@ struct CategoryCard: View {
         }
         .padding(12)
         .frame(height: 189)
-        .background(Color(hex: backgroundColor))
+        .background(Color(hex: backgroundColor).opacity(0.5))
+        .border(Color("CategoryCardBorder"), width: 2)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color("CategoryCardBorder"), lineWidth: 1)
+                .stroke(Color(.black), lineWidth: 1)
         )
         .opacity(1)
+        
     }
 }

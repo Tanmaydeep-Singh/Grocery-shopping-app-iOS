@@ -7,6 +7,7 @@ final class HomeViewModel: ObservableObject {
     @Published var products: [Product] = []
     @Published var currentBannerIndex: Int = 0
     @Published var categories: [Category] = []
+    @Published var categoryProducts: [Product] = []
     
     let bannerImages: [String] = [
         "banner_1",
@@ -18,7 +19,40 @@ final class HomeViewModel: ObservableObject {
     
     init() {
         products = MockProducts.products
+        categoryProducts = MockProducts.products
         loadCategories()
+    }
+    
+    private func loadCategories() {
+        categories = ProductCategory
+            .allCases
+            .map { $0.toCategory() }
+    }
+    
+    // Fetch Products through API
+    func fetchProducts(category: ProductCategory? = nil) async {
+        do {
+            let endpoint: ProductEndpoints = .allProducts
+
+            var dtos: [ProductDTO] =
+            try await NetworkClient.shared.request(endpoint: endpoint)
+
+//            // If category filter is applied
+//            if let category {
+//                dtos = dtos.filter { $0.category == category }
+//            }
+            if let category{
+                categoryProducts = dtos
+                    .filter { $0.category == category }
+                    .map(Product.init)
+            }
+
+            // DTO → UI MODEL (Mapping)
+            products = dtos.map(Product.init)
+
+        } catch {
+            print("❌ Failed to fetch products:", error)
+        }
     }
     
     private var timer: AnyCancellable?
@@ -42,12 +76,6 @@ final class HomeViewModel: ObservableObject {
         currentBannerIndex =
         (currentBannerIndex + 1) % bannerImages.count
     }
-    
-    private func loadCategories() {
-            categories = ProductCategory
-                .allCases
-                .map { $0.toCategory() }
-        }
     
     func products(for section: HomeSectionType) -> [Product] {
         switch section {

@@ -8,5 +8,5 @@
 import Foundation
 
 enum NetworkConfig {
-    static let baseURL = URL(string: "")!
+    static let baseURL = URL(string: "your api")!
 }

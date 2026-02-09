@@ -6,13 +6,27 @@
 //
 
 import SwiftUI
+import Combine
 
-struct ProductViewModel: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+@MainActor
+final class ProductViewModel: ObservableObject {
+    @Published var productDetail: ProductDetail?
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    
+    func fetchProductDetail(productId: Int) async {
+        isLoading = true
+        errorMessage = nil
+        
+        do {
+            let dto: ProductDetailDTO = try await NetworkClient.shared.request(endpoint: ProductEndpoints.product(id: String(productId), showLabel: true))
+            
+            productDetail = ProductDetail(dto: dto)
+        }  catch {
+            errorMessage = "Failed to load product details"
+        }
+
+        isLoading = false
     }
 }
 
-#Preview {
-    ProductViewModel()
-}

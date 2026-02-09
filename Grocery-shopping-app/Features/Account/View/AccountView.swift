@@ -7,7 +7,7 @@ struct AccountView: View {
     var body: some View {
         VStack(spacing: 0) {
 
-            // MARK: - Profile Header
+            // MARK: Profile Header
             
             HStack(spacing: 14) {
 

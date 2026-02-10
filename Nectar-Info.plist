@@ -9,14 +9,11 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>CFBundleURLIconFile</key>
-			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.749047941324-euiup9da4a49teap4unbv8i301isp4f7</string>
 			</array>
 		</dict>
-		<dict/>
 	</array>
 </dict>
 </plist>

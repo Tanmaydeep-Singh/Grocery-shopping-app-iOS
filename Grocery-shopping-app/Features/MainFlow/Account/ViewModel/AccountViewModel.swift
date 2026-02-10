@@ -1,10 +1,13 @@
+
 import Foundation
 import Combine
+import FirebaseAuth
 
 final class AccountViewModel: ObservableObject {
 
-    @Published var userName: String = "Kushagra"
-    @Published var userEmail: String = "hello@gmail.com"
+    // MARK: - User Info
+    @Published var userName: String = ""
+    @Published var userEmail: String = ""
 
     // MARK: - Menu Items
     let menuItems: [AccountMenuItem] = [
@@ -17,5 +20,7 @@ final class AccountViewModel: ObservableObject {
         .init(title: "Help", icon: "questionmark.circle"),
         .init(title: "About", icon: "info.circle")
     ]
+
 }
+
 

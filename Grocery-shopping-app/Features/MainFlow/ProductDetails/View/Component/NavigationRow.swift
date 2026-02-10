@@ -34,4 +34,6 @@ struct NavigationRow<Content: View>: View {
 
 #Preview {
     NavigationRow(title: "Testing", trailingText: "This is for testing purpose")
+        .environmentObject(AuthViewModel())
+
 }

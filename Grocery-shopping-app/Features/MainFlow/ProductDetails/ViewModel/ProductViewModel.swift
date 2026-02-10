@@ -14,18 +14,20 @@ final class ProductViewModel: ObservableObject {
     @Published var productDetail: ProductDetail?
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var isFavorite: Bool = false
     
     private let favoritesService: FavoritesServiceProtocol = FavoritesService()
 
     
-    func fetchProductDetail(productId: Int) async {
+    func fetchProductDetail(productId: Int, userId:  String) async {
         isLoading = true
         errorMessage = nil
 
         do {
             let dto: ProductDetailDTO = try await NetworkClient.shared.request(endpoint: ProductEndpoints.product(id: String(productId), showLabel: true))
-            
+            isFavorite = try await favoritesService.isFavorite(userId: userId, itemId: productId)
             productDetail = ProductDetail(dto: dto)
+
         }  catch {
             errorMessage = "Failed to load product details"
         }
@@ -56,5 +58,7 @@ final class ProductViewModel: ObservableObject {
             }
         }
     }
+    
+    
 }
 

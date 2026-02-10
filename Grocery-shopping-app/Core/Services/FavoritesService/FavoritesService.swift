@@ -70,4 +70,18 @@ final class FavoritesService: FavoritesServiceProtocol {
             .document(String(productId))
             .delete()
     }
+    
+    // check if the item is favorite.
+    func isFavorite(
+        userId: String,
+        itemId: Int
+    ) async throws -> Bool {
+        
+        let document = try await favoritesRef(userId: userId)
+            .document(String(itemId))
+            .getDocument()
+        
+        return document.exists
+    }
+
 }

@@ -46,10 +46,11 @@ struct ProductDetailView: View {
                                     await viewModel.addToFavorites(userId: userId)
                                 }
                             } label: {
-                                Image(systemName: "heart")
+                                Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
                                     .font(.title3)
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(viewModel.isFavorite ? .red : .primary)
                             }
+
                         }
                         .padding(.horizontal)
                         
@@ -125,11 +126,14 @@ struct ProductDetailView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await viewModel.fetchProductDetail(productId: product.id)
+            let userId = authViewModel.user?.id ?? ""
+            await viewModel.fetchProductDetail(productId: product.id, userId: userId)
         }
     }
 }
 
 #Preview {
     ProductDetailView(product: MockProducts.dummyProduct)
+        .environmentObject(AuthViewModel())
+
 }

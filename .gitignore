@@ -4,3 +4,6 @@ xcuserdata/
 
 # EXCEPT specific ones you actually need (Uncomment if needed)
 # !Info.plist
+
+# Secrets
+Secrets.xcconfig

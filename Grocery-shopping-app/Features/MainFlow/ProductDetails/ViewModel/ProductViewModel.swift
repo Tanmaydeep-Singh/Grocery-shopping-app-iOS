@@ -46,7 +46,8 @@ final class ProductViewModel: ObservableObject {
             id: product.id,
             name: product.name,
             manufacturer: product.manufacturer,
-            price: product.price
+            price: product.price,
+            category: product.category,
         )
 
         Task {

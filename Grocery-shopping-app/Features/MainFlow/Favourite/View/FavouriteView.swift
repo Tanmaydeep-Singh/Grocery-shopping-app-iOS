@@ -68,10 +68,10 @@ struct FavouriteView: View {
         NavigationLink {
             ProductDetailView(productId: item.id)
         } label: {
-            ProgressView()
             HStack(spacing: 14) {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.gray.opacity(0.2))
+                Image(item.imageName)
+                    .resizable()
+                    .scaledToFit()
                     .frame(width: 76, height: 104)
                 
                 VStack(spacing: 10) {

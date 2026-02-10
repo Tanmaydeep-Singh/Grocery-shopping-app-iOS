@@ -8,30 +8,32 @@
 import SwiftUI
 
 struct LoginView: View {
-    
+
     @Binding var path: NavigationPath
 
     @State private var email = ""
     @State private var password = ""
     @State private var isPasswordVisible = false
-    
+
+    @State private var showResetSuccessAlert = false
+
     @EnvironmentObject var authViewModel: AuthViewModel
 
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
-                
+
                 Image("CarrotOrange")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 50, height: 50)
                     .padding(.vertical, 30)
-                
+
                 VStack(alignment: .leading, spacing: 10) {
                     Text("login_title")
                         .font(.system(size: 26, weight: .semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
+
                     Text("login_subtitle")
                         .font(.system(size: 16))
                         .foregroundColor(.secondary)
@@ -39,31 +41,32 @@ struct LoginView: View {
                 .padding(.bottom, 20)
 
                 VStack(spacing: 25) {
+
                     VStack(alignment: .leading, spacing: 10) {
                         Text("login_email_title")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
-                        
+
                         TextField("login_email_placeholder", text: $email)
                             .keyboardType(.emailAddress)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
-                        
+
                         Divider()
                     }
-                   
+
                     VStack(alignment: .leading, spacing: 10) {
                         Text("login_password_title")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
-                        
+
                         HStack {
                             if isPasswordVisible {
                                 TextField("login_password_placeholder", text: $password)
                             } else {
                                 SecureField("login_password_placeholder", text: $password)
                             }
-                            
+
                             Button {
                                 isPasswordVisible.toggle()
                             } label: {
@@ -74,8 +77,9 @@ struct LoginView: View {
                         Divider()
                     }
                 }
-                
+
                 Button {
+                    handlePasswordReset()
                 } label: {
                     Text("login_forgot_password")
                         .font(.system(size: 14))
@@ -103,10 +107,11 @@ struct LoginView: View {
                 }
                 .disabled(isFormInvalid || authViewModel.isLoading)
                 .padding(.top, 10)
-                
+
                 HStack {
                     Text("login_no_account_text")
                         .font(.system(size: 14, weight: .semibold))
+
                     Button {
                         path.append(OnboardingRoutes.signup)
                     } label: {
@@ -118,23 +123,53 @@ struct LoginView: View {
             }
             .padding(25)
         }
+
         .alert("Error", isPresented: $authViewModel.isError) {
             Button("OK", role: .cancel) { }
         } message: {
             Text(authViewModel.errorMessage ?? "An unknown error occurred.")
         }
+
+        .alert("Password Reset", isPresented: $showResetSuccessAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("A password reset link has been sent to your email.")
+        }
     }
-    
-    
+
+
     private var isFormInvalid: Bool {
         email.isEmpty || password.isEmpty
     }
-    
+
     private func handleLogin() {
         Task {
-            let success = await authViewModel.loginUser(email: email, password: password)
+            let success = await authViewModel.loginUser(
+                email: email,
+                password: password
+            )
             if success {
                 path = NavigationPath()
+            }
+        }
+    }
+
+    private func handlePasswordReset() {
+        let trimmedEmail = email.trimmingCharacters(in: .whitespaces)
+
+        guard !trimmedEmail.isEmpty else {
+            authViewModel.errorMessage = "Email should be present"
+            authViewModel.isError = true
+            return
+        }
+
+        Task {
+            do {
+                try await authViewModel.resetPassword(email: trimmedEmail)
+                showResetSuccessAlert = true
+            } catch {
+                authViewModel.errorMessage = error.localizedDescription
+                authViewModel.isError = true
             }
         }
     }

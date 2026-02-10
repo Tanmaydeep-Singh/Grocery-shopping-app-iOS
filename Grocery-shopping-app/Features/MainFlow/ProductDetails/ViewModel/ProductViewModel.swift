@@ -52,11 +52,29 @@ final class ProductViewModel: ObservableObject {
         Task {
             do {
                 try await favoritesService.addToFavorites(userId: userId, item: item)
-                print("Successfully added to favorites")
+                isFavorite = true
             } catch {
                 self.errorMessage = error.localizedDescription
             }
         }
+    }
+    
+    func removeFromFavorite(userId: String){
+        
+        guard let product = productDetail else {
+            self.errorMessage = "Product information is missing."
+            return
+        }
+
+        Task {
+            do {
+                try await favoritesService.removeFromFavorites(userId: userId, productId: product.id)
+                isFavorite = false
+            } catch {
+                self.errorMessage = error.localizedDescription
+            }
+        }
+        
     }
     
     

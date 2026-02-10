@@ -12,16 +12,22 @@ final class FavoritesService: FavoritesServiceProtocol {
     
     private let db = Firestore.firestore()
     
+    // Create ref to user
     private func favoritesRef(userId: String) -> CollectionReference {
         db.collection("users")
             .document(userId)
             .collection("favourites")
     }
     
+    // Add to favorites
     func addToFavorites(
         userId: String,
         item: FavouriteItem
     ) async throws {
+        
+        guard !userId.isEmpty else {
+                throw NSError(domain: "FavoritesService", code: 401, userInfo: [NSLocalizedDescriptionKey: "User ID is empty"])
+            }
         
         let docRef = favoritesRef(userId: userId)
             .document(String(item.id))
@@ -36,6 +42,7 @@ final class FavoritesService: FavoritesServiceProtocol {
         try await docRef.setData(data)
     }
     
+    // Get favorite
     func getFavorites(userId: String) async throws -> [FavouriteItem] {
         
         let snapshot = try await favoritesRef(userId: userId).getDocuments()
@@ -61,6 +68,7 @@ final class FavoritesService: FavoritesServiceProtocol {
         }
     }
     
+    // Remove from favorite
     func removeFromFavorites(
         userId: String,
         productId: Int

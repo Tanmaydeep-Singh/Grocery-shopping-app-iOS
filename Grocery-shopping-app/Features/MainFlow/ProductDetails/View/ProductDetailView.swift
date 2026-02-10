@@ -43,8 +43,16 @@ struct ProductDetailView: View {
                             Button {
                                 Task {
                                     let userId = authViewModel.user?.id ?? ""
-                                    await viewModel.addToFavorites(userId: userId)
+
+                                    do {
+                                        if viewModel.isFavorite {
+                                            viewModel.removeFromFavorite(userId: userId)
+                                        } else {
+                                             viewModel.addToFavorites(userId: userId)
+                                        }
+                                    }
                                 }
+
                             } label: {
                                 Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
                                     .font(.title3)

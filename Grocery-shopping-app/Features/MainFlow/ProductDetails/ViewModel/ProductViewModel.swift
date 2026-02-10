@@ -10,14 +10,18 @@ import Combine
 
 @MainActor
 final class ProductViewModel: ObservableObject {
+    
     @Published var productDetail: ProductDetail?
     @Published var isLoading = false
     @Published var errorMessage: String?
     
+    private let favoritesService: FavoritesServiceProtocol = FavoritesService()
+
+    
     func fetchProductDetail(productId: Int) async {
         isLoading = true
         errorMessage = nil
-        
+
         do {
             let dto: ProductDetailDTO = try await NetworkClient.shared.request(endpoint: ProductEndpoints.product(id: String(productId), showLabel: true))
             
@@ -27,6 +31,30 @@ final class ProductViewModel: ObservableObject {
         }
 
         isLoading = false
+    }
+    
+    func addToFavorites(userId: String) {
+        
+        guard let product = productDetail else {
+            self.errorMessage = "Product information is missing."
+            return
+        }
+
+        let item = FavouriteItem(
+            id: product.id,
+            name: product.name,
+            manufacturer: product.manufacturer,
+            price: product.price
+        )
+
+        Task {
+            do {
+                try await favoritesService.addToFavorites(userId: userId, item: item)
+                print("Successfully added to favorites")
+            } catch {
+                self.errorMessage = error.localizedDescription
+            }
+        }
     }
 }
 

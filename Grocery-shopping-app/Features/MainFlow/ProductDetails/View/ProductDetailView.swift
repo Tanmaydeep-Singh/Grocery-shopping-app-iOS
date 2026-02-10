@@ -4,6 +4,7 @@ struct ProductDetailView: View {
 
     let product: Product
 
+    @EnvironmentObject private var authViewModel: AuthViewModel
     @StateObject private var viewModel = ProductViewModel()
     @State private var quantity: Int = 1
 
@@ -39,9 +40,16 @@ struct ProductDetailView: View {
                             }
                             
                             Spacer()
-                            
-                            Image(systemName: "heart")
-                                .font(.title3)
+                            Button {
+                                Task {
+                                    let userId = authViewModel.user?.id ?? ""
+                                    await viewModel.addToFavorites(userId: userId)
+                                }
+                            } label: {
+                                Image(systemName: "heart")
+                                    .font(.title3)
+                                    .foregroundColor(.primary)
+                            }
                         }
                         .padding(.horizontal)
                         

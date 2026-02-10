@@ -1,75 +1,84 @@
-import SwiftUI
+import Foundation
 import Combine
 
-@MainActor
+//@MainActor
 final class CartViewModel: ObservableObject {
 
-    // MARK: - Published State
     @Published var cartItems: [CartItem] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
 
-    // MARK: - Init (load dummy cart)
-    init() {
-        loadDummyCart()
+    private let service: CartServiceProtocol
+    private var cartId: String?
+
+    init(service: CartServiceProtocol = CartServiceImpl()) {
+        self.service = service
     }
 
-    // MARK: - Dummy Data
-    private func loadDummyCart() {
-        cartItems = [
-            CartItem(
-                id: "1",
-                productName: "Bell Pepper Red",
-                productImageURL: "",
-                unitDescription: "1kg",
-                price: 4.99,
-                quantity: 2
-            ),
-            CartItem(
-                id: "2",
-                productName: "Egg Chicken Red",
-                productImageURL: "",
-                unitDescription: "4pcs",
-                price: 1.99,
-                quantity: 3
-            ),
-            CartItem(
-                id: "3",
-                productName: "Organic Bananas",
-                productImageURL: "",
-                unitDescription: "12kg",
-                price: 3.00,
-                quantity: 1
-            ),
-            CartItem(
-                id: "4",
-                productName: "Ginger",
-                productImageURL: "",
-                unitDescription: "250gm",
-                price: 2.99,
-                quantity: 2
-            )
-        ]
+    func onAppear() {
+        if cartId == nil {
+            createCart()
+        }
     }
 
-    // MARK: - Actions
+    private func createCart() {
+        isLoading = true
+
+        Task {
+            do {
+                let cart = try await service.createCart()
+                cartId = cart.id
+                cartItems = cart.items
+            } catch {
+                errorMessage = "Failed to create cart"
+            }
+
+            isLoading = false
+        }
+    }
+
     func increaseQuantity(for item: CartItem) {
-        updateQuantity(for: item, delta: 1)
+        updateQuantity(for: item, newQuantity: item.quantity + 1)
     }
 
     func decreaseQuantity(for item: CartItem) {
         guard item.quantity > 1 else { return }
-        updateQuantity(for: item, delta: -1)
+        updateQuantity(for: item, newQuantity: item.quantity - 1)
     }
 
-    private func updateQuantity(for item: CartItem, delta: Int) {
-        guard let index = cartItems.firstIndex(where: { $0.id == item.id }) else { return }
-        cartItems[index].quantity += delta
+    private func updateQuantity(for item: CartItem, newQuantity: Int) {
+        guard let cartId else { return }
+
+        Task {
+            do {
+                let updatedCart = try await service.updateItemQuantity(
+                    cartId: cartId,
+                    itemId: item.id,
+                    quantity: newQuantity
+                )
+                cartItems = updatedCart.items
+            } catch {
+                errorMessage = "Failed to update quantity"
+            }
+        }
     }
 
     func removeItem(_ item: CartItem) {
-        cartItems.removeAll { $0.id == item.id }
+        guard let cartId else { return }
+
+        Task {
+            do {
+                let updatedCart = try await service.removeItem(
+                    cartId: cartId,
+                    itemId: item.id
+                )
+                cartItems = updatedCart.items
+            } catch {
+                errorMessage = "Failed to remove item"
+            }
+        }
     }
 
-    // MARK: - Total
     var totalPrice: Double {
         cartItems.reduce(0) {
             $0 + ($1.price * Double($1.quantity))

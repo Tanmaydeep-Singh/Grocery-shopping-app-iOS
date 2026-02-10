@@ -65,40 +65,46 @@ struct FavouriteView: View {
     }
 
     private func favouriteItemRow(item: FavouriteItem) -> some View {
-        HStack(spacing: 14) {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color.gray.opacity(0.2))
-                .frame(width: 76, height: 104)
-
-            VStack(spacing: 10) {
-                HStack {
-                    Text(item.name)
+        NavigationLink {
+            ProductDetailView(productId: item.id)
+        } label: {
+            ProgressView()
+            HStack(spacing: 14) {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(width: 76, height: 104)
+                
+                VStack(spacing: 10) {
+                    HStack {
+                        Text(item.name)
+                            .font(.body)
+                            .fontWeight(.medium)
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Text(item.manufacturer)
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                        Spacer()
+                    }
+                }
+                
+                Spacer()
+                
+                HStack(spacing: 8) {
+                    Text("$\(item.price, specifier: "%.2f")")
                         .font(.body)
                         .fontWeight(.medium)
-                    Spacer()
-                }
-
-                HStack {
-                    Text(item.manufacturer)
+                    
+                    Image(systemName: "chevron.right")
                         .font(.footnote)
                         .foregroundColor(.gray)
-                    Spacer()
                 }
             }
-
-            Spacer()
-
-            HStack(spacing: 8) {
-                Text("$\(item.price, specifier: "%.2f")")
-                    .font(.body)
-                    .fontWeight(.medium)
-
-                Image(systemName: "chevron.right")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-            }
+            .padding(.vertical, 22)
         }
-        .padding(.vertical, 22)
+        .buttonStyle(.plain)
     }
 }
 

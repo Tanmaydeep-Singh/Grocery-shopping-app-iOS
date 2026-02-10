@@ -24,7 +24,7 @@ struct ProductGridView: View {
                 LazyHGrid(rows: rows, spacing: 16) {
                     ForEach(products) { product in
                         NavigationLink {
-                            ProductDetailView(product: product)
+                            ProductDetailView(productId: product.id)
                         } label: {
                             ProductCard(product: product)
                                 .frame(width: 180)

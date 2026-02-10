@@ -8,6 +8,7 @@ final class HomeViewModel: ObservableObject {
     @Published var currentBannerIndex: Int = 0
     @Published var categories: [Category] = []
     @Published var categoryProducts: [Product] = []
+    @Published var isLoading: Bool = false
     
     let bannerImages: [String] = [
         "banner_1",
@@ -18,8 +19,8 @@ final class HomeViewModel: ObservableObject {
     let sections: [HomeSectionType] = HomeSectionType.allCases
     
     init() {
-        products = MockProducts.products
-        categoryProducts = MockProducts.products
+//        products = MockProducts.products
+//        categoryProducts = MockProducts.products
         loadCategories()
     }
     
@@ -31,6 +32,7 @@ final class HomeViewModel: ObservableObject {
     
     // Fetch Products through API
     func fetchProducts(category: ProductCategory? = nil) async {
+        isLoading = true;
         do {
             let endpoint: ProductEndpoints = .allProducts
 
@@ -53,6 +55,7 @@ final class HomeViewModel: ObservableObject {
         } catch {
             print("❌ Failed to fetch products:", error)
         }
+        isLoading = false;
     }
     
     private var timer: AnyCancellable?

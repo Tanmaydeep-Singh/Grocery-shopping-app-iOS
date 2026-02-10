@@ -4,6 +4,7 @@ struct ProductGridView: View {
 
     let title: String?
     let products: [Product]
+    @StateObject private var viewModel = HomeViewModel()
 
     private let rows = [
         GridItem(.fixed(250))
@@ -19,20 +20,24 @@ struct ProductGridView: View {
                     .padding(.horizontal)
             }
 
-            ScrollView(.horizontal, showsIndicators: false) {
-
-                LazyHGrid(rows: rows, spacing: 16) {
-                    ForEach(products) { product in
-                        NavigationLink {
-                            ProductDetailView(productId: product.id)
-                        } label: {
-                            ProductCard(product: product)
-                                .frame(width: 180)
+            if viewModel.isLoading{
+                ProgressView()
+                    .padding()
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHGrid(rows: rows, spacing: 16) {
+                        ForEach(products) { product in
+                            NavigationLink {
+                                ProductDetailView(productId: product.id)
+                            } label: {
+                                ProductCard(product: product)
+                                    .frame(width: 180)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
         }
     }

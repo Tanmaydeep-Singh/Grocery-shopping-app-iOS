@@ -9,8 +9,6 @@ struct AccountView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-
-            // Profile Header
             
             HStack(spacing: 14) {
 
@@ -22,14 +20,16 @@ struct AccountView: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text(viewModel.userName)
-                            .font(.headline)
+                        Text(authViewModel.user?.username ?? "guest user")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                        
 
                         Image(systemName: "pencil")
                             .foregroundColor(.green)
                     }
 
-                    Text(viewModel.userEmail)
+                    Text(authViewModel.user?.email ?? "guest@gmail.com")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
@@ -61,17 +61,13 @@ struct AccountView: View {
                 }
             }
             
-            
-            // MARK: - Logout Button
-
+        
             
             PrimaryButton(
                 title: "Log Out",
                 icon: "arrow.backward.square",
                 textColor: .green,
                 backgroundColor: Color.green.opacity(0.12),
-                height: 56,
-                cornerRadius: 14
             ) {
                 Task{
                     authViewModel.logout()

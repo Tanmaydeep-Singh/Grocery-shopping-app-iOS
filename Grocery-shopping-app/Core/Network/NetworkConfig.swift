@@ -1,12 +1,13 @@
 //
-//  NetworkConfig.swift
-//  Nectar
+//  NetworkConfig.swift
+//  Nectar
 //
-//  Created by tanmaydeep on 08/02/26.
+//  Created by tanmaydeep on 08/02/26.
 //
-
+ 
 import Foundation
-
+ 
 enum NetworkConfig {
-    static let baseURL = URL(string: "your api")!
+    static let baseURL = URL(string: AppConfig.apiBaseURL)!
 }
+ 

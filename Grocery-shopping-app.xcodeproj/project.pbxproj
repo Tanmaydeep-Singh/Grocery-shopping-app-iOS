@@ -48,11 +48,11 @@
 		144EE8C02F3311E20030FBCA = {
 			isa = PBXGroup;
 			children = (
-				248542762F3B0AA4002AD885 /* Secrets */,
 				24853E7F2F3B000C002AD885 /* Nectar-Info.plist */,
 				144EE8CB2F3311E20030FBCA /* Grocery-shopping-app */,
 				24CCB5DD2F39E224003E8383 /* Frameworks */,
 				144EE8CA2F3311E20030FBCA /* Products */,
+				248542772F3B0AEA002AD885 /* Secrets.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,14 +62,6 @@
 				144EE8C92F3311E20030FBCA /* Nectar.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		248542762F3B0AA4002AD885 /* Secrets */ = {
-			isa = PBXGroup;
-			children = (
-				248542772F3B0AEA002AD885 /* Secrets.xcconfig */,
-			);
-			path = Secrets;
 			sourceTree = "<group>";
 		};
 		24CCB5DD2F39E224003E8383 /* Frameworks */ = {

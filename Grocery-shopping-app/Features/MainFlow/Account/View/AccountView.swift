@@ -20,7 +20,7 @@ struct AccountView: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text(viewModel.userName)
+                        Text(authViewModel.user?.username ?? "guest user")
                             .font(.title3)
                             .fontWeight(.semibold)
                         
@@ -29,7 +29,7 @@ struct AccountView: View {
                             .foregroundColor(.green)
                     }
 
-                    Text(viewModel.userEmail)
+                    Text(authViewModel.user?.email ?? "guest@gmail.com")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
@@ -61,17 +61,13 @@ struct AccountView: View {
                 }
             }
             
-            
-            // MARK: - Logout Button
-
+        
             
             PrimaryButton(
                 title: "Log Out",
                 icon: "arrow.backward.square",
                 textColor: .green,
                 backgroundColor: Color.green.opacity(0.12),
-                height: 56,
-                cornerRadius: 14
             ) {
                 Task{
                     authViewModel.logout()

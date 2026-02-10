@@ -8,89 +8,86 @@
 import SwiftUI
 
 struct FavouriteView: View {
-
+    
+    @EnvironmentObject var authViewModel: AuthViewModel
     @StateObject private var viewModel = FavouriteViewModel()
-
+    
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottom) {
-                
-                // Scrollable Content
-                ScrollView {
-                    VStack(spacing: 0) {
-                        
-                        // Header
-                        Text("My Favourites")
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity)
-                            .padding(.top, 20)
-                            .padding(.bottom, 16)
-                        
-                        Divider()
-                            .padding(.bottom, 12)
-                        
-                        // Favourite items
-                        VStack(spacing: 0) {
-                            ForEach(viewModel.favouriteItems.indices, id: \.self) { index in
-                                let item = viewModel.favouriteItems[index]
-                                
-                                favouriteItemRow(item: item)
-                                
-                                if index != viewModel.favouriteItems.count - 1 {
+            ZStack {
+                VStack(spacing: 0) {
+                    Text("My Favourites")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .padding(.top, 20)
+                        .padding(.bottom, 16)
+
+                    Divider()
+
+                    if viewModel.isLoading {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    } else if viewModel.favouriteItems.isEmpty {
+                        Spacer()
+                        Text("No favourites yet")
+                            .foregroundColor(.gray)
+                        Spacer()
+                    } else {
+                        ScrollView {
+                            VStack(spacing: 0) {
+                                ForEach(viewModel.favouriteItems) { item in
+                                    favouriteItemRow(item: item)
                                     Divider()
-                                        .padding(.top, 22)
                                 }
                             }
+                            .padding(.horizontal)
+                            
+                            Color.clear.frame(height: 90)
                         }
-                        .padding(.horizontal)
-                        
-                        // Space for bottom CTA
-                        Color.clear
-                            .frame(height: 90)
                     }
                 }
                 
-                PrimaryButton(title:"Add to cart"){
+                VStack {
+                    Spacer()
+                    PrimaryButton(title: "Add to cart") {
+                        // Action
+                    }
+                    .padding(.bottom, 10)
                 }
             }
-            
             .background(Color.white)
+            .task {
+                let userId = authViewModel.user?.id ?? ""
+                await viewModel.loadFavorites(userId: userId)
+            }
         }
     }
 
-    // Favourite Item Row
-    private func favouriteItemRow(item: CartItem) -> some View {
+    private func favouriteItemRow(item: FavouriteItem) -> some View {
         HStack(spacing: 14) {
-
-            // Image placeholder (same size as Cart)
             RoundedRectangle(cornerRadius: 8)
                 .fill(Color.gray.opacity(0.2))
                 .frame(width: 76, height: 104)
 
-            // Product info
             VStack(spacing: 10) {
-
                 HStack {
-                    Text(item.productName)
+                    Text(item.name)
                         .font(.body)
                         .fontWeight(.medium)
-
                     Spacer()
                 }
 
                 HStack {
-                    Text("\(item.unitDescription), Price")
+                    Text(item.manufacturer)
                         .font(.footnote)
                         .foregroundColor(.gray)
-
                     Spacer()
                 }
             }
 
             Spacer()
 
-            // Price + chevron
             HStack(spacing: 8) {
                 Text("$\(item.price, specifier: "%.2f")")
                     .font(.body)
@@ -103,11 +100,9 @@ struct FavouriteView: View {
         }
         .padding(.vertical, 22)
     }
-
-    
 }
-
 
 #Preview {
     FavouriteView()
+        .environmentObject(AuthViewModel())
 }

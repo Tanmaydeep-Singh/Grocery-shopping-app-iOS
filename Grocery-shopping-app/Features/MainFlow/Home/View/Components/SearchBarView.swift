@@ -8,12 +8,21 @@ struct SearchBarView: View {
             HStack {
                 Image(systemName: "magnifyingglass")
                 TextField("home_search", text: $text)
-                Spacer()
-                Image(systemName: "xmark")
+                if !text.isEmpty {
+                    Button {
+                        text = ""
+                    } label: {
+                        Spacer()
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.gray)
+                    }
+                    .transition(.opacity)
+                }
             }
             .padding()
             .background(Color(.systemGray6))
             .cornerRadius(12)
+            .animation(.easeInOut(duration: 0.2), value: text.isEmpty)
         }
         .padding(.horizontal)
     }

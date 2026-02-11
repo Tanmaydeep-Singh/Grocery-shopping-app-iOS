@@ -4,7 +4,6 @@ struct CategoryChipView: View {
 
     let category: Category
     let onTap: () -> Void
-
     var body: some View {
         HStack(spacing: 12) {
 
@@ -23,7 +22,7 @@ struct CategoryChipView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
         .frame(width: 180)
-        .background(Color(red: 0.99, green: 0.95, blue: 0.90))
+        .background(category.backgroundColor)
         .cornerRadius(16)
         .onTapGesture {
             onTap()

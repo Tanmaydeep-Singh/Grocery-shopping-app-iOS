@@ -10,14 +10,15 @@ import SwiftUI
 struct CategoryCard: View {
     let title: String
     let imageName: String
-
+    let backgroundColor: String
+    
     var body: some View {
         VStack(spacing: 12) {
 
             Image(imageName)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 111, height: 75)
+                .frame(width: 120, height: 85)
                 .padding(16)
                 .opacity(1)
 
@@ -27,12 +28,14 @@ struct CategoryCard: View {
         }
         .padding(12)
         .frame(height: 189)
-        .background(Color("CategoryCardBackground"))
+        .background(Color(hex: backgroundColor).opacity(0.5))
+        .border(Color("CategoryCardBorder"), width: 2)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color("CategoryCardBorder"), lineWidth: 1)
+                .stroke(Color(.black), lineWidth: 1)
         )
         .opacity(1)
+        
     }
 }

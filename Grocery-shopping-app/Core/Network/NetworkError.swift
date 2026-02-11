@@ -12,4 +12,4 @@ enum NetworkError: Error {
     case invalidResponse
     case serverError(Int)
     case decodingFailed
-}
+} 

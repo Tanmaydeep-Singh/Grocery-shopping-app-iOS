@@ -11,4 +11,5 @@ import Foundation
 protocol ProductServiceProtocol {
     func fetchAllProducts() async throws -> [Product]
     func fetchProduct(id: String, showLabel: Bool) async throws -> Product
+    func fetchProductUsingCategory(category: String) async throws -> [Product]
 }

@@ -10,14 +10,14 @@ import SwiftUI
 struct ExploreView: View {
     @State public var showFilter = false
     @State private var gridLayout: GridLayout = .twoColumn
-
+    
     let categories: [Category] = [
-        Category(title: "Fruits & Vegetables", imageName: "fruitsAndVegetables"),
-        Category(title: "Fish & Meat", imageName: "MeatAndFish"),
-        Category(title: "Dairy & Eggs", imageName: "DairyAndEggs"),
-        Category(title: "Cooking Oil & Ghee", imageName: "CookingOilAndGee"),
-        Category(title: "Beverages", imageName: "Beverages"),
-        Category(title: "Bakery & Snacks", imageName: "BakeryAndSnacks")
+        Category(title: "Fruits & Vegetables",imageName: "fruitsAndVegetables",value: "fresh-produce"),
+        Category(title: "Fish & Meat", imageName: "MeatAndFish", value: "meat-seafood"),
+        Category(title: "Dairy & Eggs", imageName: "DairyAndEggs", value: "dairy"),
+        Category(title: "Cooking Oil & Ghee", imageName: "CookingOilAndGee",value: "coffee"),
+        Category(title: "Beverages", imageName: "Beverages", value: "candy"),
+        Category(title: "Bakery & Snacks", imageName: "BakeryAndSnacks", value: "bread-bakery")
     ]
     
     var body: some View {
@@ -34,7 +34,8 @@ struct ExploreView: View {
                             } label: {
                                 CategoryCard(
                                     title: category.title,
-                                    imageName: category.imageName
+                                    imageName: category.imageName,
+                                    backgroundColor: colors.randomElement()?.uppercased() ?? "FFFFFF"
                                 )
                             }
                             .buttonStyle(.plain)

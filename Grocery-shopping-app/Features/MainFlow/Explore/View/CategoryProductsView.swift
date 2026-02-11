@@ -27,7 +27,7 @@ struct CategoryProductsView: View {
                     id: \.id
                 ) { product in
                     NavigationLink {
-                        ProductDetailView(product: product)
+                        ProductDetailView(productId: product.id)
                     } label: {
                         ProductCard(product: product)
                             .frame(width: 180)

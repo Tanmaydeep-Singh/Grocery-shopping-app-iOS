@@ -10,7 +10,8 @@ import SwiftUI
 struct CategoryCard: View {
     let title: String
     let imageName: String
-    let backgroundColor: String
+    let backgroundColor: Color
+    let borderColor: Color
     
     var body: some View {
         VStack(spacing: 12) {
@@ -28,8 +29,8 @@ struct CategoryCard: View {
         }
         .padding(12)
         .frame(height: 189)
-        .background(Color(hex: backgroundColor).opacity(0.5))
-        .border(Color("CategoryCardBorder"), width: 2)
+        .background(backgroundColor)
+        .border(borderColor, width: 2)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)

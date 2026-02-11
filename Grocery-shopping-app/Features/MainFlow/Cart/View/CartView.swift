@@ -43,7 +43,17 @@ struct CartView: View {
                                         item: item,
                                         onIncrease: { cartViewModel.increaseQuantity() },
                                         onDecrease: { cartViewModel.decreaseQuantity() },
-                                        onRemove: { cartViewModel.removeItem() }
+                                        onRemove: {
+                                            guard let cartID = authViewModel.user?.cartId,
+                                            let cartProductId = item.cartProductId else { return }
+
+                                            Task {
+                                                await cartViewModel.removeItem(
+                                                    cartId: cartID,
+                                                    itemId: cartProductId
+                                                )
+                                            }
+                                        }
                                     )
 
                                     if item.id != cartViewModel.cartItems.last?.id {

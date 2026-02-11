@@ -1,3 +1,10 @@
+//
+//  CartViewModel.swift
+//  Grocery-shopping-app
+//
+//  Created by tanmaydeep on 04/02/26.
+//
+
 import Foundation
 import Combine
 
@@ -30,8 +37,10 @@ final class CartViewModel: ObservableObject {
             for item in cartResp.items{
                 var product = try await productService.fetchProduct(id: String(item.productId), showLabel: true)
                 product.quantity = item.quantity
+                product.cartProductId = item.id
                 tempItems.append(product)
             }
+            
 
             await MainActor.run {
                 self.cartItems = tempItems
@@ -54,8 +63,22 @@ final class CartViewModel: ObservableObject {
     private func updateQuantity() {
     }
 
-    func removeItem() {       
+    func removeItem(cartId: String, itemId: Int) async {
+        do {
+            print("cartId: \(cartId)")
+            print("itemId: \(itemId)")
+
+            let res = try await cartService.removeItem(
+                cartId: cartId,
+                itemId: String(itemId)
+            )
+            
+            print(res)
+        } catch {
+            print(error)
+        }
     }
+
 
     var totalPrice: Double {
         return 0;

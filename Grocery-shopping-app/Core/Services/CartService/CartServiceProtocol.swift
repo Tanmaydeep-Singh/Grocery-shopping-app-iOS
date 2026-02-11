@@ -13,13 +13,13 @@ protocol CartServiceProtocol {
 
     func getCart(cartId: String) async throws -> Cart
 
-    func getCartItems(cartId: String) async throws -> [CartItem]
 
     func addItem(
         cartId: String,
         productId: Int
     ) async throws -> Cart
 
+    
     func updateItemQuantity(
         cartId: String,
         itemId: String,

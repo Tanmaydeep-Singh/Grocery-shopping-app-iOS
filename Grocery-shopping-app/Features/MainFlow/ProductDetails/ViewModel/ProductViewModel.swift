@@ -17,6 +17,7 @@ final class ProductViewModel: ObservableObject {
     @Published var isFavorite: Bool = false
     
     private let favoritesService: FavoritesServiceProtocol = FavoritesService()
+    private let cartService: CartServiceProtocol = CartServices()
 
     
     func fetchProductDetail(productId: Int, userId:  String) async {
@@ -76,6 +77,23 @@ final class ProductViewModel: ObservableObject {
             }
         }
         
+    }
+    
+    
+    // Add item to cart:
+    func addToCart(cartId: String) async {
+        
+        guard let productId = productDetail?.id else {
+            print("Error: Product ID is missing")
+            return
+        }
+
+        do {
+            let updatedCart = try await cartService.addItem(cartId: cartId, productId: productId)
+            print("Updated cart res: \(updatedCart)")
+        } catch {
+            print("Failed to add item to cart: \(error)")
+        }
     }
     
     

@@ -23,11 +23,9 @@ final class CartViewModel: ObservableObject {
         defer { isLoading = false }
         
         do {
-            print("CALLED: \(cartId)")
             let cartResp = try await cartService.getCart(cartId: cartId)
             var tempItems: [Product] = []
 
-            print("Res: \(cartResp)")
             
             for item in cartResp.items{
                 var product = try await productService.fetchProduct(id: String(item.productId), showLabel: true)
@@ -38,7 +36,6 @@ final class CartViewModel: ObservableObject {
             await MainActor.run {
                 self.cartItems = tempItems
             }
-            print("TEMP ITEMS: \(tempItems)")
         } catch {
             print(error)
         }

@@ -26,12 +26,7 @@ final class CartServices: CartServiceProtocol {
             endpoint: CartEndpoints.getCart(cartId: cartId)
         )
     }
-
-    func getCartItems(cartId: String) async throws -> [CartItem] {
-        try await client.request(
-            endpoint: CartEndpoints.getCartItems(cartId: cartId)
-        )
-    }
+    
 
     func addItem(
         cartId: String,
@@ -43,11 +38,12 @@ final class CartServices: CartServiceProtocol {
         return try await client.request(
             endpoint: CartEndpoints.addItemToCart(
                 cartId: cartId,
-                body: request
+                body: request 
             )
         )
     }
 
+    
     func updateItemQuantity(
         cartId: String,
         itemId: String,

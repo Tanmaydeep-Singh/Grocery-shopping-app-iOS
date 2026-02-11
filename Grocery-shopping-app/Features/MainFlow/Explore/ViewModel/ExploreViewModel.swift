@@ -23,7 +23,7 @@ final class ExploreViewModel: ObservableObject {
     }
     
     
-    private func loadCategories() {
+    public func loadCategories() {
         categories = [
             Category(
                 title: "Fruits & Vegetables",

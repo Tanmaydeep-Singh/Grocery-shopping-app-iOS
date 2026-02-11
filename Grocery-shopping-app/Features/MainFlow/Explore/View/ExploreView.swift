@@ -11,12 +11,27 @@ struct ExploreView: View {
     @State public var showFilter = false
     @State private var gridLayout: GridLayout = .twoColumn
     @StateObject private var exploreViewModel = ExploreViewModel()
-    
+    @State private var navigateToResults = false
+    @State private var selectedCategories: Set<String> = []
+    @State private var selectedBrands: Set<String> = []
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 16) {
                 ScreenHeader(title: "Find Products")
-                SearchBox()
+                VStack {
+                       SearchBox { categories, brands in
+                           selectedCategories = categories
+                           selectedBrands = brands
+                           navigateToResults = true
+                       }
+                   }
+                   .navigationDestination(isPresented: $navigateToResults) {
+                       FilterResultView(
+                           selectedCategories: selectedCategories,
+                           selectedBrands: selectedBrands
+                       )
+                   }
                 
                 ScrollView {
                     LazyVGrid(columns: gridLayout.columns, spacing: 16) {

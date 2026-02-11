@@ -22,7 +22,7 @@ struct CategoryProductsView: View {
             }
             LazyVGrid(columns: gridLayout.columns,spacing: 16) {
                 ForEach(
-                    MockProducts.products
+                    products
                         /*.filter { $0.category.rawValue == category.title }*/,
                     id: \.id
                 ) { product in
@@ -55,7 +55,16 @@ struct CategoryProductsView: View {
             }
         }
         .fullScreenCover(isPresented: $showFilter) {
-            FilterView()
+            FilterView() { categories, brands in
+                Task {
+                    do {
+                        products = try await getFilterProducts(categories, brands)
+                    }
+                    catch {
+                        print("Error occured while filtering the products", error)
+                    }
+                }
+            }
         }
     }
     func loadProducts() async {

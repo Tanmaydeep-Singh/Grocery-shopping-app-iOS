@@ -15,11 +15,12 @@ enum ProductEndpoints: Endpoint {
         id: String,
         showLabel: Bool
     )
+    case productsByCategory(category: String)
 
     // URL Construction
     var path: String {
         switch self {
-        case .allProducts:
+        case .allProducts, .productsByCategory:
             return "products"
         case .product(let id, _):
             return "products/\(id)"
@@ -41,6 +42,9 @@ enum ProductEndpoints: Endpoint {
                     value: String(showLabel)
                 )
             ]
+        case .productsByCategory(let category):
+            return [URLQueryItem(name: "category", value: category)]
+            
         default:
             return nil
         }

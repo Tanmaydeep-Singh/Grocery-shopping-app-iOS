@@ -31,7 +31,7 @@ enum ProductCategory: String, Codable, CaseIterable {
        }
     
     func toCategory() -> Category {
-          Category(title: title, imageName: imageName)
+        Category(title: title, imageName: imageName, value: "")
       }
 }
 

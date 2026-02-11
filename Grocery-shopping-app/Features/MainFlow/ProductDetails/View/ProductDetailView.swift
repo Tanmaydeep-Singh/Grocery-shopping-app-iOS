@@ -2,8 +2,9 @@ import SwiftUI
 
 struct ProductDetailView: View {
 
-    let product: Product
+    let productId: Int
 
+    @EnvironmentObject private var authViewModel: AuthViewModel
     @StateObject private var viewModel = ProductViewModel()
     @State private var quantity: Int = 1
 
@@ -39,9 +40,25 @@ struct ProductDetailView: View {
                             }
                             
                             Spacer()
-                            
-                            Image(systemName: "heart")
-                                .font(.title3)
+                            Button {
+                                Task {
+                                    let userId = authViewModel.user?.id ?? ""
+
+                                    do {
+                                        if viewModel.isFavorite {
+                                            viewModel.removeFromFavorite(userId: userId)
+                                        } else {
+                                             viewModel.addToFavorites(userId: userId)
+                                        }
+                                    }
+                                }
+
+                            } label: {
+                                Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
+                                    .font(.title3)
+                                    .foregroundColor(viewModel.isFavorite ? .red : .primary)
+                            }
+
                         }
                         .padding(.horizontal)
                         
@@ -117,11 +134,13 @@ struct ProductDetailView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await viewModel.fetchProductDetail(productId: product.id)
+            let userId = authViewModel.user?.id ?? ""
+            await viewModel.fetchProductDetail(productId: productId, userId: userId)
         }
     }
 }
 
 #Preview {
-    ProductDetailView(product: MockProducts.dummyProduct)
+    ProductDetailView(productId: MockProducts.dummyProduct.id)
+        .environmentObject(AuthViewModel())
 }

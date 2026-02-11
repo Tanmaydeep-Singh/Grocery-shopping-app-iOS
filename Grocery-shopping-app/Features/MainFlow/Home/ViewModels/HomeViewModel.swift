@@ -9,6 +9,8 @@ final class HomeViewModel: ObservableObject {
     @Published var categories: [Category] = []
     @Published var categoryProducts: [Product] = []
     @Published var isLoading: Bool = false
+    @Published var searchError: String?
+    @Published var isSearching: Bool = false
     
     let bannerImages: [String] = [
         "banner_1",
@@ -18,16 +20,62 @@ final class HomeViewModel: ObservableObject {
     
     let sections: [HomeSectionType] = HomeSectionType.allCases
     
+    private var cancellables = Set<AnyCancellable>()
+    
     init() {
-//        products = MockProducts.products
-//        categoryProducts = MockProducts.products
         loadCategories()
+        setUpSearchDebounce()
     }
     
     private func loadCategories() {
         categories = ProductCategory
             .allCases
             .map { $0.toCategory() }
+    }
+    
+    private func setUpSearchDebounce() {
+        $searchText
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .sink{ [weak self] value in
+                guard let self else { return }
+                if !value.isEmpty {
+                    Task {
+                        await self.searchByCategory(value)
+                    }
+                } else {
+                    self.reserSearch()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func searchByCategory(_ input: String) async {
+        searchError = nil
+        
+        let normalizedInput = input
+                .lowercased()
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .replacingOccurrences(of: " ", with: "-")
+        
+        guard let category = ProductCategory.allCases.first(where: {
+            $0.rawValue == normalizedInput ||
+            $0.title.lowercased() == input.lowercased()
+        }) else {
+            isSearching = true
+            categoryProducts = []
+            searchError = "Invalid category"
+            return
+        }
+        
+        isSearching = true
+        await fetchProducts(category: category)
+    }
+    
+    func reserSearch(){
+        isSearching = false
+        searchError = nil
+        categoryProducts = []
     }
     
     // Fetch Products through API
@@ -53,7 +101,7 @@ final class HomeViewModel: ObservableObject {
             products = dtos.map(Product.init)
 
         } catch {
-            print("❌ Failed to fetch products:", error)
+            searchError = error.localizedDescription
         }
         isLoading = false;
     }

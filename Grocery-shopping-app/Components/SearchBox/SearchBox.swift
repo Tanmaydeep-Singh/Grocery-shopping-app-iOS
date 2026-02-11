@@ -4,6 +4,7 @@ struct SearchBox: View {
     @State private var searchText = ""
     @FocusState private var isFocused: Bool
     @State private var showFilter: Bool = false
+    var onFiltersApplied: (Set<String>, Set<String>) -> Void
     
     var body: some View {
         HStack(spacing: 12) {
@@ -42,7 +43,9 @@ struct SearchBox: View {
         .cornerRadius(16)
         .opacity(1)
         .fullScreenCover(isPresented: $showFilter) {
-            FilterView()
+            FilterView { categories, brands in
+                onFiltersApplied(categories, brands)
+            }
         }
     }
 }

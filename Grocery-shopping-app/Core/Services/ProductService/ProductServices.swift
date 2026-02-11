@@ -17,9 +17,11 @@ final class ProductService: ProductServiceProtocol {
     
     // Get All Products
     func fetchAllProducts() async throws -> [Product] {
-        try await networkClient.request(
+        let dtos: [ProductDTO] = try await networkClient.request(
             endpoint: ProductEndpoints.allProducts
         )
+
+        return dtos.map { Product(dto: $0) }
     }
     
     // Get Product by ID
@@ -36,10 +38,12 @@ final class ProductService: ProductServiceProtocol {
     }
     
     func fetchProductUsingCategory(category: String) async throws -> [Product] {
-        try await NetworkClient.shared
+        let dtos: [ProductDTO] = try await NetworkClient.shared
             .request(
                 endpoint: ProductEndpoints
                     .productsByCategory(category: category)
             )
+        
+        return dtos.map { Product(dto: $0)}
     }
 }

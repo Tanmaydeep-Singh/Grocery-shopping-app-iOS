@@ -11,14 +11,9 @@ struct FilterView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var selectedCategories: Set<String> = []
     @State private var selectedBrands: Set<String> = []
-
-    let categories = [
-        "Fruits & Vegetables",
-        "Fish & Meat",
-        "Dairy & Eggs",
-        "Beverages",
-        "Bakery & Snacks"
-    ]
+    var onApply: (Set<String>, Set<String>) -> Void
+    
+    let categories: [Category] = ExploreViewModel().categories
     let brands = [
         "Nestlé",
         "Britannia",
@@ -59,16 +54,21 @@ struct FilterView: View {
                                 Text("Categories")
                                     .font(.headline)
 
-                                ForEach(categories, id: \.self) { category in
+                                ForEach(categories, id: \.id) { category in
                                     FilterCategoryRow(
-                                        title: category,
+                                        title: category.title,
                                         isSelected: Binding(
-                                            get: { selectedCategories.contains(category) },
+                                            get: {
+                                                selectedCategories
+                                                    .contains(category.value)
+                                            },
                                             set: { isChecked in
                                                 if isChecked {
-                                                    selectedCategories.insert(category)
+                                                    selectedCategories
+                                                        .insert(category.value)
                                                 } else {
-                                                    selectedCategories.remove(category)
+                                                    selectedCategories
+                                                        .remove(category.value)
                                                 }
                                             }
                                         )
@@ -86,16 +86,13 @@ struct FilterView: View {
                                         title: brand,
                                         isSelected: Binding(
                                             get: {
-                                                selectedBrands
-                                                    .contains(brand)
+                                                selectedBrands.contains(brand)
                                             },
                                             set: { isChecked in
                                                 if isChecked {
-                                                    selectedBrands
-                                                        .insert(brand)
+                                                    selectedBrands.insert(brand)
                                                 } else {
-                                                    selectedBrands
-                                                        .remove(brand)
+                                                    selectedBrands.remove(brand)
                                                 }
                                             }
                                         )
@@ -106,7 +103,9 @@ struct FilterView: View {
                 }
 
                 PrimaryButton(title: "Apply Filters") {
-                    
+                    print(selectedBrands, selectedCategories)
+                    onApply(selectedCategories, selectedBrands)
+                    dismiss()
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: 791)

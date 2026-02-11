@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class CartServiceImpl: CartServiceProtocol {
+final class CartServices: CartServiceProtocol {
 
     private let client: NetworkClient
 
@@ -15,7 +15,7 @@ final class CartServiceImpl: CartServiceProtocol {
         self.client = client
     }
 
-    func createCart() async throws -> Cart {
+    func createCart() async throws -> CreateCartResponse {
         try await client.request(
             endpoint: CartEndpoints.createCart
         )

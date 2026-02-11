@@ -11,7 +11,7 @@ final class CartViewModel: ObservableObject {
     private let service: CartServiceProtocol
     private var cartId: String?
 
-    init(service: CartServiceProtocol = CartServiceImpl()) {
+    init(service: CartServiceProtocol = CartServices()) {
         self.service = service
     }
 
@@ -27,8 +27,7 @@ final class CartViewModel: ObservableObject {
         Task {
             do {
                 let cart = try await service.createCart()
-                cartId = cart.id
-                cartItems = cart.items
+                cartId = cartId
             } catch {
                 errorMessage = "Failed to create cart"
             }

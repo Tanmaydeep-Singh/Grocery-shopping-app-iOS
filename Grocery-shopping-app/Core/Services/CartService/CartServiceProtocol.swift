@@ -9,7 +9,7 @@ import Foundation
 
 protocol CartServiceProtocol {
 
-    func createCart() async throws -> Cart
+    func createCart() async throws -> CreateCartResponse
 
     func getCart(cartId: String) async throws -> Cart
 

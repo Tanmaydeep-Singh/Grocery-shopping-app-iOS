@@ -37,12 +37,13 @@ final class FavoritesService: FavoritesServiceProtocol {
             "name": item.name,
             "manufacturer": item.manufacturer,
             "price": item.price,
+            "category": item.category.rawValue
         ]
         
         try await docRef.setData(data)
     }
     
-    // Get favorite
+    // Get favoriteTask 15: "Unsupported type: __SwiftValue (found in field category)"
     func getFavorites(userId: String) async throws -> [FavouriteItem] {
         
         let snapshot = try await favoritesRef(userId: userId).getDocuments()
@@ -54,7 +55,9 @@ final class FavoritesService: FavoritesServiceProtocol {
                 let id = data["id"] as? Int,
                 let name = data["name"] as? String,
                 let manufacturer = data["manufacturer"] as? String,
-                let price = data["price"] as? Double
+                let price = data["price"] as? Double,
+                let categoryRaw = data["category"] as? String,
+                let category = ProductCategory(rawValue: categoryRaw)
             else {
                 return nil
             }
@@ -64,6 +67,7 @@ final class FavoritesService: FavoritesServiceProtocol {
                 name: name,
                 manufacturer: manufacturer,
                 price: price,
+                category: category,
             )
         }
     }

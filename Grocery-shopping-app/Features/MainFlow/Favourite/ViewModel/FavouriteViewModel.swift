@@ -17,7 +17,6 @@ final class FavouriteViewModel: ObservableObject {
 
     private let favoritesService: FavoritesServiceProtocol
 
-
     init(
     ) {
         self.favoritesService = FavoritesService()

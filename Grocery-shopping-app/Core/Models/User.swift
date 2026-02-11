@@ -14,10 +14,3 @@ struct User : Codable {
     let username: String
     let token: String?
 }
-
-struct FavouriteItem: Identifiable, Codable {
-    let id: Int
-    let name: String
-    let manufacturer: String
-    let price: Double
-}

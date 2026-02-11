@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ProductDetailView: View {
 
-    let product: Product
+    let productId: Int
 
     @EnvironmentObject private var authViewModel: AuthViewModel
     @StateObject private var viewModel = ProductViewModel()
@@ -135,13 +135,12 @@ struct ProductDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .task {
             let userId = authViewModel.user?.id ?? ""
-            await viewModel.fetchProductDetail(productId: product.id, userId: userId)
+            await viewModel.fetchProductDetail(productId: productId, userId: userId)
         }
     }
 }
 
 #Preview {
-    ProductDetailView(product: MockProducts.dummyProduct)
+    ProductDetailView(productId: MockProducts.dummyProduct.id)
         .environmentObject(AuthViewModel())
-
 }

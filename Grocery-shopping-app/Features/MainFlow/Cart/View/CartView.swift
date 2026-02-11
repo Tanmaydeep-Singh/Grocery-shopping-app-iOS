@@ -9,7 +9,8 @@ import SwiftUI
 
 struct CartView: View {
 
-    @StateObject private var viewModel = CartViewModel()
+    @StateObject private var cartViewModel = CartViewModel()
+    @EnvironmentObject private var authViewModel: AuthViewModel
 
     var body: some View {
         NavigationStack {
@@ -20,7 +21,7 @@ struct CartView: View {
 
                         // Header
                         ScreenHeader(
-                            title: "My Cart"
+                            title: "My Cart."
                         )
 
                         Divider()
@@ -28,23 +29,22 @@ struct CartView: View {
 
                         
                         VStack(spacing: 0) {
-                            ForEach(viewModel.cartItems.indices, id: \.self) { index in
-                                let item = viewModel.cartItems[index]
-
+                            ForEach(cartViewModel.cartItems) { item in
+    
                                 CartItemView(
                                     item: item,
                                     onIncrease: {
-                                        viewModel.increaseQuantity(for: item)
+                                        cartViewModel.increaseQuantity()
                                     },
                                     onDecrease: {
-                                        viewModel.decreaseQuantity(for: item)
+                                        cartViewModel.decreaseQuantity()
                                     },
                                     onRemove: {
-                                        viewModel.removeItem(item)
+                                        cartViewModel.removeItem()
                                     }
                                 )
 
-                                if index != viewModel.cartItems.count - 1 {
+                                if item.id != cartViewModel.cartItems.last?.id {
                                     Divider()
                                         .padding(.top, 22)
                                 }
@@ -59,13 +59,19 @@ struct CartView: View {
                 }
 
                 
-                if !viewModel.cartItems.isEmpty {
+                if !cartViewModel.cartItems.isEmpty {
                     checkoutBar
                 }
             }
             .background(Color.white)
-            .onAppear {
-                viewModel.onAppear()
+            .task {
+               
+                guard let cartID = authViewModel.user?.cartId else { return
+                }
+                do {
+                    print("authViewModel.user: \(cartID)")
+                    await cartViewModel.getCartItem(cartId: cartID)
+                }
             }
         }
     }
@@ -79,7 +85,7 @@ struct CartView: View {
             }
         )
         .overlay(alignment: .trailing) {
-            Text("$\(String(format: "%.2f", viewModel.totalPrice))")
+            Text("$\(String(format: "%.2f", cartViewModel.totalPrice))")
                 .font(.caption)
                 .fontWeight(.semibold)
                 .padding(.horizontal, 12)
@@ -94,6 +100,7 @@ struct CartView: View {
 
 #Preview {
     CartView()
+        .environmentObject(AuthViewModel())
 }
 
 

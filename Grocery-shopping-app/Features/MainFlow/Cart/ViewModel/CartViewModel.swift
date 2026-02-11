@@ -1,86 +1,62 @@
 import Foundation
 import Combine
 
-//@MainActor
+@MainActor
 final class CartViewModel: ObservableObject {
 
-    @Published var cartItems: [CartItem] = []
+    @Published var cartItems: [Product] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
 
-    private let service: CartServiceProtocol
+    private let cartService: CartServiceProtocol
+    private let productService: ProductServiceProtocol
     private var cartId: String?
 
-    init(service: CartServiceProtocol = CartServices()) {
-        self.service = service
+    init() {
+        self.cartService = CartServices()
+        self.productService = ProductService()
     }
 
-    func onAppear() {
-        if cartId == nil {
-            createCart()
-        }
-    }
+    func getCartItem(cartId: String) async  {
+        
+        do {
+            print("CALLED: \(cartId)")
+            let cartResp = try await cartService.getCart(cartId: cartId)
+            var tempItems: [Product] = []
 
-    private func createCart() {
-        isLoading = true
-
-        Task {
-            do {
-                let cart = try await service.createCart()
-                cartId = cartId
-            } catch {
-                errorMessage = "Failed to create cart"
+            print("Res: \(cartResp)")
+            
+            for product in cartResp.items{
+                let product = try await productService.fetchProduct(id: String(product.productId), showLabel: true)
+                tempItems.append(product)
             }
 
-            isLoading = false
-        }
-    }
-
-    func increaseQuantity(for item: CartItem) {
-        updateQuantity(for: item, newQuantity: item.quantity + 1)
-    }
-
-    func decreaseQuantity(for item: CartItem) {
-        guard item.quantity > 1 else { return }
-        updateQuantity(for: item, newQuantity: item.quantity - 1)
-    }
-
-    private func updateQuantity(for item: CartItem, newQuantity: Int) {
-        guard let cartId else { return }
-
-        Task {
-            do {
-                let updatedCart = try await service.updateItemQuantity(
-                    cartId: cartId,
-                    itemId: item.id,
-                    quantity: newQuantity
-                )
-                cartItems = updatedCart.items
-            } catch {
-                errorMessage = "Failed to update quantity"
+            await MainActor.run {
+                self.cartItems = tempItems
             }
+            print("TEMP ITEMS: \(tempItems)")
+        } catch {
+            print(error)
         }
+        
+        
+    }
+    
+
+    func increaseQuantity() {
     }
 
-    func removeItem(_ item: CartItem) {
-        guard let cartId else { return }
+    func decreaseQuantity() {
+       
+    }
 
-        Task {
-            do {
-                let updatedCart = try await service.removeItem(
-                    cartId: cartId,
-                    itemId: item.id
-                )
-                cartItems = updatedCart.items
-            } catch {
-                errorMessage = "Failed to remove item"
-            }
-        }
+    private func updateQuantity() {
+    }
+
+    func removeItem() {       
     }
 
     var totalPrice: Double {
-        cartItems.reduce(0) {
-            $0 + ($1.price * Double($1.quantity))
-        }
+        return 0;
     }
 }

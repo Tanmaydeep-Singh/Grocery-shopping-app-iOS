@@ -10,7 +10,7 @@ struct ProductCard: View {
 
             VStack(alignment: .leading, spacing: 10) {
 
-                Image(product.imageName)
+                Image(product.imageName ?? "")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 110)

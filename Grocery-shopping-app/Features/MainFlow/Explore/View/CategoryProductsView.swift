@@ -61,11 +61,8 @@ struct CategoryProductsView: View {
     func loadProducts() async {
         isLoading = true
         do {
-            products = try await NetworkClient.shared
-                .request(
-                    endpoint: ProductEndpoints
-                        .productsByCategory(category: category.value)
-                )
+            products = try await ProductService()
+                .fetchProductUsingCategory(category: category.value)
         }
         catch {
             errorMessage = "Failed to fetch products." + error.localizedDescription

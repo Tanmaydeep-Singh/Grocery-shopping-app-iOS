@@ -8,17 +8,20 @@ import SwiftUI
 
 struct CheckoutView: View {
     
-    @Environment(\.dismiss) private var dismiss
     
     @State private var goToDelivery = false
     @State private var goToPayment = false
     @State private var goToDiscount = false
     @State private var goToSuccess = false
     
+    @Binding var isPresented: Bool
+
+    
     let totalCost: Double?
     
-    init(totalCost: Double? = nil) {
+    init(isPresented: Binding<Bool>, totalCost: Double? = nil) {
         self.totalCost = totalCost
+        self._isPresented = isPresented
     }
     
     private var formattedTotal: String {
@@ -40,7 +43,7 @@ struct CheckoutView: View {
                     Spacer()
                     
                     Button {
-                        dismiss()
+                        isPresented = false
                     } label: {
                         Image(systemName: "xmark")
                             .font(.system(size: 18, weight: .semibold))
@@ -127,11 +130,26 @@ struct CheckoutView: View {
     }
 }
 
-
 #Preview {
-    NavigationStack {
-        CheckoutView()
+    CheckoutPreviewWrapper()
+}
+
+struct CheckoutPreviewWrapper: View {
+    
+    @State private var showCheckout = true
+    
+    var body: some View {
+        NavigationStack{
+            CheckoutView(
+                isPresented: $showCheckout,
+                totalCost: 149.99
+            )
+        }
+        
     }
 }
+
+
+
 
 

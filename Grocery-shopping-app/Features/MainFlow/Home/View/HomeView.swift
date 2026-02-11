@@ -10,32 +10,46 @@ struct HomeView: View {
                     VStack(spacing: 28) {
                         HomeHeaderView()
                         SearchBarView(text: $viewModel.searchText)
-                        OfferBannerView()
                         
-                        ProductGridView(title: HomeSectionType.exclusiveOffer.title, products: viewModel.products)
-                        
-                        ProductGridView(title: HomeSectionType.bestSelling.title, products: viewModel.products)
-                        
-                        VStack(alignment: .leading){
-                            Text(HomeSectionType.groceries.title)
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .padding(.horizontal)
+                        if viewModel.isSearching {
+                            if viewModel.isLoading {
+                                ProgressView()
+                                    .padding()
+                            } else if let error = viewModel.searchError {
+                                Text(error)
+                                    .foregroundColor(.red)
+                                    .padding()
+                            } else {
+                                ProductGridView(title: nil, products: viewModel.categoryProducts)
+                            }
+                        } else {
+                            OfferBannerView()
                             
-                            CategorySectionView(
-                                categories: viewModel.categories
-                            ) { category in
-                                Task {
-                                    // Convert UI Category → ProductCategory
-                                    if let productCategory = ProductCategory.allCases.first(
-                                        where: { $0.title == category.title }
-                                    ) {
-                                        await viewModel.fetchProducts(category: productCategory)
+                            ProductGridView(title: HomeSectionType.exclusiveOffer.title, products: viewModel.products)
+                            
+                            ProductGridView(title: HomeSectionType.bestSelling.title, products: viewModel.products)
+                            
+                            VStack(alignment: .leading){
+                                Text(HomeSectionType.groceries.title)
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .padding(.horizontal)
+                                
+                                CategorySectionView(
+                                    categories: viewModel.categories
+                                ) { category in
+                                    Task {
+                                        // Convert UI Category → ProductCategory
+                                        if let productCategory = ProductCategory.allCases.first(
+                                            where: { $0.title == category.title }
+                                        ) {
+                                            await viewModel.fetchProducts(category: productCategory)
+                                        }
                                     }
                                 }
+                                
+                                ProductGridView(title: nil, products: viewModel.categoryProducts.isEmpty ? viewModel.products : viewModel.categoryProducts)
                             }
-                            
-                            ProductGridView(title: nil, products: viewModel.categoryProducts.isEmpty ? viewModel.products : viewModel.categoryProducts)
                         }
                     }
                 }

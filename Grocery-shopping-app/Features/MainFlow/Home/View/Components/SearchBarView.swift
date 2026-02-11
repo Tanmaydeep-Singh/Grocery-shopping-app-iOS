@@ -8,6 +8,8 @@ struct SearchBarView: View {
             HStack {
                 Image(systemName: "magnifyingglass")
                 TextField("home_search", text: $text)
+                Spacer()
+                Image(systemName: "xmark")
             }
             .padding()
             .background(Color(.systemGray6))

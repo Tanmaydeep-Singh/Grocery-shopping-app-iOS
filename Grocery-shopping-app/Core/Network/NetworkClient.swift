@@ -48,6 +48,13 @@ final class NetworkClient {
         guard (200...299).contains(httpResponse.statusCode) else {
             throw NetworkError.serverError(httpResponse.statusCode)
         }
+        
+        if data.isEmpty {
+               if T.self == EmptyResponse.self {
+                   return EmptyResponse() as! T
+               }
+               throw URLError(.cannotDecodeContentData)
+           }
 
         do {
             return try JSONDecoder().decode(T.self, from: data)

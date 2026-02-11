@@ -17,7 +17,7 @@ protocol CartServiceProtocol {
     func addItem(
         cartId: String,
         productId: Int
-    ) async throws -> Cart
+    ) async throws -> AddCartItemResponse
 
     
     func updateItemQuantity(
@@ -36,5 +36,5 @@ protocol CartServiceProtocol {
     func removeItem(
         cartId: String,
         itemId: String
-    ) async throws -> Cart
+    ) async throws -> EmptyResponse
 }

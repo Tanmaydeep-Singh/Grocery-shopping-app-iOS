@@ -89,8 +89,7 @@ final class ProductViewModel: ObservableObject {
         }
 
         do {
-            let updatedCart = try await cartService.addItem(cartId: cartId, productId: productId)
-            print("Updated cart res: \(updatedCart)")
+           _ = try await cartService.addItem(cartId: cartId, productId: productId)
         } catch {
             print("Failed to add item to cart: \(error)")
         }

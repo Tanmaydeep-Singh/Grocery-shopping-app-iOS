@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
-
 struct CartView: View {
     @StateObject private var cartViewModel = CartViewModel()
     @EnvironmentObject private var authViewModel: AuthViewModel
+
+    private var cartId: String? {
+        authViewModel.user?.cartId
+    }
 
     var body: some View {
         NavigationStack {
@@ -28,6 +31,7 @@ struct CartView: View {
                                 Spacer()
                             }
                             .frame(minHeight: 400)
+
                         } else if cartViewModel.cartItems.isEmpty {
                             VStack {
                                 Spacer()
@@ -36,20 +40,26 @@ struct CartView: View {
                                 Spacer()
                             }
                             .frame(minHeight: 400)
+
                         } else {
                             VStack(spacing: 0) {
-                                ForEach(cartViewModel.cartItems) { item in
+                                ForEach(cartViewModel.cartItems, id: \.cartProductId) { item in
                                     CartItemView(
                                         item: item,
-                                        onIncrease: { cartViewModel.increaseQuantity() },
-                                        onDecrease: { cartViewModel.decreaseQuantity() },
+                                        onIncrease: {
+                                            cartViewModel.increaseQuantity()
+                                        },
+                                        onDecrease: {
+                                            cartViewModel.decreaseQuantity()
+                                        },
                                         onRemove: {
-                                            guard let cartID = authViewModel.user?.cartId,
-                                            let cartProductId = item.cartProductId else { return }
+                                            guard let cartId,
+                                                  let cartProductId = item.cartProductId
+                                            else { return }
 
                                             Task {
                                                 await cartViewModel.removeItem(
-                                                    cartId: cartID,
+                                                    cartId: cartId,
                                                     itemId: cartProductId
                                                 )
                                             }
@@ -76,8 +86,8 @@ struct CartView: View {
             }
             .background(Color.white)
             .task {
-                guard let cartID = authViewModel.user?.cartId else { return }
-                await cartViewModel.getCartItem(cartId: cartID)
+                guard let cartId else { return }
+                await cartViewModel.getCartItem(cartId: cartId)
             }
         }
     }
@@ -100,6 +110,7 @@ struct CartView: View {
         }
     }
 }
+
 
 #Preview {
     CartView()

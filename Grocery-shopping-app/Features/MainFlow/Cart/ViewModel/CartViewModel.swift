@@ -65,17 +65,14 @@ final class CartViewModel: ObservableObject {
 
     func removeItem(cartId: String, itemId: Int) async {
         do {
-            print("cartId: \(cartId)")
-            print("itemId: \(itemId)")
+            _ = try await cartService.removeItem(cartId: cartId, itemId: String(itemId))
+            cartItems = cartItems.filter {
+                        $0.cartProductId != itemId
+                    }
+            print("LIST: \(cartItems)")
 
-            let res = try await cartService.removeItem(
-                cartId: cartId,
-                itemId: String(itemId)
-            )
-            
-            print(res)
         } catch {
-            print(error)
+            print("Failed to remove item:", error)
         }
     }
 

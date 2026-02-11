@@ -31,7 +31,7 @@ final class CartServices: CartServiceProtocol {
     func addItem(
         cartId: String,
         productId: Int
-    ) async throws -> Cart {
+    ) async throws -> AddCartItemResponse {
 
         let request = AddCartItemRequest(productId: productId)
 
@@ -87,7 +87,7 @@ final class CartServices: CartServiceProtocol {
     func removeItem(
         cartId: String,
         itemId: String
-    ) async throws -> Cart {
+    ) async throws -> EmptyResponse {
 
         try await client.request(
             endpoint: CartEndpoints.removeCartItem(

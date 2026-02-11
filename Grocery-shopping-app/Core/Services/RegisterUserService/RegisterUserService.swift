@@ -33,12 +33,12 @@ final class RegisterUserService : RegisterUserServiceProtocol {
                         endpoint: RegisterationEndpoint.register(body)
                     )
 
-                print("✅ RegisterUserService: success")
+                print("RegisterUserService: success")
                 return response
 
             } catch {
-                print("❌ RegisterUserService ERROR:", error)
-                print("❌ TYPE:", type(of: error))
+                print("RegisterUserService ERROR:", error)
+                print("TYPE:", type(of: error))
                 throw error
             }
     }

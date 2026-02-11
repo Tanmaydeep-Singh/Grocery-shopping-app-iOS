@@ -42,7 +42,7 @@ struct ProductDetailView: View {
                             Spacer()
                             Button {
                                 Task {
-                                    let userId = authViewModel.user?.id ?? ""
+                                    let userId = authViewModel.user?.id ?? "iuREta11D5NW1sUzofRW7yLGEeA2"
 
                                     do {
                                         if viewModel.isFavorite {
@@ -124,7 +124,10 @@ struct ProductDetailView: View {
                 
                 // Add to basket
                 PrimaryButton(title: "Add to Basket"){
-                    
+                    Task {
+                        let cartId = authViewModel.user?.cartId ?? ""
+                        await viewModel.addToCart(cartId:cartId)
+                    }
                 }
             }
             else if let error = viewModel.errorMessage {
@@ -134,7 +137,7 @@ struct ProductDetailView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            let userId = authViewModel.user?.id ?? ""
+            let userId = authViewModel.user?.id ?? "iuREta11D5NW1sUzofRW7yLGEeA2"
             await viewModel.fetchProductDetail(productId: productId, userId: userId)
         }
     }

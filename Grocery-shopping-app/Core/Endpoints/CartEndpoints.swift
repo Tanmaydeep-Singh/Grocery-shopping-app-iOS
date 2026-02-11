@@ -68,14 +68,14 @@ enum CartEndpoints: Endpoint {
         }
     }
 
-    var body: Encodable? {
+    var body: Data? {
         switch self {
         case .addItemToCart(_, let request):
-            return request
+            return try? JSONEncoder().encode(request)
         case .updateCartItemQuantity(_, _, let request):
-            return request
+            return try? JSONEncoder().encode(request)
         case .replaceCartItem(_, _, let request):
-            return request
+            return try? JSONEncoder().encode(request)
         default:
             return nil
         }

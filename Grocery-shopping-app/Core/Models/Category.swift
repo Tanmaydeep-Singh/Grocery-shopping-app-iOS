@@ -9,6 +9,8 @@ struct Category: Identifiable {
     
     var backgroundColor: Color {
         switch value {
+        case ProductCategory.freshProduce.rawValue:   // Vaibhav - try to use from the product category only or add these colors in the product category
+            return Color(hex: "#EAF3EC")
         case "fresh-produce":
             return Color(hex: "#EAF3EC")
         case "meat-seafood":

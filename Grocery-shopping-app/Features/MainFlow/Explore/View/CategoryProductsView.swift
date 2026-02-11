@@ -9,12 +9,36 @@ import SwiftUI
 struct CategoryProductsView: View {
     let category: Category
     @State private var showFilter = false;
+    @State private var gridLayout: GridLayout = .twoColumn
+    @State private var products: [Product] = []
+    @State private var isLoading = false
+    @State private var errorMessage: String = ""
     
     var body: some View {
-        VStack {
-            ScreenHeader(title: "show product list here")
-            Spacer()
-            
+        ScrollView {
+            if isLoading {
+                ProgressView()
+                    .padding(.top, 40)
+            }
+            LazyVGrid(columns: gridLayout.columns,spacing: 16) {
+                ForEach(
+                    products
+                        /*.filter { $0.category.rawValue == category.title }*/,
+                    id: \.id
+                ) { product in
+                    NavigationLink {
+                        ProductDetailView(productId: product.id)
+                    } label: {
+                        ProductCard(product: product)
+                            .frame(width: 180)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding()
+        }
+        .task {
+            await loadProducts()
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -31,8 +55,28 @@ struct CategoryProductsView: View {
             }
         }
         .fullScreenCover(isPresented: $showFilter) {
-            FilterView()
+            FilterView() { categories, brands in
+                Task {
+                    do {
+                        products = try await getFilterProducts(categories, brands)
+                    }
+                    catch {
+                        print("Error occured while filtering the products", error)
+                    }
+                }
+            }
         }
     }
-
+    func loadProducts() async {
+        isLoading = true
+        do {
+            products = try await ProductService()
+                .fetchProductUsingCategory(category: category.value)
+        }
+        catch {
+            errorMessage = "Failed to fetch products." + error.localizedDescription
+            print(errorMessage)
+        }
+        isLoading = false
+    }
 }

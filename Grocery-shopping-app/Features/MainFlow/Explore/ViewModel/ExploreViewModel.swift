@@ -5,14 +5,61 @@
 //  Created by tanmaydeep on 04/02/26.
 //
 
+//
+//  ExploreViewModel.swift
+//
+
+import Foundation
+import Combine
 import SwiftUI
 
-struct ExploreViewModel: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+final class ExploreViewModel: ObservableObject {
+        
+    @Published var categories: [Category] = []
+    
+    
+    init() {
+        loadCategories()
     }
-}
-
-#Preview {
-    ExploreViewModel()
+    
+    
+    public func loadCategories() {
+        categories = [
+            Category(
+                title: "Fruits & Vegetables",
+                imageName: "fruitsAndVegetables",
+                value: "fresh-produce"
+            ),
+            
+            Category(
+                title: "Fish & Meat",
+                imageName: "MeatAndFish",
+                value: "meat-seafood"
+            ),
+            
+            Category(
+                title: "Dairy & Eggs",
+                imageName: "DairyAndEggs",
+                value: "dairy"
+            ),
+            
+            Category(
+                title: "Cooking Oil & Ghee",
+                imageName: "CookingOilAndGee",
+                value: "cooking-oil"
+            ),
+            
+            Category(
+                title: "Beverages",
+                imageName: "Beverages",
+                value: "beverages"
+            ),
+            
+            Category(
+                title: "Bakery & Snacks",
+                imageName: "BakeryAndSnacks",
+                value: "bread-bakery"
+            )
+        ]
+    }
 }

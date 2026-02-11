@@ -10,31 +10,40 @@ import SwiftUI
 struct ExploreView: View {
     @State public var showFilter = false
     @State private var gridLayout: GridLayout = .twoColumn
+    @StateObject private var exploreViewModel = ExploreViewModel()
+    @State private var navigateToResults = false
+    @State private var selectedCategories: Set<String> = []
+    @State private var selectedBrands: Set<String> = []
 
-    let categories: [Category] = [
-        Category(title: "Fruits & Vegetables", imageName: "fruitsAndVegetables"),
-        Category(title: "Fish & Meat", imageName: "MeatAndFish"),
-        Category(title: "Dairy & Eggs", imageName: "DairyAndEggs"),
-        Category(title: "Cooking Oil & Ghee", imageName: "CookingOilAndGee"),
-        Category(title: "Beverages", imageName: "Beverages"),
-        Category(title: "Bakery & Snacks", imageName: "BakeryAndSnacks")
-    ]
-    
     var body: some View {
         NavigationStack {
             VStack(spacing: 16) {
                 ScreenHeader(title: "Find Products")
-                SearchBox()
+                VStack {
+                       SearchBox { categories, brands in
+                           selectedCategories = categories
+                           selectedBrands = brands
+                           navigateToResults = true
+                       }
+                   }
+                   .navigationDestination(isPresented: $navigateToResults) {
+                       FilterResultView(
+                           selectedCategories: selectedCategories,
+                           selectedBrands: selectedBrands
+                       )
+                   }
                 
                 ScrollView {
                     LazyVGrid(columns: gridLayout.columns, spacing: 16) {
-                        ForEach(categories) { category in
+                        ForEach(exploreViewModel.categories) { category in
                             NavigationLink {
                                 CategoryProductsView(category: category)
                             } label: {
                                 CategoryCard(
                                     title: category.title,
-                                    imageName: category.imageName
+                                    imageName: category.imageName,
+                                    backgroundColor: category.backgroundColor,
+                                    borderColor: category.borderColor
                                 )
                             }
                             .buttonStyle(.plain)

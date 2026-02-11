@@ -18,6 +18,9 @@ final class CartViewModel: ObservableObject {
     }
 
     func getCartItem(cartId: String) async  {
+        isLoading = true
+
+        defer { isLoading = false }
         
         do {
             print("CALLED: \(cartId)")
@@ -26,8 +29,9 @@ final class CartViewModel: ObservableObject {
 
             print("Res: \(cartResp)")
             
-            for product in cartResp.items{
-                let product = try await productService.fetchProduct(id: String(product.productId), showLabel: true)
+            for item in cartResp.items{
+                var product = try await productService.fetchProduct(id: String(item.productId), showLabel: true)
+                product.quantity = item.quantity
                 tempItems.append(product)
             }
 

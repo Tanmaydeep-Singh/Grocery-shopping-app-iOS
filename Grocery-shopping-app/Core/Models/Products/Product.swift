@@ -7,6 +7,7 @@ struct Product: Identifiable, Codable {
     var price: Double? = 0
     let inStock: Bool
     let imageName: String?
+    var quantity: Int? = 0
 }
 
 extension Product {

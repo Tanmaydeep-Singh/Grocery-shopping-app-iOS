@@ -17,8 +17,9 @@ struct CartItemView: View {
     var body: some View {
         HStack(spacing: 14) {
 
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color.gray.opacity(0.2))
+            Image(item.category.imageName)
+                .resizable()
+                .scaledToFit()
                 .frame(width: 76, height: 104)
 
             VStack(spacing: 14) {
@@ -48,16 +49,15 @@ struct CartItemView: View {
                     HStack(spacing: 16) {
                         quantityButton(icon: "minus", color: .gray, action: onDecrease)
 
-                        Text("1")
-                            .font(.body)
+                        Text("\(item.quantity ?? 1)")
+                        .font(.body)
 
                         quantityButton(icon: "plus", color: .green, action: onIncrease)
                     }
 
                     Spacer()
 
-                    Text("$\(String(format: "%.2f", item.price ?? 0))")
-                        .font(.body)
+                    Text("$\(String(format: "%.2f", (item.price ?? 0.0) * Double(item.quantity ?? 0)))")                        .font(.body)
                         .fontWeight(.medium)
                 }
             }

@@ -72,7 +72,7 @@ final class CartProductsService {
             cartProduct.name = item.name
             cartProduct.price = item.price ?? 0
             cartProduct.inStock = item.inStock
-            cartProduct.imageName = item.imageName
+            cartProduct.imageName = item.category.rawValue
             cartProduct.cartProductId = Int64(item.cartProductId ?? 0)
             cartProduct.quantity = Int64(item.quantity ?? 0)
         }

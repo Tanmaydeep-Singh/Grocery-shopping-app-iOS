@@ -23,43 +23,9 @@ final class ExploreViewModel: ObservableObject {
     }
     
     
-    public func loadCategories() {
-        categories = [
-            Category(
-                title: "Fruits & Vegetables",
-                imageName: "fruitsAndVegetables",
-                value: "fresh-produce"
-            ),
-            
-            Category(
-                title: "Fish & Meat",
-                imageName: "MeatAndFish",
-                value: "meat-seafood"
-            ),
-            
-            Category(
-                title: "Dairy & Eggs",
-                imageName: "DairyAndEggs",
-                value: "dairy"
-            ),
-            
-            Category(
-                title: "Cooking Oil & Ghee",
-                imageName: "CookingOilAndGee",
-                value: "cooking-oil"
-            ),
-            
-            Category(
-                title: "Beverages",
-                imageName: "Beverages",
-                value: "beverages"
-            ),
-            
-            Category(
-                title: "Bakery & Snacks",
-                imageName: "BakeryAndSnacks",
-                value: "bread-bakery"
-            )
-        ]
+    private func loadCategories() {
+        categories = ProductCategory
+            .allCases
+            .map { $0.toCategory() }
     }
 }

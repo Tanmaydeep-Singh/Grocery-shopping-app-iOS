@@ -4,152 +4,232 @@
 //
 //  Created by tanmaydeep on 04/02/26.
 //
+
+//import SwiftUI
+//
+//struct CheckoutView: View {
+//    
+//    @Environment(\.dismiss) private var dismiss
+//    
+//    @State private var goToDelivery = false
+//    @State private var goToPayment = false
+//    @State private var goToDiscount = false
+//    @State private var goToSuccess = false
+//    
+//    let totalCost: Double?
+//    
+//    private var formattedTotal: String {
+//        String(format: "$%.2f", totalCost ?? 0)
+//    }
+//    
+//    var body: some View {
+//        VStack(spacing: 0) {
+//            
+//            // Header
+//            HStack {
+//                ScreenHeader(title: "Checkout")
+//                
+//                Spacer()
+//                
+//                Button {
+//                    dismiss()
+//                } label: {
+//                    Image(systemName: "xmark")
+//                        .font(.system(size: 18, weight: .semibold))
+//                }
+//                .padding(.trailing, 16)
+//            }
+//            
+//            Divider()
+//                .padding(.bottom, 16)
+//            
+//            VStack(spacing: 14) {
+//                
+//                CheckoutRow(
+//                    title: "Delivery",
+//                    value: "Select Method",
+//                    imagePlaceholder: false
+//                ) {
+//                    goToDelivery = true
+//                }
+//                
+//                Divider()
+//                
+//                CheckoutRow(
+//                    title: "Payment",
+//                    value: nil,
+//                    imagePlaceholder: true
+//                ) {
+//                    goToPayment = true
+//                }
+//                
+//                Divider()
+//                
+//                CheckoutRow(
+//                    title: "Promo Code",
+//                    value: "Pick Discount",
+//                    imagePlaceholder: false
+//                ) {
+//                    goToDiscount = true
+//                }
+//                
+//                Divider()
+//                
+//                CheckoutRow(
+//                    title: "Total Cost",
+//                    value: formattedTotal,
+//                    imagePlaceholder: false
+//                ) { }
+//                
+//                VStack(alignment: .leading, spacing: 4) {
+//                    Text("By placing an order, you agree to our")
+//                        .font(.system(size: 13))
+//                        .foregroundColor(.gray)
+//                    
+//                    Text("Terms and Conditions")
+//                        .font(.system(size: 13, weight: .semibold))
+//                        .foregroundColor(.black)
+//                }
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//                .padding(.top, 6)
+//                
+//                PrimaryButton(title: "Place Order") {
+//                    goToSuccess = true
+//                }
+//                .padding(.top, 4)
+//            }
+//            .padding(.horizontal, 20)
+//            .padding(.bottom, 6)
+//        }
+////        .navigationBarBackButtonHidden(true)
+//        
+//        // Hidden navigation links
+//        .background(
+//            Group {
+//                NavigationLink(destination: DeliveryOptionsView(), isActive: $goToDelivery) { EmptyView() }
+//                NavigationLink(destination: PaymentOptionsView(), isActive: $goToPayment) { EmptyView() }
+//                NavigationLink(destination: DiscountOptionsView(), isActive: $goToDiscount) { EmptyView() }
+//                NavigationLink(destination: OrderAcceptedView(), isActive: $goToSuccess) { EmptyView() }
+//            }
+//            
+//        )
+//    }
+//}
+
+
 import SwiftUI
 
 struct CheckoutView: View {
     
+    @Environment(\.dismiss) private var dismiss
     
     @State private var goToDelivery = false
     @State private var goToPayment = false
     @State private var goToDiscount = false
-    @State private var goToSuccess = false
-    
-    @Binding var isPresented: Bool
-
     
     let totalCost: Double?
-    
-    init(isPresented: Binding<Bool>, totalCost: Double? = nil) {
-        self.totalCost = totalCost
-        self._isPresented = isPresented
-    }
+    let onOrderPlaced: () -> Void   // full screen navigation trigger
     
     private var formattedTotal: String {
-        let amount = totalCost ?? 0.0
-        return String(format: "$%.2f", amount)
+        String(format: "$%.2f", totalCost ?? 0)
     }
     
     var body: some View {
-        ZStack(alignment: .bottom) {
+        
+        VStack(spacing: 0) {
             
-            Color.black.opacity(0.3)
-                .ignoresSafeArea()
-            
-            VStack(spacing: 0) {
+            // Header
+            HStack {
+                ScreenHeader(title: "Checkout")
                 
-                HStack {
-                    ScreenHeader(title: "Checkout")
-                    
-                    Spacer()
-                    
-                    Button {
-                        isPresented = false
-                    } label: {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.primary)
-                    }
-                    .padding(.trailing, 16)
+                Spacer()
+                
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 18, weight: .semibold))
+                }
+                .padding(.trailing, 16)
+            }
+            
+            Divider()
+                .padding(.bottom, 16)
+            
+            VStack(spacing: 14) {
+                
+                CheckoutRow(
+                    title: "Delivery",
+                    value: "Select Method",
+                    imagePlaceholder: false
+                ) {
+                    goToDelivery = true
                 }
                 
                 Divider()
-                    .padding(.bottom, 20)
                 
-                VStack(spacing: 20) {
-                    
-                    CheckoutRow(
-                        title: "Delivery",
-                        value: "Select Method",
-                        imagePlaceholder: false
-                    ) {
-                        goToDelivery = true
-                    }
-                    
-                    Divider()
-                    
-                    CheckoutRow(
-                        title: "Payment",
-                        value: nil,
-                        imagePlaceholder: true
-                    ) {
-                        goToPayment = true
-                    }
-                    
-                    Divider()
-                    
-                    CheckoutRow(
-                        title: "Promo Code",
-                        value: "Pick Discount",
-                        imagePlaceholder: false
-                    ) {
-                        goToDiscount = true
-                    }
-                    
-                    Divider()
-                    
-                    CheckoutRow(
-                        title: "Total Cost",
-                        value: formattedTotal,
-                        imagePlaceholder: false
-                    ) { }
-                    
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("By placing an order, you agree to our")
-                            .font(.system(size: 13))
-                            .foregroundColor(.gray)
-                        
-                        Text("Terms and Conditions")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(.black)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, 10)
-                    
-                    Spacer()
-                    
-                    PrimaryButton(title: "Place Order") {
-                        goToSuccess = true
-                    }
-                    .padding(.bottom, 10)
+                CheckoutRow(
+                    title: "Payment",
+                    value: nil,
+                    imagePlaceholder: true
+                ) {
+                    goToPayment = true
                 }
-                .padding(.horizontal, 20)
                 
-                NavigationLink(destination: DeliveryOptionsView(), isActive: $goToDelivery) { EmptyView() }
-                NavigationLink(destination: PaymentOptionsView(), isActive: $goToPayment) { EmptyView() }
-                NavigationLink(destination: DiscountOptionsView(), isActive: $goToDiscount) { EmptyView() }
-                NavigationLink(destination: OrderAcceptedView(), isActive: $goToSuccess) { EmptyView() }
+                Divider()
+                
+                CheckoutRow(
+                    title: "Promo Code",
+                    value: "Pick Discount",
+                    imagePlaceholder: false
+                ) {
+                    goToDiscount = true
+                }
+                
+                Divider()
+                
+                CheckoutRow(
+                    title: "Total Cost",
+                    value: formattedTotal,
+                    imagePlaceholder: false
+                ) { }
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("By placing an order, you agree to our")
+                        .font(.system(size: 13))
+                        .foregroundColor(.gray)
+                    
+                    Text("Terms and Conditions")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(.black)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 6)
+                
+                PrimaryButton(title: "Place Order") {
+                    onOrderPlaced()
+                }
+                .padding(.top, 6)
             }
-            .padding(.top, 12)
-            .background(
-                RoundedRectangle(cornerRadius: 30)
-                    .fill(Color.white)
-                    .ignoresSafeArea(edges: .bottom)
-            )
-            .frame(height: UIScreen.main.bounds.height * 0.55)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 12)
         }
-    }
-}
-
-#Preview {
-    CheckoutPreviewWrapper()
-}
-
-struct CheckoutPreviewWrapper: View {
-    
-    @State private var showCheckout = true
-    
-    var body: some View {
-        NavigationStack{
-            CheckoutView(
-                isPresented: $showCheckout,
-                totalCost: 149.99
-            )
-        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         
+        
+        .background(Color.white)
+        
+        // Internal navigation inside sheet
+        .navigationDestination(isPresented: $goToDelivery) {
+            DeliveryOptionsView()
+        }
+        .navigationDestination(isPresented: $goToPayment) {
+            PaymentOptionsView()
+        }
+        .navigationDestination(isPresented: $goToDiscount) {
+            DiscountOptionsView()
+        }
     }
 }
-
-
-
 
 

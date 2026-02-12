@@ -97,13 +97,15 @@ final class ProductViewModel: ObservableObject {
             
             print("cartRes : \(cartRes)")
             if let productDetail = productDetail {
-                cartProductsService.addCartProduct(product: productDetail, cartProductId: cartRes.itemId)
+                cartProductsService.addCartProduct(productDetails: productDetail, cartProductId: cartRes.itemId)
             }
             
         } catch {
             print("Failed to add item to cart: \(error)")
         }
     }
+    
+    // Quantity Update with debounce.
     
     
 }

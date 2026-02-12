@@ -11,13 +11,35 @@ import Combine
 @MainActor
 final class ProductCardViewModel: ObservableObject {
     
+    @Published var isInCart: Bool = false
+    @Published var quantity: Int = 1
+    
     private let cartService: CartServiceProtocol = CartServices()
-
-    func addToCart(cartId: String, productId: Int) async {
-        do {
-            _ = try await cartService.addItem(cartId: cartId, productId: productId)
-        } catch {
-            print("Failed to add item to cart: \(error)")
+    private let cartProductsService: CartProductsService = CartProductsService()
+    
+    
+    func addToCart(cartId: String, product: Product?) async {
+        
+        guard let productId = product?.id else {
+            return
         }
+
+        do {
+           let cartRes = try await cartService.addItem(cartId: cartId, productId: productId)
+            
+            if let productDetail = product {
+                cartProductsService.addCartProduct(product: product, cartProductId: cartRes.itemId)
+            }
+            isInCart = true
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    func onLoad(productId: Int) async {
+        isInCart = await cartProductsService.isProductInCart(productId: productId)
+        quantity = Int(cartProductsService.getProductById(productId: productId)?.quantity ?? 1)
+
     }
 }

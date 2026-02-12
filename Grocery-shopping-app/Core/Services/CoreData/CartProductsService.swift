@@ -13,27 +13,47 @@ final class CartProductsService {
     static let shared = CartProductsService()
     private let context = PersistenceManager.shared.context
     
-//    Create CartProduct
-    func addCartProduct( product: ProductDetail , cartProductId: Int) {
-        
-        do {
-            
-            print("Adding to cart: \(product)")
-            print(" cartProductId: \(cartProductId)")
-            
+    func addCartProduct(
+        productDetails: ProductDetail? = nil,
+        product: Product? = nil,
+        cartProductId: Int
+    ) {
+
+        if let product = product {
+
             let cartProduct = CartProduct(context: context)
-            
+
             cartProduct.id = Int64(product.id)
             cartProduct.name = product.name
-            cartProduct.price = product.price
+            cartProduct.price = product.price ?? 0
             cartProduct.inStock = product.inStock
             cartProduct.imageName = product.imageName
             cartProduct.cartProductId = Int64(cartProductId)
-            cartProduct.quantity = 1
-            
+            cartProduct.quantity = Int64(product.quantity ?? 1)
+
             save()
+            return
         }
+
+        if let details = productDetails {
+
+            let cartProduct = CartProduct(context: context)
+
+            cartProduct.id = Int64(details.id)
+            cartProduct.name = details.name
+            cartProduct.price = details.price
+            cartProduct.inStock = details.inStock
+            cartProduct.imageName = details.imageName
+            cartProduct.cartProductId = Int64(cartProductId)
+            cartProduct.quantity = 1
+
+            save()
+            return
+        }
+
+        print("no data")
     }
+
 
         
 //    Get Products
@@ -63,6 +83,23 @@ final class CartProductsService {
             return false
         }
     }
+    
+    // Get Product by ID:
+    func getProductById(productId: Int) -> CartProduct? {
+        let request: NSFetchRequest<CartProduct> = CartProduct.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "id == %lld", Int64(productId))
+        request.fetchLimit = 1
+        
+        do {
+            let results = try context.fetch(request)
+                        return results.first
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
     // Clear coredata
     func clearCart() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = CartProduct.fetchRequest()

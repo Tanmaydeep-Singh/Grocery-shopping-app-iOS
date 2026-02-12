@@ -25,7 +25,7 @@ final class CartProductsService {
 
             cartProduct.id = Int64(product.id)
             cartProduct.name = product.name
-            cartProduct.price = product.price ?? 0
+            cartProduct.price = product.price ?? 4.99
             cartProduct.inStock = product.inStock
             cartProduct.imageName = product.imageName
             cartProduct.cartProductId = Int64(cartProductId)
@@ -143,7 +143,7 @@ final class CartProductsService {
             cartProduct.name = item.name
             cartProduct.price = item.price ?? 0
             cartProduct.inStock = item.inStock
-            cartProduct.imageName = item.category.rawValue
+            cartProduct.imageName = item.imageName
             cartProduct.cartProductId = Int64(item.cartProductId ?? 0)
             cartProduct.quantity = Int64(item.quantity ?? 0)
         }

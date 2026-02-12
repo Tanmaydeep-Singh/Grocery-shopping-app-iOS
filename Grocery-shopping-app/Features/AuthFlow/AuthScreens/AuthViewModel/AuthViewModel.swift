@@ -89,7 +89,6 @@ final class AuthViewModel: ObservableObject {
             let authResult = try await auth.signIn(withEmail: email, password: password)
             self.userSession = authResult.user
             await fetchUser(uid: authResult.user.uid)
-            print("AuthResult: \(authResult)")
                 
            await syncCartOnLoginHelper.getCartItems(cartId: user!.cartId ?? "")
            

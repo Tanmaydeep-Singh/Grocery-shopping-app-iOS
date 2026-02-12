@@ -37,9 +37,6 @@ final class CartViewModel: ObservableObject {
             print("products: \(products)")
             self.cartItems = products
         }
-        catch {
-            print("ERROR: \(error)")
-        }
     }
 
     
@@ -50,7 +47,7 @@ final class CartViewModel: ObservableObject {
             cartItems = cartItems.filter {
                         $0.cartProductId != itemId
                     }
-            print("LIST: \(cartItems)")
+            cartProductsService.removeCartItem(itemId:itemId)
 
         } catch {
             print("Failed to remove item:", error)

@@ -78,6 +78,24 @@ final class CartProductsService {
         }
     }
     
+//    Remove Cart Item
+    // CartProductsService.swift
+    func removeCartItem(itemId: Int) {
+        
+        let request: NSFetchRequest<CartProduct> = CartProduct.fetchRequest()
+            request.predicate = NSPredicate(format: "cartProductId == %lld", Int64(itemId))
+        
+        do {
+            let items = try context.fetch(request)
+            for item in items {
+                context.delete(item)
+            }
+            try context.save()
+            print("Core Data: Item \(itemId) removed successfully.")
+        } catch {
+            print("error removing item:", error.localizedDescription)
+        }
+    }
     // Inside CartProductsService.swift
     func syncCart(products: [Product]) {
         clearCart()

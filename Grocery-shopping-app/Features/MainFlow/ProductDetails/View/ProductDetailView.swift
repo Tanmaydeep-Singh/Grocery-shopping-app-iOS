@@ -161,7 +161,7 @@ struct ProductDetailView: View {
                         Task {
                             let cartId = authViewModel.user?.cartId ?? ""
                             await viewModel.addToCart(cartId: cartId)
-                            showAddedAlert = true
+                            viewModel.isInCart = true
                         }
                     }
                 }

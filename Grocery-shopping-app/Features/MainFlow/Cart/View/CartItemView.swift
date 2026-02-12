@@ -9,14 +9,14 @@ import SwiftUI
 
 struct CartItemView: View {
 
-    let item: Product
+    let item: CartProduct
     let onIncrease: (Int) -> Void
     let onDecrease: (Int) -> Void
     let onRemove: () -> Void
     @State private var quantity: Int
 
     init(
-            item: Product,
+            item: CartProduct,
             onIncrease: @escaping (Int) -> Void,
             onDecrease: @escaping (Int) -> Void,
             onRemove: @escaping () -> Void
@@ -25,13 +25,13 @@ struct CartItemView: View {
             self.onIncrease = onIncrease
             self.onDecrease = onDecrease
             self.onRemove = onRemove
-            _quantity = State(initialValue: item.quantity ?? 1)
+            _quantity = State(initialValue: Int(item.quantity))
         }
 
     var body: some View {
         HStack(spacing: 14) {
 
-            Image(item.category.imageName)
+            Image(item.imageName ?? "")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 76, height: 104)
@@ -39,7 +39,7 @@ struct CartItemView: View {
             VStack(spacing: 14) {
 
                 HStack {
-                    Text(item.name)
+                    Text(item.name ?? "")
                         .font(.body)
                         .fontWeight(.medium)
 
@@ -52,7 +52,7 @@ struct CartItemView: View {
                 }
 
                 HStack {
-                    Text("$\(String(format: "%.2f", item.price ?? 0))")
+                    Text("$\(String(format: "%.2f", item.price))")
                         .font(.footnote)
                         .foregroundColor(.gray)
 
@@ -80,7 +80,7 @@ struct CartItemView: View {
 
                     Spacer()
 
-                    Text("$\(String(format: "%.2f", (item.price ?? 0.0) * Double(item.quantity ?? 0)))")
+                    Text("$\(String(format: "%.2f", (item.price) * Double(item.quantity)))")
                         .font(.body)
                         .fontWeight(.medium)
                 }

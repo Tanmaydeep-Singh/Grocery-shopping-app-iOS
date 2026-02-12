@@ -18,6 +18,7 @@ final class ProductViewModel: ObservableObject {
     
     private let favoritesService: FavoritesServiceProtocol = FavoritesService()
     private let cartService: CartServiceProtocol = CartServices()
+    private let cartProductsService: CartProductsService = CartProductsService()
 
     
     func fetchProductDetail(productId: Int, userId:  String) async {
@@ -89,7 +90,14 @@ final class ProductViewModel: ObservableObject {
         }
 
         do {
-           _ = try await cartService.addItem(cartId: cartId, productId: productId)
+            print("Product Details  : \(String(describing: productDetail))")
+           let cartRes = try await cartService.addItem(cartId: cartId, productId: productId)
+            
+            print("cartRes : \(cartRes)")
+            if let productDetail = productDetail {
+                cartProductsService.addCartProduct(product: productDetail, cartProductId: cartRes.itemId)
+            }
+            
         } catch {
             print("Failed to add item to cart: \(error)")
         }

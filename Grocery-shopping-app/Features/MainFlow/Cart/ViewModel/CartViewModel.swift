@@ -11,7 +11,7 @@ import Combine
 @MainActor
 final class CartViewModel: ObservableObject {
 
-    @Published var cartItems: [Product] = []
+    @Published var cartItems: [CartProduct] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
 
@@ -26,39 +26,24 @@ final class CartViewModel: ObservableObject {
         self.cartProductsService = CartProductsService()
     }
 
-    func getCartItem(cartId: String) async  {
-        isLoading = true
-
-        defer { isLoading = false }
-        
-        do {
-            
-            let cpsresp = cartProductsService.getProducts()
-            print("cpsresp: \(cpsresp)")
-            
-            let cartResp = try await cartService.getCart(cartId: cartId)
-            var tempItems: [Product] = []
-
-            
-            for item in cartResp.items{
-                var product = try await productService.fetchProduct(id: String(item.productId), showLabel: true)
-                product.quantity = item.quantity
-                product.cartProductId = item.id
-                tempItems.append(product)
-            }
-            
-
-            await MainActor.run {
-                self.cartItems = tempItems
-            }
-        } catch {
-            print(error)
-        }
-        
-        
-    }
     
+    //Get cart item
+    func getCartItem(cartId: String) async {
+        isLoading = true
+        defer { isLoading = false }
 
+        do {
+            let products = await cartProductsService.getProducts()
+            print("products: \(products)")
+            self.cartItems = products
+        }
+        catch {
+            print("ERROR: \(error)")
+        }
+    }
+
+        
+        
    
 
 
@@ -80,8 +65,8 @@ final class CartViewModel: ObservableObject {
         var price: Double = 0
 
         for item in cartItems {
-            let itemPrice = item.price ?? 0
-            let quantity = Double(item.quantity ?? 0)
+            let itemPrice = item.price
+            let quantity = Double(item.quantity)
             price += itemPrice * quantity
         }
         return price
@@ -95,7 +80,7 @@ final class CartViewModel: ObservableObject {
     func updateLocalQuantity(cartId: String, itemId: Int, quantity: Int) {
 
            if let index = cartItems.firstIndex(where: { $0.cartProductId == itemId }) {
-               cartItems[index].quantity = quantity
+               cartItems[index].quantity =  Int64(quantity)
            }
 
            debounceTasks[itemId]?.cancel()

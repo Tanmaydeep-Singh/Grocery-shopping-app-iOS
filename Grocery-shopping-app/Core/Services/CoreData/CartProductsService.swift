@@ -50,6 +50,23 @@ final class CartProductsService {
                        }
        }
     
+    // Clear coredata
+    func clearCart() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = CartProduct.fetchRequest()
+        
+        do {
+            let items = try context.fetch(fetchRequest) as? [NSManagedObject]
+            items?.forEach { context.delete($0) }
+            
+            try context.save()
+            print("Core Data: Cart cleared successfully.")
+        } catch {
+            print("Error clearing cart: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    // Helper Save fun
     private func save() {
            do {
                try context.save()

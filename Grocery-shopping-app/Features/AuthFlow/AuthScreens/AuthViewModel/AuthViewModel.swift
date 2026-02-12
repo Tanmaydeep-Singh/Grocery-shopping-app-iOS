@@ -24,10 +24,11 @@ final class AuthViewModel: ObservableObject {
     private let auth = Auth.auth()
     private let firestore = Firestore.firestore()
     private let cartService: CartServices
-
+    private let cartProductsService : CartProductsService
     init() {
         self.userSession = auth.currentUser
         self.cartService = CartServices()
+        self.cartProductsService = CartProductsService()
         if let currentUser = auth.currentUser {
             Task {
                 await fetchUser(uid: currentUser.uid)
@@ -205,6 +206,7 @@ final class AuthViewModel: ObservableObject {
         try? auth.signOut()
         self.userSession = nil
         self.user = nil
+        cartProductsService.clearCart()
     }
 
     private func handleAuthError(_ error: Error) {

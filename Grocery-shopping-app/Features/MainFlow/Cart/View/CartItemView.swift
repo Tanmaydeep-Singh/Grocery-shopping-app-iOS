@@ -10,9 +10,23 @@ import SwiftUI
 struct CartItemView: View {
 
     let item: Product
-    let onIncrease: () -> Void
-    let onDecrease: () -> Void
+    let onIncrease: (Int) -> Void
+    let onDecrease: (Int) -> Void
     let onRemove: () -> Void
+    @State private var quantity: Int
+
+    init(
+            item: Product,
+            onIncrease: @escaping (Int) -> Void,
+            onDecrease: @escaping (Int) -> Void,
+            onRemove: @escaping () -> Void
+        ) {
+            self.item = item
+            self.onIncrease = onIncrease
+            self.onDecrease = onDecrease
+            self.onRemove = onRemove
+            _quantity = State(initialValue: item.quantity ?? 1)
+        }
 
     var body: some View {
         HStack(spacing: 14) {
@@ -47,17 +61,27 @@ struct CartItemView: View {
 
                 HStack {
                     HStack(spacing: 16) {
-                        quantityButton(icon: "minus", color: .gray, action: onDecrease)
+                        quantityButton(icon: "minus", color: .gray) {
+                            if quantity > 1 {
+                                quantity -= 1
+                                onDecrease(quantity)
+                            }
+                        }
 
-                        Text("\(item.quantity ?? 1)")
-                        .font(.body)
+                        Text("\(quantity)")
+                            .font(.body)
 
-                        quantityButton(icon: "plus", color: .green, action: onIncrease)
+                        quantityButton(icon: "plus", color: .green) {
+                            quantity += 1
+                            onIncrease(quantity) 
+                        }
+
                     }
 
                     Spacer()
 
-                    Text("$\(String(format: "%.2f", (item.price ?? 0.0) * Double(item.quantity ?? 0)))")                        .font(.body)
+                    Text("$\(String(format: "%.2f", (item.price ?? 0.0) * Double(item.quantity ?? 0)))")
+                        .font(.body)
                         .fontWeight(.medium)
                 }
             }

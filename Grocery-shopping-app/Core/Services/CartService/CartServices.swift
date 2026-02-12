@@ -46,9 +46,9 @@ final class CartServices: CartServiceProtocol {
     
     func updateItemQuantity(
         cartId: String,
-        itemId: String,
+        productId: String,
         quantity: Int
-    ) async throws -> Cart {
+    ) async throws -> EmptyResponse {
 
         let request = UpdateCartItemQuantityRequest(
             quantity: quantity
@@ -57,32 +57,12 @@ final class CartServices: CartServiceProtocol {
         return try await client.request(
             endpoint: CartEndpoints.updateCartItemQuantity(
                 cartId: cartId,
-                itemId: itemId,
+                productId: productId,
                 body: request
             )
         )
     }
 
-    func replaceItem(
-        cartId: String,
-        itemId: String,
-        productId: Int,
-        quantity: Int
-    ) async throws -> Cart {
-
-        let request = ReplaceCartItemRequest(
-            productId: productId,
-            quantity: quantity
-        )
-
-        return try await client.request(
-            endpoint: CartEndpoints.replaceCartItem(
-                cartId: cartId,
-                itemId: itemId,
-                body: request
-            )
-        )
-    }
 
     func removeItem(
         cartId: String,

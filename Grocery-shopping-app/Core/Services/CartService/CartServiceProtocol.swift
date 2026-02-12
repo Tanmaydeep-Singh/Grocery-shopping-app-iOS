@@ -22,17 +22,11 @@ protocol CartServiceProtocol {
     
     func updateItemQuantity(
         cartId: String,
-        itemId: String,
+        productId: String,
         quantity: Int
-    ) async throws -> Cart
+    ) async throws -> EmptyResponse
 
-    func replaceItem(
-        cartId: String,
-        itemId: String,
-        productId: Int,
-        quantity: Int
-    ) async throws -> Cart
-
+    
     func removeItem(
         cartId: String,
         itemId: String

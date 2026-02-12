@@ -42,10 +42,7 @@ final class CartViewModel: ObservableObject {
         }
     }
 
-        
-        
-   
-
+    
 
     func removeItem(cartId: String, itemId: Int) async {
         do {

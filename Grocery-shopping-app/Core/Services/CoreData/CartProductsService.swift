@@ -33,9 +33,6 @@ final class CartProductsService {
             
             save()
         }
-        catch {
-            print("ERRRRR : \(error)")
-        }
     }
 
         
@@ -65,6 +62,25 @@ final class CartProductsService {
         }
     }
     
+    // Inside CartProductsService.swift
+    func syncCart(products: [Product]) {
+        clearCart()
+        
+        for item in products {
+            let cartProduct = CartProduct(context: context)
+            cartProduct.id = Int64(item.id)
+            cartProduct.name = item.name
+            cartProduct.price = item.price ?? 0
+            cartProduct.inStock = item.inStock
+            cartProduct.imageName = item.imageName
+            cartProduct.cartProductId = Int64(item.cartProductId ?? 0)
+            cartProduct.quantity = Int64(item.quantity ?? 0)
+        }
+        
+        save()
+        print("Core Data: Synced \(products.count) items from server.")
+    }
+    
     
     // Helper Save fun
     private func save() {
@@ -74,5 +90,7 @@ final class CartProductsService {
                print("Save error:", error)
            }
        }
+    
+    
 
 }

@@ -4,7 +4,10 @@ import SwiftUI
 struct ProductCard: View {
 
     let product: Product
-
+    @EnvironmentObject private var authViewModel: AuthViewModel
+    @StateObject private var viewModel = ProductCardViewModel()
+    @State private var showAddedAlert = false
+    
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
 
@@ -41,10 +44,19 @@ struct ProductCard: View {
             )
             
             PrimaryButton(icon: "plus", height: 44, width: 44, cornerRadius: 14){
-                
+                Task{
+                    let cartId = authViewModel.user?.cartId ?? ""
+                    await viewModel.addToCart(cartId:cartId, productId: product.id)
+                    showAddedAlert = true
+                }
             }
+        }.alert("Success", isPresented: $showAddedAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Item added to cart")
         }
     }
+    
 }
 
 #Preview {

@@ -7,6 +7,7 @@ struct ProductDetailView: View {
     @EnvironmentObject private var authViewModel: AuthViewModel
     @StateObject private var viewModel = ProductViewModel()
     @State private var quantity: Int = 1
+    @State private var showAddedAlert = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -127,6 +128,8 @@ struct ProductDetailView: View {
                     Task {
                         let cartId = authViewModel.user?.cartId ?? ""
                         await viewModel.addToCart(cartId:cartId)
+                        showAddedAlert = true
+
                     }
                 }
             }
@@ -136,6 +139,11 @@ struct ProductDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .alert("Success", isPresented: $showAddedAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Item added to cart")
+        }
         .task {
             let userId = authViewModel.user?.id ?? "iuREta11D5NW1sUzofRW7yLGEeA2"
             await viewModel.fetchProductDetail(productId: productId, userId: userId)

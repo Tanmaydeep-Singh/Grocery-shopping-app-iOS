@@ -8,6 +8,8 @@ struct ProductDetailView: View {
     @StateObject private var viewModel = ProductViewModel()
     @State private var quantity: Int = 1
     @State private var showAddedAlert = false
+    @Namespace private var buttonTransition
+
 
     var body: some View {
         VStack(spacing: 0) {
@@ -123,49 +125,50 @@ struct ProductDetailView: View {
                     }
                 }
                 
-                // Add to basket
-                if viewModel.isInCart {
-                    HStack {
-                        Button(action: {
-                            
-                        }) {
-                            Image(systemName: "minus")
-                                .frame(width: 40, height: 40)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("\(quantity)")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            
-                        }) {
-                            Image(systemName: "plus")
-                                .frame(width: 40, height: 40)
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 60)
-                    .background(Color("Splash"),)
-                    .cornerRadius(19)
-                    .padding(20)
-                    .foregroundStyle(.white)
+               
 
-                    
-                } else {
-                    PrimaryButton(title: "Add to Basket") {
-                        Task {
-                            let cartId = authViewModel.user?.cartId ?? ""
-                            await viewModel.addToCart(cartId: cartId)
-                            viewModel.isInCart = true
+               
+                    if viewModel.isInCart {
+                        HStack {
+                            Button(action: {  }) {
+                                Image(systemName: "minus")
+                                    .frame(width: 40, height: 40)
+                            }
+                            
+                            Spacer()
+                            Text("\(quantity)")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                            Spacer()
+                            
+                            Button(action: {  }) {
+                                Image(systemName: "plus")
+                                    .frame(width: 40, height: 40)
+                            }
                         }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 60)
+                        .background(Color("Splash"))
+                        .cornerRadius(19)
+                        .foregroundStyle(.white)
+                        .padding(20)
+                        .matchedGeometryEffect(id: "cartButton", in: buttonTransition)
+                        .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+                        
+                    } else {
+                        PrimaryButton(title: "Add to Basket") {
+                            Task {
+                                let cartId = authViewModel.user?.cartId ?? ""
+                                await viewModel.addToCart(cartId: cartId)
+                            
+                                withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                    viewModel.isInCart = true
+                                }
+                            }
+                        }
+                        .matchedGeometryEffect(id: "cartButton", in: buttonTransition)
                     }
                 }
-            }
             else if let error = viewModel.errorMessage {
                        Text(error)
                            .foregroundColor(.red)

@@ -9,6 +9,10 @@ import SwiftUI
 struct CartView: View {
     @StateObject private var cartViewModel = CartViewModel()
     @EnvironmentObject private var authViewModel: AuthViewModel
+    
+    //Checkout flow variables
+    @State private var showCheckout = false
+    @State private var goToOrderAccepted = false
 
     private var cartId: String? {
         authViewModel.user?.cartId
@@ -47,10 +51,21 @@ struct CartView: View {
                                     CartItemView(
                                         item: item,
                                         onIncrease: {
-                                            cartViewModel.increaseQuantity()
-                                        },
+                                            newQuantity in
+                                                    guard let cartId, let id = item.cartProductId else { return }
+                                                    cartViewModel.updateLocalQuantity(
+                                                        cartId: cartId,
+                                                        itemId: id,
+                                                        quantity: newQuantity
+                                                    )                                      },
                                         onDecrease: {
-                                            cartViewModel.decreaseQuantity()
+                                            newQuantity in
+                                                    guard let cartId, let id = item.cartProductId else { return }
+                                                    cartViewModel.updateLocalQuantity(
+                                                        cartId: cartId,
+                                                        itemId: id,
+                                                        quantity: newQuantity
+                                                    )
                                         },
                                         onRemove: {
                                             guard let cartId,
@@ -95,7 +110,9 @@ struct CartView: View {
     private var checkoutBar: some View {
         PrimaryButton(
             title: "Go To Checkout",
-            action: { }
+            action: {
+                showCheckout = true
+            }
         )
         .overlay(alignment: .trailing) {
             Text("$\(String(format: "%.2f", cartViewModel.totalPrice))")
@@ -108,7 +125,28 @@ struct CartView: View {
                 .foregroundColor(.white)
                 .padding(.trailing, 32)
         }
+        .sheet(isPresented: $showCheckout) {
+            NavigationStack {
+                CheckoutView(
+                    totalCost: cartViewModel.totalPrice,
+                    onOrderPlaced: {
+                        showCheckout = false
+                        goToOrderAccepted = true
+                    }
+                )
+            }
+            .presentationDetents([.fraction(0.65)])
+            .presentationDragIndicator(.hidden)
+        }
+        .navigationDestination(isPresented: $goToOrderAccepted) {
+            OrderAcceptedView()
+        }
     }
+
+        
+        
+    
+
 }
 
 

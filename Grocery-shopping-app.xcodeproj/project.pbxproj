@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		248542782F3B0AEA002AD885 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 248542772F3B0AEA002AD885 /* Secrets.xcconfig */; };
+		14C7C9792F3DB42F00FF4945 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 14C7C9782F3DB42F00FF4945 /* Secrets.xcconfig */; };
 		24CCB5DF2F39E224003E8383 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 24CCB5DE2F39E224003E8383 /* FirebaseAuth */; };
 		24CCB5E12F39E228003E8383 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 24CCB5E02F39E228003E8383 /* FirebaseCore */; };
 		24CCB5E32F39E231003E8383 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 24CCB5E22F39E231003E8383 /* FirebaseFirestore */; };
@@ -17,8 +17,8 @@
 
 /* Begin PBXFileReference section */
 		144EE8C92F3311E20030FBCA /* Nectar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nectar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		14C7C9782F3DB42F00FF4945 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		24853E7F2F3B000C002AD885 /* Nectar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Nectar-Info.plist"; sourceTree = "<group>"; };
-		248542772F3B0AEA002AD885 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -52,7 +52,7 @@
 				144EE8CB2F3311E20030FBCA /* Grocery-shopping-app */,
 				24CCB5DD2F39E224003E8383 /* Frameworks */,
 				144EE8CA2F3311E20030FBCA /* Products */,
-				248542772F3B0AEA002AD885 /* Secrets.xcconfig */,
+				14C7C9782F3DB42F00FF4945 /* Secrets.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -144,7 +144,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				248542782F3B0AEA002AD885 /* Secrets.xcconfig in Resources */,
+				14C7C9792F3DB42F00FF4945 /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,7 +163,7 @@
 /* Begin XCBuildConfiguration section */
 		144EE8D22F3311E40030FBCA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 248542772F3B0AEA002AD885 /* Secrets.xcconfig */;
+			baseConfigurationReference = 14C7C9782F3DB42F00FF4945 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -228,7 +228,7 @@
 		};
 		144EE8D32F3311E40030FBCA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 248542772F3B0AEA002AD885 /* Secrets.xcconfig */;
+			baseConfigurationReference = 14C7C9782F3DB42F00FF4945 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -286,7 +286,7 @@
 		};
 		144EE8D52F3311E40030FBCA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 248542772F3B0AEA002AD885 /* Secrets.xcconfig */;
+			baseConfigurationReference = 14C7C9782F3DB42F00FF4945 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -320,7 +320,7 @@
 		};
 		144EE8D62F3311E40030FBCA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 248542772F3B0AEA002AD885 /* Secrets.xcconfig */;
+			baseConfigurationReference = 14C7C9782F3DB42F00FF4945 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

@@ -14,8 +14,12 @@ final class PersistenceManager {
     
     private let container: NSPersistentContainer
     
+    var context: NSManagedObjectContext {
+            container.viewContext
+        }
+    
     init() {
-        container = NSPersistentContainer(name: "")
+        container = NSPersistentContainer(name: "CartProduct")
         
         // Load persistent stores (creates or opens the SQLite database)
         container.loadPersistentStores { _, error in

@@ -17,11 +17,13 @@ final class CartViewModel: ObservableObject {
 
     private let cartService: CartServiceProtocol
     private let productService: ProductServiceProtocol
+    private let cartProductsService : CartProductsService
     private var cartId: String?
 
     init() {
         self.cartService = CartServices()
         self.productService = ProductService()
+        self.cartProductsService = CartProductsService()
     }
 
     func getCartItem(cartId: String) async  {
@@ -30,6 +32,10 @@ final class CartViewModel: ObservableObject {
         defer { isLoading = false }
         
         do {
+            
+            let cpsresp = cartProductsService.getProducts()
+            print("cpsresp: \(cpsresp)")
+            
             let cartResp = try await cartService.getCart(cartId: cartId)
             var tempItems: [Product] = []
 

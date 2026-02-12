@@ -19,14 +19,10 @@ enum CartEndpoints: Endpoint {
     )
     case updateCartItemQuantity(
         cartId: String,
-        itemId: String,
+        productId: String,
         body: UpdateCartItemQuantityRequest
     )
-    case replaceCartItem(
-        cartId: String,
-        itemId: String,
-        body: ReplaceCartItemRequest
-    )
+   
     case removeCartItem(
         cartId: String,
         itemId: String
@@ -45,7 +41,6 @@ enum CartEndpoints: Endpoint {
             return "carts/\(cartId)/items"
 
         case .updateCartItemQuantity(let cartId, let itemId, _),
-             .replaceCartItem(let cartId, let itemId, _),
              .removeCartItem(let cartId, let itemId):
             return "carts/\(cartId)/items/\(itemId)"
         }
@@ -61,8 +56,6 @@ enum CartEndpoints: Endpoint {
             return .post
         case .updateCartItemQuantity:
             return .patch
-        case .replaceCartItem:
-            return .put
         case .removeCartItem:
             return .delete
         }
@@ -73,8 +66,6 @@ enum CartEndpoints: Endpoint {
         case .addItemToCart(_, let request):
             return try? JSONEncoder().encode(request)
         case .updateCartItemQuantity(_, _, let request):
-            return try? JSONEncoder().encode(request)
-        case .replaceCartItem(_, _, let request):
             return try? JSONEncoder().encode(request)
         default:
             return nil

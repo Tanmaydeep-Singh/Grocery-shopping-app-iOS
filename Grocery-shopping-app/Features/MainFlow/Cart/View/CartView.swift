@@ -51,10 +51,21 @@ struct CartView: View {
                                     CartItemView(
                                         item: item,
                                         onIncrease: {
-                                            cartViewModel.increaseQuantity()
-                                        },
+                                            newQuantity in
+                                                    guard let cartId, let id = item.cartProductId else { return }
+                                                    cartViewModel.updateLocalQuantity(
+                                                        cartId: cartId,
+                                                        itemId: id,
+                                                        quantity: newQuantity
+                                                    )                                      },
                                         onDecrease: {
-                                            cartViewModel.decreaseQuantity()
+                                            newQuantity in
+                                                    guard let cartId, let id = item.cartProductId else { return }
+                                                    cartViewModel.updateLocalQuantity(
+                                                        cartId: cartId,
+                                                        itemId: id,
+                                                        quantity: newQuantity
+                                                    )
                                         },
                                         onRemove: {
                                             guard let cartId,

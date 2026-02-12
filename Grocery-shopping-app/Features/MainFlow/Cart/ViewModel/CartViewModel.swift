@@ -53,15 +53,8 @@ final class CartViewModel: ObservableObject {
     }
     
 
-    func increaseQuantity() {
-    }
+   
 
-    func decreaseQuantity() {
-       
-    }
-
-    private func updateQuantity() {
-    }
 
     func removeItem(cartId: String, itemId: Int) async {
         do {
@@ -78,6 +71,54 @@ final class CartViewModel: ObservableObject {
 
 
     var totalPrice: Double {
-        return 0;
+        var price: Double = 0
+
+        for item in cartItems {
+            let itemPrice = item.price ?? 0
+            let quantity = Double(item.quantity ?? 0)
+            price += itemPrice * quantity
+        }
+        return price
+    }
+
+    
+    // Array to track items for debounce
+    private var debounceTasks: [Int: Task<Void, Never>] = [:]
+    
+    // Helper func for decounce
+    func updateLocalQuantity(cartId: String, itemId: Int, quantity: Int) {
+
+           if let index = cartItems.firstIndex(where: { $0.cartProductId == itemId }) {
+               cartItems[index].quantity = quantity
+           }
+
+           debounceTasks[itemId]?.cancel()
+
+           debounceTasks[itemId] = Task {
+               try? await Task.sleep(nanoseconds: 2_500_000_000) // 2.5 sec for debounce
+
+               await updatedQuantity(
+                   cartId: cartId,
+                   itemId: itemId,
+                   quantity: quantity
+               )
+           }
+       }
+    
+    //Update Item
+    func updatedQuantity(
+        cartId: String,
+        itemId: Int,
+        quantity: Int
+        
+    ) async {
+        do {
+            print("CART ID : \(cartId) ITEM ID: \(itemId) QUANTITY: \(quantity)")
+            _ = try await cartService.updateItemQuantity(cartId: cartId, productId: String(itemId), quantity: quantity )
+        }
+        catch {
+            print("Failed to update item:", error)
+        }
+        
     }
 }

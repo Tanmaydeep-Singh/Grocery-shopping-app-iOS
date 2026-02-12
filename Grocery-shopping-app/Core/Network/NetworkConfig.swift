@@ -10,5 +10,6 @@ import Foundation
 enum NetworkConfig {
 
     static let baseURL = URL(string: AppConfig.apiBaseURL)!
+
 }
 

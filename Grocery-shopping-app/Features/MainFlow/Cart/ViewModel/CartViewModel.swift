@@ -71,9 +71,16 @@ final class CartViewModel: ObservableObject {
 
 
     var totalPrice: Double {
-        return 0;
+        var price: Double = 0
+
+        for item in cartItems {
+            let itemPrice = item.price ?? 0
+            let quantity = Double(item.quantity ?? 0)
+            price += itemPrice * quantity
+        }
+        return price
     }
-    
+
     
     // Array to track items for debounce
     private var debounceTasks: [Int: Task<Void, Never>] = [:]

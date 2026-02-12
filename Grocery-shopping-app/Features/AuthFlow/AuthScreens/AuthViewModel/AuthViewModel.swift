@@ -23,9 +23,11 @@ final class AuthViewModel: ObservableObject {
     
     private let auth = Auth.auth()
     private let firestore = Firestore.firestore()
+    private let cartService: CartServices
 
     init() {
         self.userSession = auth.currentUser
+        self.cartService = CartServices()
         if let currentUser = auth.currentUser {
             Task {
                 await fetchUser(uid: currentUser.uid)
@@ -49,15 +51,18 @@ final class AuthViewModel: ObservableObject {
             )
 
             let registerUserService = RegisterUserService()
-
             let token = try await registerUserService.registerUser(body: user)
 
+            //Creating Cart
+            let cart  = try await cartService.createCart()
+            
             
             let newUser = User(
                 id: firebaseUser.uid,
                 email: email,
                 username: username,
-                token: token.accessToken
+                token: token.accessToken,
+                cartId: cart.cartId
             )
 
             try await storeUserInFirestore(user: newUser)
@@ -117,14 +122,9 @@ final class AuthViewModel: ObservableObject {
         GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { [weak self] result, error in
             guard let self = self else { return }
 
-            if let error = error {
-                self.handleAuthError(error)
-                return
-            }
 
             guard let user = result?.user,
                   let idToken = user.idToken?.tokenString else {
-                self.setError("Google authentication failed.")
                 return
             }
 
@@ -160,13 +160,18 @@ final class AuthViewModel: ObservableObject {
                 let registerUserService = RegisterUserService()
 
                 let token = try await registerUserService.registerUser(body: user)
+                
+                //Creating Cart
+                let cart  = try await cartService.createCart()
+                
 
                 
                 let newUser = User(
                     id: firebaseUser.uid,
                     email: firebaseUser.email ?? "",
                     username: firebaseUser.displayName ?? "New User",
-                    token: token.accessToken
+                    token: token.accessToken,
+                    cartId: cart.cartId
                 )
                 try await storeUserInFirestore(user: newUser)
                 self.user = newUser

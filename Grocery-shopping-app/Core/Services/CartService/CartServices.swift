@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class CartServiceImpl: CartServiceProtocol {
+final class CartServices: CartServiceProtocol {
 
     private let client: NetworkClient
 
@@ -15,7 +15,7 @@ final class CartServiceImpl: CartServiceProtocol {
         self.client = client
     }
 
-    func createCart() async throws -> Cart {
+    func createCart() async throws -> CreateCartResponse {
         try await client.request(
             endpoint: CartEndpoints.createCart
         )
@@ -26,28 +26,24 @@ final class CartServiceImpl: CartServiceProtocol {
             endpoint: CartEndpoints.getCart(cartId: cartId)
         )
     }
-
-    func getCartItems(cartId: String) async throws -> [CartItem] {
-        try await client.request(
-            endpoint: CartEndpoints.getCartItems(cartId: cartId)
-        )
-    }
+    
 
     func addItem(
         cartId: String,
         productId: Int
-    ) async throws -> Cart {
+    ) async throws -> AddCartItemResponse {
 
         let request = AddCartItemRequest(productId: productId)
 
         return try await client.request(
             endpoint: CartEndpoints.addItemToCart(
                 cartId: cartId,
-                body: request
+                body: request 
             )
         )
     }
 
+    
     func updateItemQuantity(
         cartId: String,
         itemId: String,
@@ -91,7 +87,7 @@ final class CartServiceImpl: CartServiceProtocol {
     func removeItem(
         cartId: String,
         itemId: String
-    ) async throws -> Cart {
+    ) async throws -> EmptyResponse {
 
         try await client.request(
             endpoint: CartEndpoints.removeCartItem(

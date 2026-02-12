@@ -8,7 +8,7 @@
 import Foundation
 
 struct Cart: Codable {
-    let id: String
+    let created: String
     var items: [CartItem]
 }
 

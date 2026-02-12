@@ -14,6 +14,7 @@ final class FavoritesService: FavoritesServiceProtocol {
     
     // Create ref to user
     private func favoritesRef(userId: String) -> CollectionReference {
+        
         db.collection("users")
             .document(userId)
             .collection("favourites")

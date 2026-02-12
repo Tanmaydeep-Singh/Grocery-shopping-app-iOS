@@ -8,10 +8,7 @@
 import Foundation
 
 struct CartItem: Codable, Identifiable {
-    let id: String
-    let productName: String
-    let productImageURL: String
-    let unitDescription: String
-    let price: Double
-    var quantity: Int
+    let id: Int
+    let productId: Int
+    let quantity: Int
 }

@@ -4,8 +4,11 @@ struct Product: Identifiable, Codable {
     let id: Int
     let category: ProductCategory
     let name: String
+    var price: Double? = 0
     let inStock: Bool
-    let imageName: String
+    let imageName: String?
+    var quantity: Int? = 0
+    var cartProductId: Int? = nil
 }
 
 extension Product {

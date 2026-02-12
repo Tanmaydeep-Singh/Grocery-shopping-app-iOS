@@ -6,80 +6,99 @@
 //
 
 import SwiftUI
-
 struct CartView: View {
+    @StateObject private var cartViewModel = CartViewModel()
+    @EnvironmentObject private var authViewModel: AuthViewModel
 
-    @StateObject private var viewModel = CartViewModel()
+    private var cartId: String? {
+        authViewModel.user?.cartId
+    }
 
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
-
                 ScrollView {
                     VStack(spacing: 0) {
-
-                        // Header
-                        ScreenHeader(
-                            title: "My Cart"
-                        )
+                        ScreenHeader(title: "My Cart.")
 
                         Divider()
                             .padding(.bottom, 12)
 
-                        
-                        VStack(spacing: 0) {
-                            ForEach(viewModel.cartItems.indices, id: \.self) { index in
-                                let item = viewModel.cartItems[index]
+                        if cartViewModel.isLoading {
+                            VStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }
+                            .frame(minHeight: 400)
 
-                                CartItemView(
-                                    item: item,
-                                    onIncrease: {
-                                        viewModel.increaseQuantity(for: item)
-                                    },
-                                    onDecrease: {
-                                        viewModel.decreaseQuantity(for: item)
-                                    },
-                                    onRemove: {
-                                        viewModel.removeItem(item)
+                        } else if cartViewModel.cartItems.isEmpty {
+                            VStack {
+                                Spacer()
+                                Text("Cart is empty.")
+                                    .foregroundColor(.gray)
+                                Spacer()
+                            }
+                            .frame(minHeight: 400)
+
+                        } else {
+                            VStack(spacing: 0) {
+                                ForEach(cartViewModel.cartItems, id: \.cartProductId) { item in
+                                    CartItemView(
+                                        item: item,
+                                        onIncrease: {
+                                            cartViewModel.increaseQuantity()
+                                        },
+                                        onDecrease: {
+                                            cartViewModel.decreaseQuantity()
+                                        },
+                                        onRemove: {
+                                            guard let cartId,
+                                                  let cartProductId = item.cartProductId
+                                            else { return }
+
+                                            Task {
+                                                await cartViewModel.removeItem(
+                                                    cartId: cartId,
+                                                    itemId: cartProductId
+                                                )
+                                            }
+                                        }
+                                    )
+
+                                    if item.id != cartViewModel.cartItems.last?.id {
+                                        Divider()
+                                            .padding(.top, 22)
                                     }
-                                )
-
-                                if index != viewModel.cartItems.count - 1 {
-                                    Divider()
-                                        .padding(.top, 22)
                                 }
                             }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
 
-                        
                         Color.clear
                             .frame(height: 100)
                     }
                 }
 
-                
-                if !viewModel.cartItems.isEmpty {
+                if !cartViewModel.cartItems.isEmpty {
                     checkoutBar
                 }
             }
             .background(Color.white)
-            .onAppear {
-                viewModel.onAppear()
+            .task {
+                guard let cartId else { return }
+                await cartViewModel.getCartItem(cartId: cartId)
             }
         }
     }
 
-  
     private var checkoutBar: some View {
         PrimaryButton(
             title: "Go To Checkout",
-            action: {
-                // Navigation later
-            }
+            action: { }
         )
         .overlay(alignment: .trailing) {
-            Text("$\(String(format: "%.2f", viewModel.totalPrice))")
+            Text("$\(String(format: "%.2f", cartViewModel.totalPrice))")
                 .font(.caption)
                 .fontWeight(.semibold)
                 .padding(.horizontal, 12)
@@ -92,8 +111,8 @@ struct CartView: View {
     }
 }
 
+
 #Preview {
     CartView()
+        .environmentObject(AuthViewModel())
 }
-
-

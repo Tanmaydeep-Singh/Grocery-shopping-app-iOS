@@ -9,17 +9,17 @@ import Foundation
 
 protocol CartServiceProtocol {
 
-    func createCart() async throws -> Cart
+    func createCart() async throws -> CreateCartResponse
 
     func getCart(cartId: String) async throws -> Cart
 
-    func getCartItems(cartId: String) async throws -> [CartItem]
 
     func addItem(
         cartId: String,
         productId: Int
-    ) async throws -> Cart
+    ) async throws -> AddCartItemResponse
 
+    
     func updateItemQuantity(
         cartId: String,
         itemId: String,
@@ -36,5 +36,5 @@ protocol CartServiceProtocol {
     func removeItem(
         cartId: String,
         itemId: String
-    ) async throws -> Cart
+    ) async throws -> EmptyResponse
 }

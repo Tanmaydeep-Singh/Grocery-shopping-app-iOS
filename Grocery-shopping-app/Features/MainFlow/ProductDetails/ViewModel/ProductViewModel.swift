@@ -15,6 +15,7 @@ final class ProductViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var isFavorite: Bool = false
+    @Published var isInCart: Bool = false
     
     private let favoritesService: FavoritesServiceProtocol = FavoritesService()
     private let cartService: CartServiceProtocol = CartServices()
@@ -28,6 +29,7 @@ final class ProductViewModel: ObservableObject {
         do {
             let dto: ProductDetailDTO = try await NetworkClient.shared.request(endpoint: ProductEndpoints.product(id: String(productId), showLabel: true))
             isFavorite = try await favoritesService.isFavorite(userId: userId, itemId: productId)
+            isInCart = await cartProductsService.isProductInCart(productId: productId)
             productDetail = ProductDetail(dto: dto)
 
         }  catch {

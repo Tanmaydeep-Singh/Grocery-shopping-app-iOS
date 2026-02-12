@@ -124,12 +124,45 @@ struct ProductDetailView: View {
                 }
                 
                 // Add to basket
-                PrimaryButton(title: "Add to Basket"){
-                    Task {
-                        let cartId = authViewModel.user?.cartId ?? ""
-                        await viewModel.addToCart(cartId:cartId)
-                        showAddedAlert = true
+                if viewModel.isInCart {
+                    HStack {
+                        Button(action: {
+                            
+                        }) {
+                            Image(systemName: "minus")
+                                .frame(width: 40, height: 40)
+                        }
+                        
+                        Spacer()
+                        
+                        Text("\(quantity)")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            
+                        }) {
+                            Image(systemName: "plus")
+                                .frame(width: 40, height: 40)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 60)
+                    .background(Color("Splash"),)
+                    .cornerRadius(19)
+                    .padding(20)
+                    .foregroundStyle(.white)
 
+                    
+                } else {
+                    PrimaryButton(title: "Add to Basket") {
+                        Task {
+                            let cartId = authViewModel.user?.cartId ?? ""
+                            await viewModel.addToCart(cartId: cartId)
+                            showAddedAlert = true
+                        }
                     }
                 }
             }
@@ -139,11 +172,6 @@ struct ProductDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .alert("Success", isPresented: $showAddedAlert) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text("Item added to cart")
-        }
         .task {
             let userId = authViewModel.user?.id ?? "iuREta11D5NW1sUzofRW7yLGEeA2"
             await viewModel.fetchProductDetail(productId: productId, userId: userId)

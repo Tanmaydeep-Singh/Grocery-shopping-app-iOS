@@ -47,6 +47,22 @@ final class CartProductsService {
                        }
        }
     
+    // Check if the product is in cart
+    func isProductInCart(productId: Int) async -> Bool {
+        
+        let request: NSFetchRequest<CartProduct> = CartProduct.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %lld", Int64(productId))
+        
+        request.fetchLimit = 1
+        
+        do {
+            let count = try context.count(for: request)
+            return count > 0
+        } catch {
+            print("Error checking product existence: \(error)")
+            return false
+        }
+    }
     // Clear coredata
     func clearCart() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = CartProduct.fetchRequest()

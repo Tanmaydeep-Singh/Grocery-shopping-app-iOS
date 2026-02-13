@@ -25,3 +25,4 @@ struct ContentView: View {
         ContentView()
             .environmentObject(AuthViewModel())
     }
+

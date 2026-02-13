@@ -99,6 +99,7 @@ final class CartViewModel: ObservableObject {
     ) async {
         do {
             _ = try await cartService.updateItemQuantity(cartId: cartId, productId: String(itemId), quantity: quantity )
+
         }
         catch {
             print(error)

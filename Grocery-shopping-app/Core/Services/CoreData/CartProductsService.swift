@@ -67,6 +67,18 @@ final class CartProductsService {
                        }
        }
     
+    
+//    Get Products Count
+func getProductsCount() async -> Int {
+    let request : NSFetchRequest<CartProduct> = CartProduct.fetchRequest()
+           do {
+               return try context.fetch(request).count
+                   } catch {
+                       print(error.localizedDescription)
+                       return 0
+                   }
+   }
+    
     // Check if the product is in cart
     func isProductInCart(productId: Int) async -> Bool {
         
@@ -99,6 +111,34 @@ final class CartProductsService {
             return nil
         }
     }
+    
+    // Update Product Quantity by ID
+    func updateProductQuantity(productId: Int, quantity: Int) async -> EmptyResponse? {
+        
+        print("CALLED FOR UPDATE: \(productId) \(quantity)")
+        let request: NSFetchRequest<CartProduct> = CartProduct.fetchRequest()
+        request.predicate = NSPredicate(format: "cartProductId == %lld", Int64(productId))
+        request.fetchLimit = 1
+        
+        do {
+            let results = try context.fetch(request)
+            if let product = results.first {
+                print("PRODUCT: \(product) ")
+
+                product.quantity = Int64(quantity)
+                print("PRODUCT updated: \(product) ")
+
+                try context.save()
+            }
+    
+            return nil
+            
+        } catch {
+            print("CoreData Update Error:", error.localizedDescription)
+            return nil
+        }
+    }
+
     
     // Clear coredata
     func clearCart() {

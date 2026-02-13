@@ -101,9 +101,11 @@ struct CartView: View {
                 }
             }
             .background(Color.white)
-            .task {
-                guard let cartId else { return }
-                await cartViewModel.getCartItem(cartId: cartId)
+            .onAppear {
+                guard let cartId = cartId else { return }
+                Task {
+                    await cartViewModel.getCartItem(cartId: cartId)
+                }
             }
         }
     }

@@ -79,6 +79,7 @@ struct ProductDetailView: View {
                                 Button("+") {
                                     if viewModel.quantity < detail.currentStock {
                                         viewModel.quantity += 1
+                                        
                                     }
                                 }
                                 .disabled(viewModel.quantity == detail.currentStock)
@@ -130,8 +131,11 @@ struct ProductDetailView: View {
                     if viewModel.isInCart {
                         HStack {
                             Button(action: {
+                                let cartId = authViewModel.user?.cartId ?? ""
                                 if viewModel.quantity > 1 {
                                     viewModel.quantity -= 1
+                                    viewModel.updateLocalQuantity(cartId: cartId)
+                                    
                                 }
                             }) {
                                 Image(systemName: "minus")
@@ -145,8 +149,13 @@ struct ProductDetailView: View {
                             Spacer()
                             
                             Button(action: {
+                                let cartId = authViewModel.user?.cartId ?? ""
                                     viewModel.quantity += 1
-                                                    }) {
+                                    viewModel.updateLocalQuantity(cartId: cartId)
+                                    
+                                
+                            }
+                            ) {
                                 Image(systemName: "plus")
                                     .frame(width: 40, height: 40)
                             }

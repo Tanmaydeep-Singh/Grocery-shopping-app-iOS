@@ -31,7 +31,7 @@ final class CartViewModel: ObservableObject {
     func getCartItem(cartId: String) async {
         isLoading = true
         defer { isLoading = false }
-
+        print(" CALLED TO GET CART DATA")
         do {
             let products = await cartProductsService.getProducts()
             print("products: \(products)")
@@ -80,7 +80,7 @@ final class CartViewModel: ObservableObject {
            debounceTasks[itemId]?.cancel()
 
            debounceTasks[itemId] = Task {
-               try? await Task.sleep(nanoseconds: 2_500_000_000) // 2.5 sec for debounce
+               try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 sec for debounce
 
                await updatedQuantity(
                    cartId: cartId,

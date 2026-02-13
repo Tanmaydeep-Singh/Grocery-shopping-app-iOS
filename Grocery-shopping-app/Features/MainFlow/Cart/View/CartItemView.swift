@@ -4,42 +4,25 @@
 //
 //  Created by rentamac on 2/10/26.
 //
-
 import SwiftUI
 
 struct CartItemView: View {
-
-    let item: CartProduct
+    @ObservedObject var item: CartProduct
+    
     let onIncrease: (Int) -> Void
     let onDecrease: (Int) -> Void
     let onRemove: () -> Void
-    @State private var quantity: Int
-
-    init(
-            item: CartProduct,
-            onIncrease: @escaping (Int) -> Void,
-            onDecrease: @escaping (Int) -> Void,
-            onRemove: @escaping () -> Void
-        ) {
-            self.item = item
-            self.onIncrease = onIncrease
-            self.onDecrease = onDecrease
-            self.onRemove = onRemove
-            _quantity = State(initialValue: Int(item.quantity))
-        }
 
     var body: some View {
         HStack(spacing: 14) {
-
             Image(item.imageName ?? "")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 76, height: 104)
 
             VStack(spacing: 14) {
-
                 HStack {
-                    Text(item.name ?? "")
+                    Text(item.name ?? "Unknown Product")
                         .font(.body)
                         .fontWeight(.medium)
 
@@ -62,25 +45,24 @@ struct CartItemView: View {
                 HStack {
                     HStack(spacing: 16) {
                         quantityButton(icon: "minus", color: .gray) {
-                            if quantity > 1 {
-                                quantity -= 1
-                                onDecrease(quantity)
+                            if item.quantity > 1 {
+                                onDecrease(Int(item.quantity) - 1)
                             }
                         }
 
-                        Text("\(quantity)")
+                        Text("\(item.quantity)")
                             .font(.body)
+                            .fontWeight(.semibold)
+                            .frame(minWidth: 25)
 
                         quantityButton(icon: "plus", color: .green) {
-                            quantity += 1
-                            onIncrease(quantity) 
+                            onIncrease(Int(item.quantity) + 1)
                         }
-
                     }
 
                     Spacer()
 
-                    Text("$\(String(format: "%.2f", (item.price) * Double(item.quantity)))")
+                    Text("$\(String(format: "%.2f", item.price * Double(item.quantity)))")
                         .font(.body)
                         .fontWeight(.medium)
                 }
@@ -89,6 +71,7 @@ struct CartItemView: View {
         .padding(.vertical, 22)
     }
 
+    // Professional reusable button component
     private func quantityButton(
         icon: String,
         color: Color,
@@ -96,11 +79,12 @@ struct CartItemView: View {
     ) -> some View {
         Button(action: action) {
             Image(systemName: icon)
+                .font(.system(size: 14, weight: .bold))
                 .foregroundColor(color)
                 .frame(width: 32, height: 32)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                 )
         }
         .buttonStyle(.plain)

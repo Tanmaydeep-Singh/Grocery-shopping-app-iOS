@@ -68,19 +68,31 @@ struct ProductDetailView: View {
                         HStack(spacing: 20) {
                             
                             HStack {
-                                Button("-") {
-                                    if viewModel.quantity > 1 { viewModel.quantity -= 1 }
+                                Button(action: {
+                                    let cartId = authViewModel.user?.cartId ?? ""
+                                    if viewModel.quantity > 1 {
+                                        viewModel.quantity -= 1
+                                        viewModel.updateLocalQuantity(cartId: cartId)
+                                        
+                                    }
+                                }) {
+                                    Image(systemName: "minus")
+                                        .frame(width: 40, height: 40)
                                 }
                                 .disabled(viewModel.quantity == 1)
 
                                 Text("\(viewModel.quantity)")
                                     .frame(width: 30)
-
-                                Button("+") {
+                                Button(action: {
+                                    let cartId = authViewModel.user?.cartId ?? ""
                                     if viewModel.quantity < detail.currentStock {
                                         viewModel.quantity += 1
+                                        viewModel.updateLocalQuantity(cartId: cartId)
                                         
                                     }
+                                }) {
+                                    Image(systemName: "plus")
+                                        .frame(width: 40, height: 40)
                                 }
                                 .disabled(viewModel.quantity == detail.currentStock)
                             }
@@ -150,10 +162,10 @@ struct ProductDetailView: View {
                             
                             Button(action: {
                                 let cartId = authViewModel.user?.cartId ?? ""
+                                if viewModel.quantity < detail.currentStock {
                                     viewModel.quantity += 1
                                     viewModel.updateLocalQuantity(cartId: cartId)
-                                    
-                                
+                                }
                             }
                             ) {
                                 Image(systemName: "plus")

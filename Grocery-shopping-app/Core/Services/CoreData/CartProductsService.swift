@@ -123,10 +123,8 @@ func getProductsCount() async -> Int {
         do {
             let results = try context.fetch(request)
             if let product = results.first {
-                print("PRODUCT: \(product) ")
 
                 product.quantity = Int64(quantity)
-                print("PRODUCT updated: \(product) ")
 
                 try context.save()
             }
@@ -156,7 +154,6 @@ func getProductsCount() async -> Int {
     }
     
 //    Remove Cart Item
-    // CartProductsService.swift
     func removeCartItem(itemId: Int) {
         
         let request: NSFetchRequest<CartProduct> = CartProduct.fetchRequest()

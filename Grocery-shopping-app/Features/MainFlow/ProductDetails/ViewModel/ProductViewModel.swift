@@ -123,7 +123,7 @@ final class ProductViewModel: ObservableObject {
             debounceTasks[id]?.cancel()
             
             debounceTasks[id] = Task {
-                try? await Task.sleep(nanoseconds: 2_500_000_000)
+                try? await Task.sleep(nanoseconds: 1_500_000_000) //1.5 sec
                 
                 if Task.isCancelled { return }
                 
@@ -144,8 +144,8 @@ final class ProductViewModel: ObservableObject {
         
     ) async {
         do {
-            _ = try await cartService.updateItemQuantity(cartId: cartId, productId: String(itemId), quantity: quantity )
             _ = await cartProductsService.updateProductQuantity( productId: itemId, quantity: quantity )
+            _ = try await cartService.updateItemQuantity(cartId: cartId, productId: String(itemId), quantity: quantity )
         }
         catch {
             print(error)

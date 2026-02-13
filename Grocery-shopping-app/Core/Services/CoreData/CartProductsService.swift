@@ -85,7 +85,7 @@ final class CartProductsService {
     }
     
     // Get Product by ID:
-    func getProductById(productId: Int) -> CartProduct? {
+    func getProductById(productId: Int) async -> CartProduct? {
         let request: NSFetchRequest<CartProduct> = CartProduct.fetchRequest()
         
         request.predicate = NSPredicate(format: "id == %lld", Int64(productId))

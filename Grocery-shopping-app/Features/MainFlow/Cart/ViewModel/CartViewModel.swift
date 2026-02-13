@@ -98,11 +98,10 @@ final class CartViewModel: ObservableObject {
         
     ) async {
         do {
-            print("CART ID : \(cartId) ITEM ID: \(itemId) QUANTITY: \(quantity)")
             _ = try await cartService.updateItemQuantity(cartId: cartId, productId: String(itemId), quantity: quantity )
         }
         catch {
-            print("Failed to update item:", error)
+            print(error)
         }
         
     }

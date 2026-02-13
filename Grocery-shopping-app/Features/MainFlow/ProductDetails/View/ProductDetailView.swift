@@ -6,7 +6,6 @@ struct ProductDetailView: View {
 
     @EnvironmentObject private var authViewModel: AuthViewModel
     @StateObject private var viewModel = ProductViewModel()
-    @State private var quantity: Int = 1
     @State private var showAddedAlert = false
     @Namespace private var buttonTransition
 
@@ -70,19 +69,19 @@ struct ProductDetailView: View {
                             
                             HStack {
                                 Button("-") {
-                                    if quantity > 1 { quantity -= 1 }
+                                    if viewModel.quantity > 1 { viewModel.quantity -= 1 }
                                 }
-                                .disabled(quantity == 1)
+                                .disabled(viewModel.quantity == 1)
 
-                                Text("\(quantity)")
+                                Text("\(viewModel.quantity)")
                                     .frame(width: 30)
 
                                 Button("+") {
-                                    if quantity < detail.currentStock {
-                                        quantity += 1
+                                    if viewModel.quantity < detail.currentStock {
+                                        viewModel.quantity += 1
                                     }
                                 }
-                                .disabled(quantity == detail.currentStock)
+                                .disabled(viewModel.quantity == detail.currentStock)
                             }
                             .padding()
                             .background(Color(.systemGray6))
@@ -130,18 +129,24 @@ struct ProductDetailView: View {
                
                     if viewModel.isInCart {
                         HStack {
-                            Button(action: {  }) {
+                            Button(action: {
+                                if viewModel.quantity > 1 {
+                                    viewModel.quantity -= 1
+                                }
+                            }) {
                                 Image(systemName: "minus")
                                     .frame(width: 40, height: 40)
                             }
                             
                             Spacer()
-                            Text("\(quantity)")
+                            Text("\(viewModel.quantity)")
                                 .font(.headline)
                                 .fontWeight(.bold)
                             Spacer()
                             
-                            Button(action: {  }) {
+                            Button(action: {
+                                    viewModel.quantity += 1
+                                                    }) {
                                 Image(systemName: "plus")
                                     .frame(width: 40, height: 40)
                             }

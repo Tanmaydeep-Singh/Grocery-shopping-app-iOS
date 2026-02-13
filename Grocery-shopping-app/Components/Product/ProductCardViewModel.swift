@@ -39,7 +39,13 @@ final class ProductCardViewModel: ObservableObject {
     
     func onLoad(productId: Int) async {
         isInCart = await cartProductsService.isProductInCart(productId: productId)
-        quantity = await Int(cartProductsService.getProductById(productId: productId)?.quantity ?? 1)
-
+        
+        if let product = await cartProductsService.getProductById(productId: productId) {
+            print("self.quantity: \(product.quantity) ")
+            self.quantity = Int(product.quantity)
+        } else {
+            quantity = 1
+        }
     }
+
 }

@@ -52,30 +52,31 @@ struct CartView: View {
                                         item: item,
                                         onIncrease: {
                                             newQuantity in
-                                                    guard let cartId, let id = item.cartProductId else { return }
-                                                    cartViewModel.updateLocalQuantity(
+                                            guard let cartId = authViewModel.user?.cartId else { return }
+                                            let id = Int(item.cartProductId)
+                                            cartViewModel.updateLocalQuantity(
                                                         cartId: cartId,
-                                                        itemId: id,
+                                                        itemId: Int(id),
                                                         quantity: newQuantity
                                                     )                                      },
                                         onDecrease: {
                                             newQuantity in
-                                                    guard let cartId, let id = item.cartProductId else { return }
+                                            guard let cartId = authViewModel.user?.cartId else { return }
+                                            let id = Int(item.cartProductId)
                                                     cartViewModel.updateLocalQuantity(
                                                         cartId: cartId,
-                                                        itemId: id,
+                                                        itemId: Int(id),
                                                         quantity: newQuantity
                                                     )
                                         },
                                         onRemove: {
-                                            guard let cartId,
-                                                  let cartProductId = item.cartProductId
-                                            else { return }
+                                            guard let cartId = authViewModel.user?.cartId else { return }
+                                            let id = Int(item.cartProductId)
 
                                             Task {
                                                 await cartViewModel.removeItem(
                                                     cartId: cartId,
-                                                    itemId: cartProductId
+                                                    itemId: Int(id)
                                                 )
                                             }
                                         }

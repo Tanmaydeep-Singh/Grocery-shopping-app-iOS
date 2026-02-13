@@ -24,10 +24,14 @@ final class AuthViewModel: ObservableObject {
     private let auth = Auth.auth()
     private let firestore = Firestore.firestore()
     private let cartService: CartServices
-
+    private let cartProductsService : CartProductsService
+    private let syncCartOnLoginHelper:SyncCartOnLoginHelper
     init() {
         self.userSession = auth.currentUser
         self.cartService = CartServices()
+        self.cartProductsService = CartProductsService()
+        self.syncCartOnLoginHelper = SyncCartOnLoginHelper()
+        
         if let currentUser = auth.currentUser {
             Task {
                 await fetchUser(uid: currentUser.uid)
@@ -85,6 +89,9 @@ final class AuthViewModel: ObservableObject {
             let authResult = try await auth.signIn(withEmail: email, password: password)
             self.userSession = authResult.user
             await fetchUser(uid: authResult.user.uid)
+                
+           await syncCartOnLoginHelper.getCartItems(cartId: user!.cartId ?? "")
+           
             return true
         } catch {
             handleAuthError(error)
@@ -196,6 +203,7 @@ final class AuthViewModel: ObservableObject {
                 .collection("users")
                 .document(uid)
                 .getDocument(as: User.self)
+            
         } catch {
             print("DEBUG: Failed to fetch user: \(error.localizedDescription)")
         }
@@ -205,6 +213,7 @@ final class AuthViewModel: ObservableObject {
         try? auth.signOut()
         self.userSession = nil
         self.user = nil
+        cartProductsService.clearCart()
     }
 
     private func handleAuthError(_ error: Error) {

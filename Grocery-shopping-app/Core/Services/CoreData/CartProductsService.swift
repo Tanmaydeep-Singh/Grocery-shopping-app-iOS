@@ -32,6 +32,7 @@ final class CartProductsService {
             cartProduct.quantity = 1
 
             save()
+            
             return
         }
 
@@ -46,6 +47,7 @@ final class CartProductsService {
             cartProduct.imageName = details.imageName
             cartProduct.cartProductId = Int64(cartProductId)
             cartProduct.quantity = 1
+            
 
             save()
             return

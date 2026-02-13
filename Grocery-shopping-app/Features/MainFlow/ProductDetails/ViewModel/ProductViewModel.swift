@@ -101,18 +101,27 @@ final class ProductViewModel: ObservableObject {
         }
 
         do {
-            print("Product Details  : \(String(describing: productDetail))")
-           let cartRes = try await cartService.addItem(cartId: cartId, productId: productId)
-            
-            print("cartRes : \(cartRes)")
+            let cartRes = try await cartService.addItem(
+                cartId: cartId,
+                productId: productId
+            )
+
             if let productDetail = productDetail {
-                cartProductsService.addCartProduct(productDetails: productDetail, cartProductId: cartRes.itemId)
+
+                cartProductsService.addCartProduct(
+                    productDetails: productDetail,
+                    cartProductId: cartRes.itemId
+                )
+                self.cartProductId = cartRes.itemId
+                self.isInCart = true
+                self.quantity = 1
             }
-            
+
         } catch {
             print("Failed to add item to cart: \(error)")
         }
     }
+
     
     // Quantity Update with debounce.
     private var debounceTasks: [Int: Task<Void, Never>] = [:]

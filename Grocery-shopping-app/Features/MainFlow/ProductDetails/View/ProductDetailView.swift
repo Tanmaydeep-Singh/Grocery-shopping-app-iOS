@@ -6,8 +6,9 @@ struct ProductDetailView: View {
 
     @EnvironmentObject private var authViewModel: AuthViewModel
     @StateObject private var viewModel = ProductViewModel()
-    @State private var quantity: Int = 1
     @State private var showAddedAlert = false
+    @Namespace private var buttonTransition
+
 
     var body: some View {
         VStack(spacing: 0) {
@@ -67,20 +68,33 @@ struct ProductDetailView: View {
                         HStack(spacing: 20) {
                             
                             HStack {
-                                Button("-") {
-                                    if quantity > 1 { quantity -= 1 }
-                                }
-                                .disabled(quantity == 1)
-
-                                Text("\(quantity)")
-                                    .frame(width: 30)
-
-                                Button("+") {
-                                    if quantity < detail.currentStock {
-                                        quantity += 1
+                                Button(action: {
+                                    let cartId = authViewModel.user?.cartId ?? ""
+                                    if viewModel.quantity > 1 {
+                                        viewModel.quantity -= 1
+                                        viewModel.updateLocalQuantity(cartId: cartId)
+                                        
                                     }
+                                }) {
+                                    Image(systemName: "minus")
+                                        .frame(width: 40, height: 40)
                                 }
-                                .disabled(quantity == detail.currentStock)
+                                .disabled(viewModel.quantity == 1)
+
+                                Text("\(viewModel.quantity)")
+                                    .frame(width: 30)
+                                Button(action: {
+                                    let cartId = authViewModel.user?.cartId ?? ""
+                                    if viewModel.quantity < detail.currentStock {
+                                        viewModel.quantity += 1
+                                        viewModel.updateLocalQuantity(cartId: cartId)
+                                        
+                                    }
+                                }) {
+                                    Image(systemName: "plus")
+                                        .frame(width: 40, height: 40)
+                                }
+                                .disabled(viewModel.quantity == detail.currentStock)
                             }
                             .padding()
                             .background(Color(.systemGray6))
@@ -123,27 +137,70 @@ struct ProductDetailView: View {
                     }
                 }
                 
-                // Add to basket
-                PrimaryButton(title: "Add to Basket"){
-                    Task {
-                        let cartId = authViewModel.user?.cartId ?? ""
-                        await viewModel.addToCart(cartId:cartId)
-                        showAddedAlert = true
+               
 
+               
+                    if viewModel.isInCart {
+                        HStack {
+                            Button(action: {
+                                let cartId = authViewModel.user?.cartId ?? ""
+                                if viewModel.quantity > 1 {
+                                    viewModel.quantity -= 1
+                                    viewModel.updateLocalQuantity(cartId: cartId)
+                                    
+                                }
+                            }) {
+                                Image(systemName: "minus")
+                                    .frame(width: 40, height: 40)
+                            }
+                            
+                            Spacer()
+                            Text("\(viewModel.quantity)")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                            Spacer()
+                            
+                            Button(action: {
+                                let cartId = authViewModel.user?.cartId ?? ""
+                                if viewModel.quantity < detail.currentStock {
+                                    viewModel.quantity += 1
+                                    viewModel.updateLocalQuantity(cartId: cartId)
+                                }
+                            }
+                            ) {
+                                Image(systemName: "plus")
+                                    .frame(width: 40, height: 40)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 60)
+                        .background(Color("Splash"))
+                        .cornerRadius(19)
+                        .foregroundStyle(.white)
+                        .padding(20)
+                        .matchedGeometryEffect(id: "cartButton", in: buttonTransition)
+                        .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+                        
+                    } else {
+                        PrimaryButton(title: "Add to Basket") {
+                            Task {
+                                let cartId = authViewModel.user?.cartId ?? ""
+                                await viewModel.addToCart(cartId: cartId)
+                            
+                                withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                    viewModel.isInCart = true
+                                }
+                            }
+                        }
+                        .matchedGeometryEffect(id: "cartButton", in: buttonTransition)
                     }
                 }
-            }
             else if let error = viewModel.errorMessage {
                        Text(error)
                            .foregroundColor(.red)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .alert("Success", isPresented: $showAddedAlert) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text("Item added to cart")
-        }
         .task {
             let userId = authViewModel.user?.id ?? "iuREta11D5NW1sUzofRW7yLGEeA2"
             await viewModel.fetchProductDetail(productId: productId, userId: userId)

@@ -48,7 +48,6 @@
 		144EE8C02F3311E20030FBCA = {
 			isa = PBXGroup;
 			children = (
-				244C9DD42F3DE22F009C6023 /* Secrets.xcconfig */,
 				24853E7F2F3B000C002AD885 /* Nectar-Info.plist */,
 				144EE8CB2F3311E20030FBCA /* Grocery-shopping-app */,
 				24CCB5DD2F39E224003E8383 /* Frameworks */,

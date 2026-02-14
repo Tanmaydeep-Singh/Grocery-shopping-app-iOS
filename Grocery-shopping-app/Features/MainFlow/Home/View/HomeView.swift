@@ -12,22 +12,19 @@ struct HomeView: View {
                         SearchBarView(text: $viewModel.searchText)
                         
                         if viewModel.isSearching {
-                            if viewModel.isLoading {
-                                ProgressView()
-                                    .padding()
-                            } else if let error = viewModel.searchError {
+                            if let error = viewModel.searchError {
                                 Text(error)
                                     .foregroundColor(.red)
                                     .padding()
                             } else {
-                                ProductGridView(title: nil, products: viewModel.categoryProducts)
+                                ProductGridView(title: nil, products: viewModel.categoryProducts, isLoading: viewModel.isLoading)
                             }
                         } else {
                             OfferBannerView()
                             
-                            ProductGridView(title: HomeSectionType.exclusiveOffer.title, products: viewModel.products)
+                            ProductGridView(title: HomeSectionType.exclusiveOffer.title, products: viewModel.products, isLoading: viewModel.isLoading)
                             
-                            ProductGridView(title: HomeSectionType.bestSelling.title, products: viewModel.products)
+                            ProductGridView(title: HomeSectionType.bestSelling.title, products: viewModel.products, isLoading: viewModel.isLoading)
                             
                             VStack(alignment: .leading){
                                 Text(HomeSectionType.groceries.title)
@@ -48,7 +45,7 @@ struct HomeView: View {
                                     }
                                 }
                                 
-                                ProductGridView(title: nil, products: viewModel.categoryProducts.isEmpty ? viewModel.products : viewModel.categoryProducts)
+                                ProductGridView(title: nil, products: viewModel.categoryProducts.isEmpty ? viewModel.products : viewModel.categoryProducts, isLoading: viewModel.isLoading)
                             }
                         }
                     }

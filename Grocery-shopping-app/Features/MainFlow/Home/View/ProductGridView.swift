@@ -4,7 +4,7 @@ struct ProductGridView: View {
 
     let title: String?
     let products: [Product]
-    @StateObject private var viewModel = HomeViewModel()
+    let isLoading: Bool
 
     private let rows = [
         GridItem(.fixed(250))
@@ -20,9 +20,13 @@ struct ProductGridView: View {
                     .padding(.horizontal)
             }
 
-            if viewModel.isLoading{
-                ProgressView()
-                    .padding()
+            if isLoading{
+                HStack {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
+                }
+                .padding()
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHGrid(rows: rows, spacing: 16) {
@@ -40,10 +44,11 @@ struct ProductGridView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
 
 #Preview {
-    ProductGridView(title: "Featured Products", products: MockProducts.products)
+    ProductGridView(title: "Featured Products", products: MockProducts.products, isLoading: false)
 }

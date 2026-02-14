@@ -32,5 +32,7 @@ enum MockProducts {
     ]
     
     static let dummyProduct: Product = Product(id: 1225, category: .freshProduce, name: "Red Apple", inStock: true, imageName: "apple")
+    
+    static let dummyCategory: Category = Category(title: "red apple", imageName: "apple", value: "20")
 }
 

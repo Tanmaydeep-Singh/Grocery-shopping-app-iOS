@@ -60,10 +60,11 @@ struct ProductCard: View {
                 
                 
             }
-            .task {
-                await viewModel.onLoad(productId: product.id)
+            .onAppear {
+                Task {
+                    await viewModel.onLoad(productId: product.id)
+                }
             }
-            
         }
     }
     

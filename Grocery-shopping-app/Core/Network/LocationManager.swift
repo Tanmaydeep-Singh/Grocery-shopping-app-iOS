@@ -60,4 +60,22 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         locationName = "Location not available"
     }
+    
+    func checkPermissionAndRequest() {
+        let status = manager.authorizationStatus
+
+        switch status {
+        case .notDetermined:
+            manager.requestWhenInUseAuthorization()
+
+        case .denied, .restricted:
+            locationName = "Enable location in Settings"
+
+        case .authorizedWhenInUse, .authorizedAlways:
+            manager.startUpdatingLocation()
+
+        @unknown default:
+            break
+        }
+    }
 }

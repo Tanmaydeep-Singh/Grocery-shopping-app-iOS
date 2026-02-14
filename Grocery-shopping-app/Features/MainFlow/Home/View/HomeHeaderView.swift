@@ -21,7 +21,7 @@ struct HomeHeaderView: View {
                 }
             }
         .onAppear{
-            locationManager.requestLocation()
+            locationManager.checkPermissionAndRequest()
         }
     }
 }

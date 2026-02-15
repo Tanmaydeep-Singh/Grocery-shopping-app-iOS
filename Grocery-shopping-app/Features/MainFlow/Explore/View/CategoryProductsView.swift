@@ -19,13 +19,11 @@ struct CategoryProductsView: View {
     @State private var selectedBrands: Set<String> = []
     
     var body: some View {
-        ZStack {
-            if isLoading {
-                Spacer()
-                ProgressView()
-                Spacer()
-            }
             ScrollView {
+                if isLoading {
+                    ProgressView()
+                        .padding(.top, 40)
+                }
                 LazyVGrid(columns: gridLayout.columns,spacing: 16) {
                     ForEach(
                         products
@@ -46,9 +44,7 @@ struct CategoryProductsView: View {
             .task {
                 await loadProducts()
             }
-
-            .padding()
-        }
+        
         .navigationDestination(isPresented: $navigateToResults) {
             FilterResultView(
                 selectedCategories: selectedCategories,

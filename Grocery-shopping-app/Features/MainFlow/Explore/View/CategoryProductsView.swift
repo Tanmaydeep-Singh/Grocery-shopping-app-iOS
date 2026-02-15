@@ -19,26 +19,34 @@ struct CategoryProductsView: View {
     @State private var selectedBrands: Set<String> = []
     
     var body: some View {
-        ScrollView {
+        ZStack {
             if isLoading {
+                Spacer()
                 ProgressView()
-                    .padding(.top, 40)
+                Spacer()
             }
-            LazyVGrid(columns: gridLayout.columns,spacing: 16) {
-                ForEach(
-                    products
+            ScrollView {
+                LazyVGrid(columns: gridLayout.columns,spacing: 16) {
+                    ForEach(
+                        products
                         /*.filter { $0.category.rawValue == category.title }*/,
-                    id: \.id
-                ) { product in
-                    NavigationLink {
-                        ProductDetailView(productId: product.id)
-                    } label: {
-                        ProductCard(product: product)
-                            .frame(width: 180)
+                        id: \.id
+                    ) { product in
+                        NavigationLink {
+                            ProductDetailView(productId: product.id)
+                        } label: {
+                            ProductCard(product: product)
+                                .frame(width: 180)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+                .padding()
             }
+            .task {
+                await loadProducts()
+            }
+
             .padding()
         }
         .navigationDestination(isPresented: $navigateToResults) {
@@ -84,4 +92,8 @@ struct CategoryProductsView: View {
         }
         isLoading = false
     }
+}
+
+#Preview{
+    CategoryProductsView(category: MockProducts.dummyCategory)
 }

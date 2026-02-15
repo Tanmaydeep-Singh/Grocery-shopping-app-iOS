@@ -37,6 +37,11 @@ struct FilterResultView: View {
             }
             .padding()
         }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                ScreenHeader(title: "Filtered Products")
+            }
+        }
         .task {
             await loadFilteredProducts()
         }

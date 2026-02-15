@@ -12,31 +12,35 @@ struct CategoryCard: View {
     let imageName: String
     let backgroundColor: Color
     let borderColor: Color
-    
+
     var body: some View {
-        VStack(spacing: 12) {
+        GeometryReader { geo in
+            let width = geo.size.width
 
-            Image(imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 120, height: 85)
-                .padding(16)
-                .opacity(1)
+            VStack(spacing: width * 0.06) {
 
-            Text(title)
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
-                .foregroundColor(Color("CategoryText"))
+                Image(imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: width * 0.6)   // responsive image height
+                    .padding(width * 0.08)
+
+                Text(title)
+                    .font(.system(size: width * 0.09,
+                                  weight: .semibold,
+                                  design: .rounded))
+                    .foregroundColor(Color("CategoryText"))
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(backgroundColor)
+            .clipShape(RoundedRectangle(cornerRadius: width * 0.12))
+            .overlay(
+                RoundedRectangle(cornerRadius: width * 0.12)
+                    .stroke(borderColor, lineWidth: 2)
+            )
         }
-        .padding(12)
-        .frame(height: 189)
-        .background(backgroundColor)
-        .border(borderColor, width: 2)
-        .cornerRadius(16)
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.black), lineWidth: 1)
-        )
-        .opacity(1)
-        
+        .aspectRatio(0.85, contentMode: .fit) // keeps card proportions consistent
     }
 }
+

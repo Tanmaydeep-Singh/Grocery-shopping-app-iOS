@@ -13,6 +13,10 @@ struct CategoryProductsView: View {
     @State private var products: [Product] = []
     @State private var isLoading = false
     @State private var errorMessage: String = ""
+    @State private var filtered: String? = nil
+    @State private var navigateToResults = false
+    @State private var selectedCategories: Set<String> = []
+    @State private var selectedBrands: Set<String> = []
     
     var body: some View {
         ScrollView {
@@ -37,12 +41,18 @@ struct CategoryProductsView: View {
             }
             .padding()
         }
+        .navigationDestination(isPresented: $navigateToResults) {
+            FilterResultView(
+                selectedCategories: selectedCategories,
+                selectedBrands: selectedBrands
+            )
+        }
         .task {
             await loadProducts()
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
-                ScreenHeader(title: category.title)
+                ScreenHeader(title: filtered ?? category.title)
             }
             
             ToolbarItem(placement: .topBarTrailing) {
@@ -56,14 +66,9 @@ struct CategoryProductsView: View {
         }
         .fullScreenCover(isPresented: $showFilter) {
             FilterView() { categories, brands in
-                Task {
-                    do {
-                        products = try await getFilterProducts(categories, brands)
-                    }
-                    catch {
-                        print("Error occured while filtering the products", error)
-                    }
-                }
+                selectedCategories = categories
+                selectedBrands = brands
+                navigateToResults = true
             }
         }
     }

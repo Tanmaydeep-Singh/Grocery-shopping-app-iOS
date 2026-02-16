@@ -12,7 +12,7 @@ final class PersistenceManager {
 
     static let shared = PersistenceManager()
     
-    private let container: NSPersistentContainer
+    public let container: NSPersistentContainer
     
     var context: NSManagedObjectContext {
             container.viewContext

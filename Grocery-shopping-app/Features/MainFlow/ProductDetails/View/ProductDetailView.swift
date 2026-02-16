@@ -82,11 +82,15 @@ struct ProductDetailView: View {
                                                 viewModel.quantity -= 1
                                                 viewModel.updateLocalQuantity(cartId: cartId)
                                             }
+                                            else if viewModel.quantity == 1 {
+                                                Task{
+                                                    await viewModel.removeFromCart(cartId:cartId)
+                                                }
+                                                }
                                         }) {
                                             Image(systemName: "minus")
                                                 .frame(width: 40, height: 40)
                                         }
-                                        .disabled(viewModel.quantity == 1)
                                         
                                         Text("\(viewModel.quantity)")
                                             .frame(width: 30)

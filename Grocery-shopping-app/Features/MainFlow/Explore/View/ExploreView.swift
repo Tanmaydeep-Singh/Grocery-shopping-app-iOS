@@ -34,7 +34,12 @@ struct ExploreView: View {
                    }
                 
                 ScrollView {
-                    LazyVGrid(columns: gridLayout.columns, spacing: 16) {
+                    LazyVGrid(
+                        columns: [
+                            GridItem(.adaptive(minimum: 160), spacing: 16)
+                        ],
+                        spacing: 16
+                    ) {
                         ForEach(exploreViewModel.categories) { category in
                             NavigationLink {
                                 CategoryProductsView(category: category)
@@ -50,6 +55,7 @@ struct ExploreView: View {
                         }
                     }
                 }
+
 
                 Spacer()
             }

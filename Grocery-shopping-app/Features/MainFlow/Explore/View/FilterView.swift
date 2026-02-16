@@ -14,18 +14,6 @@ struct FilterView: View {
     var onApply: (Set<String>, Set<String>) -> Void
     
     let categories: [Category] = ExploreViewModel().categories
-    let brands = [
-        "Nestlé",
-        "Britannia",
-        "Amul",
-        "ITC",
-        "Kellogg’s",
-        "PepsiCo",
-        "Coca-Cola",
-        "Haldiram’s",
-        "Parle",
-        "MTR"
-    ]
     
     var body: some View {
         ZStack {
@@ -76,34 +64,9 @@ struct FilterView: View {
                                 }
                             }
                             .padding(16)
-                    
-                    VStack(alignment: .leading, spacing: 16) {
-                                Text("Brands")
-                                    .font(.headline)
-
-                        ForEach(brands, id: \.self) { brand in
-                                    FilterCategoryRow(
-                                        title: brand,
-                                        isSelected: Binding(
-                                            get: {
-                                                selectedBrands.contains(brand)
-                                            },
-                                            set: { isChecked in
-                                                if isChecked {
-                                                    selectedBrands.insert(brand)
-                                                } else {
-                                                    selectedBrands.remove(brand)
-                                                }
-                                            }
-                                        )
-                                    )
-                                }
-                            }
-                            .padding(16)
                 }
 
                 PrimaryButton(title: "Apply Filters") {
-                    print(selectedBrands, selectedCategories)
                     onApply(selectedCategories, selectedBrands)
                     dismiss()
                 }

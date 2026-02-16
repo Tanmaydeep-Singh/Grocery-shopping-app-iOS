@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct MainView: View {
 
     @State private var selectedTab: Tab = .home
-
+    @FetchRequest(entity: CartProduct.entity(), sortDescriptors: [])
+    private var cartProducts: FetchedResults<CartProduct>
+    
     var body: some View {
         TabView(selection: $selectedTab) {
 
@@ -28,8 +31,9 @@ struct MainView: View {
 
             CartView()
                 .tabItem {
-                    Label("Cart", systemImage: "cart.fill")
+                        Label("Cart", systemImage: "cart.fill")
                 }
+                .badge(cartProducts.count > 0 ? cartProducts.count: 0)
                 .tag(Tab.cart)
 
             FavouriteView()

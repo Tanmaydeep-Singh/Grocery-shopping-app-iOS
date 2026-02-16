@@ -8,6 +8,8 @@ struct ProductDetailView: View {
     @StateObject private var viewModel = ProductViewModel()
     @State private var showAddedAlert = false
     @Namespace private var buttonTransition
+    @EnvironmentObject var router: AppRouter
+
 
 
 
@@ -154,6 +156,8 @@ struct ProductDetailView: View {
                         let cartId = authViewModel.user?.cartId ?? ""
                         
                         if viewModel.isInCart {
+                            router.selectedTab = .cart
+
                         } else {
                             await viewModel.addToCart(cartId: cartId)
                             

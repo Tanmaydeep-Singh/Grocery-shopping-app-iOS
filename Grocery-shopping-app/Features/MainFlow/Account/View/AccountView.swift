@@ -2,11 +2,12 @@ import SwiftUI
 
 struct AccountView: View {
     
-    @Binding var selectedTab: Tab
 
     @StateObject private var viewModel = AccountViewModel()
     @EnvironmentObject private var authViewModel: AuthViewModel
+    @EnvironmentObject var router: AppRouter
 
+    
     var body: some View {
         VStack(spacing: 0) {
             
@@ -71,7 +72,7 @@ struct AccountView: View {
             ) {
                 Task{
                     authViewModel.logout()
-                    selectedTab = Tab.home
+                    router.selectedTab = .home
                 }
             }
             .padding(.bottom, 20)
@@ -83,6 +84,6 @@ struct AccountView: View {
 }
 
 #Preview {
-    AccountView(selectedTab: .constant(.home))        .environmentObject(AuthViewModel())
+    AccountView()
 }
 

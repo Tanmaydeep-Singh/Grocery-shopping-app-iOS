@@ -75,7 +75,7 @@ struct AccountView: View {
                     router.selectedTab = .home
                 }
             }
-            .padding(.bottom, 20)
+            .padding(20)
 
 
         }

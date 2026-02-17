@@ -44,11 +44,56 @@ struct ProductCard: View {
             Group {
                 
                 if viewModel.isInCart {
-                    HStack{
-                        PrimaryButton(title: "\(viewModel.quantity)" , height: 44, width: 44, cornerRadius: 14){
+                    
+                    HStack(spacing: 10) {
+                        // MINUS
+                        Button {
+                            let cartId = authViewModel.user?.cartId ?? ""
+                            
+                            if viewModel.quantity > 1 {
+                                viewModel.quantity -= 1
+                                viewModel.updateLocalQuantity(cartId: cartId)
+                            } else {
+                                Task {
+                                    await viewModel.removeFromCart(cartId: cartId)
+                                    withAnimation {
+                                        viewModel.isInCart = false
+                                        viewModel.quantity = 0
+                                    }
+                                }
+                            }
+                            
+                        } label: {
+                            Image(systemName: "minus")
+                                .font(.system(size: 12, weight: .bold))
                         }
+                        
+                        
+                        // QUANTITY
+                        Text("\(viewModel.quantity)")
+                            .font(.system(size: 14, weight: .semibold))
+                            .frame(minWidth: 16)
+                        
+                        
+                        // PLUS
+                        Button {
+                            let cartId = authViewModel.user?.cartId ?? ""
+                            viewModel.quantity += 1
+                            viewModel.updateLocalQuantity(cartId: cartId)
+                            
+                        } label: {
+                            Image(systemName: "plus")
+                                .font(.system(size: 12, weight: .bold))
+                        }
+                        
                     }
-                } else
+                    .padding(.horizontal, 10)
+                    .frame(height: 34)
+                    .background(Color(.systemGray6))
+                    .clipShape(Capsule())
+                    .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
+                }
+                else
                 {
                     PrimaryButton(icon: "plus", height: 44, width: 44, cornerRadius: 14){
                         
@@ -61,9 +106,9 @@ struct ProductCard: View {
                         }
                     }
                 }
-                
-                
             }
+            .padding(.trailing, 12)
+            .padding(.bottom, 12)
             .onAppear {
                 Task {
                     await viewModel.onLoad(productId: product.id)

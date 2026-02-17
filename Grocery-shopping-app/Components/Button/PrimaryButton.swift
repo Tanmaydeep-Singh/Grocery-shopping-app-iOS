@@ -58,7 +58,6 @@ struct PrimaryButton: View {
             }
             .buttonStyle(.plain)
         }
-        .padding()
     }
 }
 

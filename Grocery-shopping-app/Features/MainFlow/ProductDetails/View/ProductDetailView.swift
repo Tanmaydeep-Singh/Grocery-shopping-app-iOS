@@ -167,6 +167,7 @@ struct ProductDetailView: View {
                         }
                     }
                 }
+                .padding()
             }
         }
         .navigationBarTitleDisplayMode(.inline)

@@ -55,7 +55,7 @@ struct OnboardingView: View {
                 PrimaryButton(title:"onboarding_button_get_started"){
                     path.append(OnboardingRoutes.socialLogin)
                 }
-                
+                .padding()              
 
 
                 Spacer().frame(height: 60)

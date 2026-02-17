@@ -5,7 +5,7 @@ struct ProductCard: View {
 
     let product: Product
     @EnvironmentObject private var authViewModel: AuthViewModel
-    @StateObject private var viewModel = ProductCardViewModel()
+    @StateObject private var viewModel = ProductViewModel()
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -44,16 +44,20 @@ struct ProductCard: View {
             Group {
                 
                 if viewModel.isInCart {
-                    PrimaryButton(title: "\(viewModel.quantity)" , height: 44, width: 44, cornerRadius: 14){
+                    HStack{
+                        PrimaryButton(title: "\(viewModel.quantity)" , height: 44, width: 44, cornerRadius: 14){
+                        }
                     }
-                }else
+                } else
                 {
                     PrimaryButton(icon: "plus", height: 44, width: 44, cornerRadius: 14){
                         
                         Task{
                             let cartId = authViewModel.user?.cartId ?? ""
-                            await viewModel.addToCart(cartId:cartId, product: product)
-                            viewModel.isInCart = true
+                            await viewModel.addToCart2(cartId: cartId, product: product)
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                viewModel.isInCart = true
+                            }
                         }
                     }
                 }

@@ -23,7 +23,7 @@ struct CartView: View {
             ZStack(alignment: .bottom) {
                 ScrollView {
                     VStack(spacing: 0) {
-                        ScreenHeader(title: "My Cart.")
+                        ScreenHeader(title: "My Cart")
 
                         Divider()
                             .padding(.bottom, 12)

@@ -10,9 +10,6 @@ struct ProductDetailView: View {
     @Namespace private var buttonTransition
     @EnvironmentObject var router: AppRouter
 
-
-
-
     var body: some View {
         VStack(spacing: 0) {
             if viewModel.isLoading {
@@ -164,7 +161,6 @@ struct ProductDetailView: View {
 
                         } else {
                             await viewModel.addToCart(cartId: cartId)
-                            
                             withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
                                 viewModel.isInCart = true
                             }

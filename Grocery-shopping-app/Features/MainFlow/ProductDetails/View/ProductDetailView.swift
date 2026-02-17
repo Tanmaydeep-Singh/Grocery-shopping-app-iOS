@@ -8,6 +8,9 @@ struct ProductDetailView: View {
     @StateObject private var viewModel = ProductViewModel()
     @State private var showAddedAlert = false
     @Namespace private var buttonTransition
+    @EnvironmentObject var router: AppRouter
+
+
 
 
     var body: some View {
@@ -34,8 +37,8 @@ struct ProductDetailView: View {
                                     .font(.title2)
                                     .fontWeight(.semibold)
                                 
-//                                Text("1kg, Price")
-//                                    .foregroundColor(.gray)
+                                //                                Text("1kg, Price")
+                                //                                    .foregroundColor(.gray)
                                 
                                 Text(detail.manufacturer)
                                     .foregroundColor(.gray)
@@ -45,22 +48,22 @@ struct ProductDetailView: View {
                             Button {
                                 Task {
                                     let userId = authViewModel.user?.id ?? "iuREta11D5NW1sUzofRW7yLGEeA2"
-
+                                    
                                     do {
                                         if viewModel.isFavorite {
                                             viewModel.removeFromFavorite(userId: userId)
                                         } else {
-                                             viewModel.addToFavorites(userId: userId)
+                                            viewModel.addToFavorites(userId: userId)
                                         }
                                     }
                                 }
-
+                                
                             } label: {
                                 Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
                                     .font(.title3)
                                     .foregroundColor(viewModel.isFavorite ? .red : .primary)
                             }
-
+                            
                         }
                         .padding(.horizontal)
                         
@@ -68,45 +71,55 @@ struct ProductDetailView: View {
                         HStack(spacing: 20) {
                             
                             HStack {
-                                Button(action: {
-                                    let cartId = authViewModel.user?.cartId ?? ""
-                                    if viewModel.quantity > 1 {
-                                        viewModel.quantity -= 1
-                                        viewModel.updateLocalQuantity(cartId: cartId)
+                                
+                                if viewModel.isInCart {
+                                    
+                                    HStack {
                                         
-                                    }
-                                }) {
-                                    Image(systemName: "minus")
-                                        .frame(width: 40, height: 40)
-                                }
-                                .disabled(viewModel.quantity == 1)
-
-                                Text("\(viewModel.quantity)")
-                                    .frame(width: 30)
-                                Button(action: {
-                                    let cartId = authViewModel.user?.cartId ?? ""
-                                    if viewModel.quantity < detail.currentStock {
-                                        viewModel.quantity += 1
-                                        viewModel.updateLocalQuantity(cartId: cartId)
+                                        Button(action: {
+                                            let cartId = authViewModel.user?.cartId ?? ""
+                                            if viewModel.quantity > 1 {
+                                                viewModel.quantity -= 1
+                                                viewModel.updateLocalQuantity(cartId: cartId)
+                                            }
+                                            else if viewModel.quantity == 1 {
+                                                Task{
+                                                    await viewModel.removeFromCart(cartId:cartId)
+                                                }
+                                                }
+                                        }) {
+                                            Image(systemName: "minus")
+                                                .frame(width: 40, height: 40)
+                                        }
                                         
+                                        Text("\(viewModel.quantity)")
+                                            .frame(width: 30)
+                                        
+                                        Button(action: {
+                                            let cartId = authViewModel.user?.cartId ?? ""
+                                            if viewModel.quantity < detail.currentStock {
+                                                viewModel.quantity += 1
+                                                viewModel.updateLocalQuantity(cartId: cartId)
+                                            }
+                                        }) {
+                                            Image(systemName: "plus")
+                                                .frame(width: 40, height: 40)
+                                        }
+                                        .disabled(viewModel.quantity == detail.currentStock)
                                     }
-                                }) {
-                                    Image(systemName: "plus")
-                                        .frame(width: 40, height: 40)
+                                    .padding()
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(16)
                                 }
-                                .disabled(viewModel.quantity == detail.currentStock)
+                                
+                                Spacer()
+                                
+                                Text("$\(detail.price, specifier: "%.2f")")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
                             }
-                            .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(16)
-                            
-                            Spacer()
-                            
-                            Text("$\(detail.price, specifier: "%.2f")")
-                                .font(.title2)
-                                .fontWeight(.bold)
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
                         
                         Divider()
                         
@@ -137,70 +150,31 @@ struct ProductDetailView: View {
                     }
                 }
                 
-               
-
-               
-                    if viewModel.isInCart {
-                        HStack {
-                            Button(action: {
-                                let cartId = authViewModel.user?.cartId ?? ""
-                                if viewModel.quantity > 1 {
-                                    viewModel.quantity -= 1
-                                    viewModel.updateLocalQuantity(cartId: cartId)
-                                    
-                                }
-                            }) {
-                                Image(systemName: "minus")
-                                    .frame(width: 40, height: 40)
-                            }
-                            
-                            Spacer()
-                            Text("\(viewModel.quantity)")
-                                .font(.headline)
-                                .fontWeight(.bold)
-                            Spacer()
-                            
-                            Button(action: {
-                                let cartId = authViewModel.user?.cartId ?? ""
-                                if viewModel.quantity < detail.currentStock {
-                                    viewModel.quantity += 1
-                                    viewModel.updateLocalQuantity(cartId: cartId)
-                                }
-                            }
-                            ) {
-                                Image(systemName: "plus")
-                                    .frame(width: 40, height: 40)
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 60)
-                        .background(Color("Splash"))
-                        .cornerRadius(19)
-                        .foregroundStyle(.white)
-                        .padding(20)
-                        .matchedGeometryEffect(id: "cartButton", in: buttonTransition)
-                        .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+                
+                
+                
+                PrimaryButton(
+                    title: viewModel.isInCart ? "Go to Cart" : "Add to Cart"
+                ) {
+                    Task {
+                        let cartId = authViewModel.user?.cartId ?? ""
                         
-                    } else {
-                        PrimaryButton(title: "Add to Basket") {
-                            Task {
-                                let cartId = authViewModel.user?.cartId ?? ""
-                                await viewModel.addToCart(cartId: cartId)
+                        if viewModel.isInCart {
+                            router.selectedTab = .cart
+
+                        } else {
+                            await viewModel.addToCart(cartId: cartId)
                             
-                                withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                                    viewModel.isInCart = true
-                                }
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                viewModel.isInCart = true
                             }
                         }
-                        .matchedGeometryEffect(id: "cartButton", in: buttonTransition)
                     }
                 }
-            else if let error = viewModel.errorMessage {
-                       Text(error)
-                           .foregroundColor(.red)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
         .task {
             let userId = authViewModel.user?.id ?? "iuREta11D5NW1sUzofRW7yLGEeA2"
             await viewModel.fetchProductDetail(productId: productId, userId: userId)

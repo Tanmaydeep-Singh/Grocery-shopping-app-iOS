@@ -18,16 +18,16 @@ final class ProductViewModel: ObservableObject {
     @Published var isInCart: Bool = false
     @Published var quantity: Int = 1
     @Published var cartProductId: Int?
-
+    
     private let favoritesService: FavoritesServiceProtocol = FavoritesService()
     private let cartService: CartServiceProtocol = CartServices()
     private let cartProductsService: CartProductsService = CartProductsService()
-
+    
     
     func fetchProductDetail(productId: Int, userId:  String) async {
         isLoading = true
         errorMessage = nil
-
+        
         do {
             let dto: ProductDetailDTO = try await NetworkClient.shared.request(endpoint: ProductEndpoints.product(id: String(productId), showLabel: true))
             isFavorite = try await favoritesService.isFavorite(userId: userId, itemId: productId)
@@ -38,13 +38,13 @@ final class ProductViewModel: ObservableObject {
                 self.quantity = Int(res?.quantity ?? 1)
                 self.cartProductId = Int(res?.cartProductId ?? 1)
             }
-
+            
             productDetail = ProductDetail(dto: dto)
-
+            
         }  catch {
             errorMessage = "Failed to load product details"
         }
-
+        
         isLoading = false
     }
     
@@ -54,7 +54,7 @@ final class ProductViewModel: ObservableObject {
             self.errorMessage = "Product information is missing."
             return
         }
-
+        
         let item = FavouriteItem(
             id: product.id,
             name: product.name,
@@ -62,7 +62,7 @@ final class ProductViewModel: ObservableObject {
             price: product.price,
             category: product.category,
         )
-
+        
         Task {
             do {
                 try await favoritesService.addToFavorites(userId: userId, item: item)
@@ -79,7 +79,8 @@ final class ProductViewModel: ObservableObject {
             self.errorMessage = "Product information is missing."
             return
         }
-
+        
+        
         Task {
             do {
                 try await favoritesService.removeFromFavorites(userId: userId, productId: product.id)
@@ -99,15 +100,15 @@ final class ProductViewModel: ObservableObject {
             print("Error: Product ID is missing")
             return
         }
-
+        
         do {
             let cartRes = try await cartService.addItem(
                 cartId: cartId,
                 productId: productId
             )
-
+            
             if let productDetail = productDetail {
-
+                
                 cartProductsService.addCartProduct(
                     productDetails: productDetail,
                     cartProductId: cartRes.itemId
@@ -116,12 +117,12 @@ final class ProductViewModel: ObservableObject {
                 self.isInCart = true
                 self.quantity = 1
             }
-
+            
         } catch {
             print("Failed to add item to cart: \(error)")
         }
     }
-
+    
     
     // Quantity Update with debounce.
     private var debounceTasks: [Int: Task<Void, Never>] = [:]
@@ -132,12 +133,12 @@ final class ProductViewModel: ObservableObject {
         guard let id = cartProductId else { return }
         
         Task {
-               await cartProductsService.updateProductQuantity(
-                   productId: id,
-                   quantity: quantity
-               )
-           }
-
+            await cartProductsService.updateProductQuantity(
+                productId: id,
+                quantity: quantity
+            )
+        }
+        
         debounceTasks[id]?.cancel()
         debounceTasks[id] = Task {
             do {
@@ -153,7 +154,7 @@ final class ProductViewModel: ObservableObject {
             }
         }
     }
-
+    
     
     //Update Item
     func updatedQuantity(
@@ -162,10 +163,28 @@ final class ProductViewModel: ObservableObject {
         quantity: Int
         
     ) async {
-            _ = await cartProductsService.updateProductQuantity( productId: itemId, quantity: quantity )
+        _ = await cartProductsService.updateProductQuantity( productId: itemId, quantity: quantity )
         
     }
     
     
+    // Remove from cart
+    func removeFromCart(cartId: String) async {
+        guard let itemId = cartProductId else {
+            print("Error: Product ID is missing")
+            return
+        }
+        
+        print("itemId:  \(itemId)")
+        do {
+            _ = try await cartService.removeItem(cartId: cartId, itemId: String(itemId))
+              cartProductsService.removeCartItem(itemId: itemId)
+            self.isInCart = false
+        }  catch {
+            print(error)
+        }
+    }
+    
+   
 }
 

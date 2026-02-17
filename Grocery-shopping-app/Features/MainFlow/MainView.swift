@@ -4,50 +4,69 @@
 //
 //  Created by tanmaydeep on 07/02/26.
 //
+//
+//  MainView.swift
+//  Nectar
+//
 
 import SwiftUI
 import CoreData
 
 struct MainView: View {
 
-    @State private var selectedTab: Tab = .home
-    @FetchRequest(entity: CartProduct.entity(), sortDescriptors: [])
+    @StateObject private var router = AppRouter()
+    
+    @FetchRequest(
+        entity: CartProduct.entity(),
+        sortDescriptors: []
+    )
     private var cartProducts: FetchedResults<CartProduct>
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $router.selectedTab) {
 
-            HomeView()
-                .tabItem {
-                    Label("Home", systemImage: "house.fill")
-                }
-                .tag(Tab.home)
+            NavigationStack {
+                HomeView()
+            }
+            .tabItem {
+                Label("Home", systemImage: "house.fill")
+            }
+            .tag(Tab.home)
 
-            ExploreView()
-                .tabItem {
-                    Label("Explore", systemImage: "magnifyingglass")
-                }
-                .tag(Tab.explore)
+            NavigationStack {
+                ExploreView()
+            }
+            .tabItem {
+                Label("Explore", systemImage: "magnifyingglass")
+            }
+            .tag(Tab.explore)
 
-            CartView()
-                .tabItem {
-                        Label("Cart", systemImage: "cart.fill")
-                }
-                .badge(cartProducts.count > 0 ? cartProducts.count: 0)
-                .tag(Tab.cart)
+            NavigationStack {
+                CartView()
+            }
+            .tabItem {
+                Label("Cart", systemImage: "cart.fill")
+            }
+            .badge(cartProducts.count > 0 ? cartProducts.count : 0)
+            .tag(Tab.cart)
 
-            FavouriteView()
-                .tabItem {
-                    Label("Favourite", systemImage: "heart.fill")
-                }
-                .tag(Tab.favourite)
+            NavigationStack {
+                FavouriteView()
+            }
+            .tabItem {
+                Label("Favourite", systemImage: "heart.fill")
+            }
+            .tag(Tab.favourite)
 
-            AccountView(selectedTab: $selectedTab)
-                .tabItem {
-                    Label("Account", systemImage: "person.fill")
-                }
-                .tag(Tab.account)
+            NavigationStack {
+                AccountView()
+            }
+            .tabItem {
+                Label("Account", systemImage: "person.fill")
+            }
+            .tag(Tab.account)
         }
+        .environmentObject(router)
         .tint(.green)
     }
 }

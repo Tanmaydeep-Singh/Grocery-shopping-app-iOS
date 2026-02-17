@@ -14,8 +14,16 @@ struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var isPasswordVisible = false
-
     @State private var showResetSuccessAlert = false
+
+    @FocusState private var focusedField: Field?
+    @State private var emailTouched = false
+    @State private var passwordTouched = false
+
+    enum Field {
+        case email
+        case password
+    }
 
     @EnvironmentObject var authViewModel: AuthViewModel
 
@@ -42,7 +50,7 @@ struct LoginView: View {
 
                 VStack(spacing: 25) {
 
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 5) {
                         Text("login_email_title")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
@@ -51,11 +59,21 @@ struct LoginView: View {
                             .keyboardType(.emailAddress)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
+                            .focused($focusedField, equals: .email)
+                            .onChange(of: email) { _ in
+                                emailTouched = true
+                            }
 
                         Divider()
+
+                        if let error = emailError {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
                     }
 
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 5) {
                         Text("login_password_title")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
@@ -63,8 +81,16 @@ struct LoginView: View {
                         HStack {
                             if isPasswordVisible {
                                 TextField("login_password_placeholder", text: $password)
+                                    .focused($focusedField, equals: .password)
+                                    .onChange(of: password) { _ in
+                                        passwordTouched = true
+                                    }
                             } else {
                                 SecureField("login_password_placeholder", text: $password)
+                                    .focused($focusedField, equals: .password)
+                                    .onChange(of: password) { _ in
+                                        passwordTouched = true
+                                    }
                             }
 
                             Button {
@@ -74,7 +100,14 @@ struct LoginView: View {
                                     .foregroundColor(.secondary)
                             }
                         }
+
                         Divider()
+
+                        if let error = passwordError {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
                     }
                 }
 
@@ -136,16 +169,52 @@ struct LoginView: View {
             Text("A password reset link has been sent to your email.")
         }
     }
+}
 
+extension LoginView {
+
+    private var emailError: String? {
+        guard emailTouched else { return nil }
+
+        if email.trimmingCharacters(in: .whitespaces).isEmpty {
+            return "Email cannot be empty."
+        }
+
+        if !authViewModel.isValidEmail(email) {
+            return "Please enter a valid email address."
+        }
+
+        return nil
+    }
+
+    private var passwordError: String? {
+        guard passwordTouched else { return nil }
+
+        if password.isEmpty {
+            return "Password cannot be empty."
+        }
+
+        if !authViewModel.isValidPassword(password) {
+            return "Minimum 8 characters & 1 special character required."
+        }
+
+        return nil
+    }
 
     private var isFormInvalid: Bool {
-        email.isEmpty || password.isEmpty
+        emailError != nil ||
+        passwordError != nil
     }
 
     private func handleLogin() {
+
+        guard !isFormInvalid else { return }
+
+        let trimmedEmail = email.trimmingCharacters(in: .whitespaces)
+
         Task {
             let success = await authViewModel.loginUser(
-                email: email,
+                email: trimmedEmail,
                 password: password
             )
             if success {

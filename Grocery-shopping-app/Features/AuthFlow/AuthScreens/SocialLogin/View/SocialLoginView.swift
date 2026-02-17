@@ -36,8 +36,8 @@ struct SocialLoginView: View {
 
                 PrimaryButton(title:"social_login_button_phone"){
                     path.append(OnboardingRoutes.login)
-
                 }
+                .padding()
             }
             
             

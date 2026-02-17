@@ -70,6 +70,7 @@ struct FilterView: View {
                     onApply(selectedCategories, selectedBrands)
                     dismiss()
                 }
+                .padding()
             }
             .frame(maxWidth: .infinity, maxHeight: 791)
             .background(

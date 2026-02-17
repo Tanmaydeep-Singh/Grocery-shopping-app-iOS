@@ -5,7 +5,7 @@ struct ProductCard: View {
 
     let product: Product
     @EnvironmentObject private var authViewModel: AuthViewModel
-    @StateObject private var viewModel = ProductCardViewModel()
+    @StateObject private var viewModel = ProductViewModel()
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -44,22 +44,71 @@ struct ProductCard: View {
             Group {
                 
                 if viewModel.isInCart {
-                    PrimaryButton(title: "\(viewModel.quantity)" , height: 44, width: 44, cornerRadius: 14){
+                    
+                    HStack(spacing: 10) {
+                        // MINUS
+                        Button {
+                            let cartId = authViewModel.user?.cartId ?? ""
+                            
+                            if viewModel.quantity > 1 {
+                                viewModel.quantity -= 1
+                                viewModel.updateLocalQuantity(cartId: cartId)
+                            } else {
+                                Task {
+                                    await viewModel.removeFromCart(cartId: cartId)
+                                    withAnimation {
+                                        viewModel.isInCart = false
+                                        viewModel.quantity = 0
+                                    }
+                                }
+                            }
+                            
+                        } label: {
+                            Image(systemName: "minus")
+                                .font(.system(size: 12, weight: .bold))
+                        }
+                        
+                        
+                        // QUANTITY
+                        Text("\(viewModel.quantity)")
+                            .font(.system(size: 14, weight: .semibold))
+                            .frame(minWidth: 16)
+                        
+                        
+                        // PLUS
+                        Button {
+                            let cartId = authViewModel.user?.cartId ?? ""
+                            viewModel.quantity += 1
+                            viewModel.updateLocalQuantity(cartId: cartId)
+                            
+                        } label: {
+                            Image(systemName: "plus")
+                                .font(.system(size: 12, weight: .bold))
+                        }
+                        
                     }
-                }else
+                    .padding(.horizontal, 10)
+                    .frame(height: 34)
+                    .background(Color(.systemGray6))
+                    .clipShape(Capsule())
+                    .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
+                }
+                else
                 {
                     PrimaryButton(icon: "plus", height: 44, width: 44, cornerRadius: 14){
                         
                         Task{
                             let cartId = authViewModel.user?.cartId ?? ""
-                            await viewModel.addToCart(cartId:cartId, product: product)
-                            viewModel.isInCart = true
+                            await viewModel.addToCart2(cartId: cartId, product: product)
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                viewModel.isInCart = true
+                            }
                         }
                     }
                 }
-                
-                
             }
+            .padding(.trailing, 12)
+            .padding(.bottom, 12)
             .onAppear {
                 Task {
                     await viewModel.onLoad(productId: product.id)

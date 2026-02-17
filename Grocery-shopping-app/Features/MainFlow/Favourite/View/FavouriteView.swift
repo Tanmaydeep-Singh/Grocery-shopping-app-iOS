@@ -53,7 +53,7 @@ struct FavouriteView: View {
                     PrimaryButton(title: "Add to cart") {
                         // Action
                     }
-                    .padding(.bottom, 10)
+                    .padding(10)
                 }
             }
             .background(Color.white)

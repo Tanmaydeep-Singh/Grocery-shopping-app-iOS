@@ -123,6 +123,27 @@ final class ProductViewModel: ObservableObject {
         }
     }
     
+    // Add to cart through Product card
+    func addToCart2(cartId: String, product: Product?) async {
+        
+        guard let productId = product?.id else {
+            return
+        }
+
+        do {
+           let cartRes = try await cartService.addItem(cartId: cartId, productId: productId)
+            if let productDetail = product {
+                cartProductsService.addCartProduct(product: product, cartProductId: cartRes.itemId)
+            }
+            self.cartProductId = cartRes.itemId
+            self.isInCart = true
+            self.quantity = 1
+            
+        } catch {
+            print(error)
+        }
+    }
+    
     
     // Quantity Update with debounce.
     private var debounceTasks: [Int: Task<Void, Never>] = [:]
@@ -185,6 +206,15 @@ final class ProductViewModel: ObservableObject {
         }
     }
     
-   
+    func onLoad(productId: Int) async {
+        isInCart = await cartProductsService.isProductInCart(productId: productId)
+        
+        if let product = await cartProductsService.getProductById(productId: productId) {
+            self.quantity = Int(product.quantity)
+            self.cartProductId = Int(product.cartProductId)
+        } else {
+            quantity = 1
+        }
+    }
 }
 

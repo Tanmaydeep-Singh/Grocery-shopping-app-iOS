@@ -100,6 +100,7 @@ struct LocationView: View {
                         PrimaryButton(title:"Submit"){
                             path.append(OnboardingRoutes.login)
                         }
+                        .padding()
                         
                     }.padding(.bottom,20)
                 }

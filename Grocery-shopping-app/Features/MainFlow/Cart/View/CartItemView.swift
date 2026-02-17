@@ -48,6 +48,9 @@ struct CartItemView: View {
                             if item.quantity > 1 {
                                 onDecrease(Int(item.quantity) - 1)
                             }
+                            else if(item.quantity == 1) {
+                                onRemove()
+                            }
                         }
 
                         Text("\(item.quantity)")

@@ -11,11 +11,19 @@ struct LoginView: View {
 
     @Binding var path: NavigationPath
 
-    @State private var email = ""
-    @State private var password = ""
-    @State private var isPasswordVisible = false
+    @State  var email = ""
+    @State  var password = ""
+    @State  var isPasswordVisible = false
+    @State  var showResetSuccessAlert = false
 
-    @State private var showResetSuccessAlert = false
+    @FocusState  var focusedField: Field?
+    @State  var emailTouched = false
+    @State  var passwordTouched = false
+
+    enum Field {
+        case email
+        case password
+    }
 
     @EnvironmentObject var authViewModel: AuthViewModel
 
@@ -42,7 +50,7 @@ struct LoginView: View {
 
                 VStack(spacing: 25) {
 
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 5) {
                         Text("login_email_title")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
@@ -51,11 +59,21 @@ struct LoginView: View {
                             .keyboardType(.emailAddress)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
+                            .focused($focusedField, equals: .email)
+                            .onChange(of: email) {
+                                emailTouched = true
+                            }
 
                         Divider()
+
+                        if let error = emailError {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
                     }
 
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 5) {
                         Text("login_password_title")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
@@ -63,8 +81,16 @@ struct LoginView: View {
                         HStack {
                             if isPasswordVisible {
                                 TextField("login_password_placeholder", text: $password)
+                                    .focused($focusedField, equals: .password)
+                                    .onChange(of: password) {
+                                        passwordTouched = true
+                                    }
                             } else {
                                 SecureField("login_password_placeholder", text: $password)
+                                    .focused($focusedField, equals: .password)
+                                    .onChange(of: password) { 
+                                        passwordTouched = true
+                                    }
                             }
 
                             Button {
@@ -74,7 +100,14 @@ struct LoginView: View {
                                     .foregroundColor(.secondary)
                             }
                         }
+
                         Divider()
+
+                        if let error = passwordError {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
                     }
                 }
 
@@ -136,44 +169,9 @@ struct LoginView: View {
             Text("A password reset link has been sent to your email.")
         }
     }
-
-
-    private var isFormInvalid: Bool {
-        email.isEmpty || password.isEmpty
-    }
-
-    private func handleLogin() {
-        Task {
-            let success = await authViewModel.loginUser(
-                email: email,
-                password: password
-            )
-            if success {
-                path = NavigationPath()
-            }
-        }
-    }
-
-    private func handlePasswordReset() {
-        let trimmedEmail = email.trimmingCharacters(in: .whitespaces)
-
-        guard !trimmedEmail.isEmpty else {
-            authViewModel.errorMessage = "Email should be present"
-            authViewModel.isError = true
-            return
-        }
-
-        Task {
-            do {
-                try await authViewModel.resetPassword(email: trimmedEmail)
-                showResetSuccessAlert = true
-            } catch {
-                authViewModel.errorMessage = error.localizedDescription
-                authViewModel.isError = true
-            }
-        }
-    }
 }
+
+
 
 #Preview {
     LoginView(path: .constant(NavigationPath()))

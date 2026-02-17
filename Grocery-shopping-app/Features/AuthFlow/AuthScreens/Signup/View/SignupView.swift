@@ -4,17 +4,30 @@
 //
 //  Created by tanmaydeep on 04/02/26.
 //
-//
 
 import SwiftUI
 
 struct SignupView: View {
+    
     @Binding var path: NavigationPath
     
-    @State private var username = ""
-    @State private var email = ""
-    @State private var password = ""
-    @State private var isPasswordVisible = false
+    @State  var username = ""
+    @State  var email = ""
+    @State  var password = ""
+    @State  var isPasswordVisible = false
+    
+    @FocusState  var focusedField: Field?
+
+    @State  var usernameTouched = false
+    @State  var emailTouched = false
+    @State  var passwordTouched = false
+
+    enum Field {
+        case username
+        case email
+        case password
+    }
+
     
     @EnvironmentObject var authViewModel: AuthViewModel
 
@@ -40,7 +53,8 @@ struct SignupView: View {
                 .padding(.bottom, 20)
                 
                 VStack(spacing: 25) {
-                    VStack(alignment: .leading, spacing: 10) {
+                    
+                    VStack(alignment: .leading, spacing: 5) {
                         Text("signup_field_username")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
@@ -48,11 +62,21 @@ struct SignupView: View {
                         TextField("signup_field_username_placeholder", text: $username)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
+                            .focused($focusedField, equals: .username)
+                               .onChange(of: username) {
+                                   usernameTouched = true
+                               }
                         
                         Divider()
+                        
+                        if let error = usernameError {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
                     }
                     
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 5) {
                         Text("signup_field_email")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
@@ -61,11 +85,21 @@ struct SignupView: View {
                             .keyboardType(.emailAddress)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
+                            .focused($focusedField, equals: .email)
+                               .onChange(of: email) {
+                                   emailTouched = true
+                               }
                         
                         Divider()
+                        
+                        if let error = emailError {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
                     }
 
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 5) {
                         Text("signup_field_password")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
@@ -75,6 +109,10 @@ struct SignupView: View {
                                 TextField("signup_field_password_placeholder", text: $password)
                             } else {
                                 SecureField("signup_field_password_placeholder", text: $password)
+                                    .focused($focusedField, equals: .password)
+                                        .onChange(of: password) { 
+                                            passwordTouched = true
+                                        }
                             }
                             
                             Button {
@@ -84,7 +122,14 @@ struct SignupView: View {
                                     .foregroundColor(.secondary)
                             }
                         }
+                        
                         Divider()
+                        
+                        if let error = passwordError {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
                     }
                     
                     Text("signup_terms_text")
@@ -118,6 +163,7 @@ struct SignupView: View {
                 HStack {
                     Text("signup_footer_existing_account")
                         .font(.system(size: 14, weight: .semibold))
+                    
                     Button {
                         path.append(OnboardingRoutes.login)
                     } label: {
@@ -133,26 +179,6 @@ struct SignupView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(authViewModel.errorMessage ?? "An unknown error occurred.")
-        }
-    }
-    
-    private var isFormInvalid: Bool {
-        username.isEmpty || email.isEmpty || password.count < 6
-    }
-    
-    private func handleSignup() {
-        print("called")
-                Task {
-                    let success = await authViewModel.createUser(
-                        email: email,
-                        password: password,
-                        username: username
-                    )
-        
-                    if success {
-                        path = NavigationPath()
-                    }
-    
         }
     }
 }

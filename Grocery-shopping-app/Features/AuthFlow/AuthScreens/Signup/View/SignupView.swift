@@ -11,16 +11,16 @@ struct SignupView: View {
     
     @Binding var path: NavigationPath
     
-    @State private var username = ""
-    @State private var email = ""
-    @State private var password = ""
-    @State private var isPasswordVisible = false
+    @State  var username = ""
+    @State  var email = ""
+    @State  var password = ""
+    @State  var isPasswordVisible = false
     
-    @FocusState private var focusedField: Field?
+    @FocusState  var focusedField: Field?
 
-    @State private var usernameTouched = false
-    @State private var emailTouched = false
-    @State private var passwordTouched = false
+    @State  var usernameTouched = false
+    @State  var emailTouched = false
+    @State  var passwordTouched = false
 
     enum Field {
         case username
@@ -63,7 +63,7 @@ struct SignupView: View {
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                             .focused($focusedField, equals: .username)
-                               .onChange(of: username) { _ in
+                               .onChange(of: username) {
                                    usernameTouched = true
                                }
                         
@@ -86,7 +86,7 @@ struct SignupView: View {
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                             .focused($focusedField, equals: .email)
-                               .onChange(of: email) { _ in
+                               .onChange(of: email) {
                                    emailTouched = true
                                }
                         
@@ -110,7 +110,7 @@ struct SignupView: View {
                             } else {
                                 SecureField("signup_field_password_placeholder", text: $password)
                                     .focused($focusedField, equals: .password)
-                                        .onChange(of: password) { _ in
+                                        .onChange(of: password) { 
                                             passwordTouched = true
                                         }
                             }
@@ -179,66 +179,6 @@ struct SignupView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(authViewModel.errorMessage ?? "An unknown error occurred.")
-        }
-    }
-}
-
-extension SignupView {
-    
-    private var usernameError: String? {
-        guard usernameTouched else { return nil }
-        if username.trimmingCharacters(in: .whitespaces).isEmpty {
-            return "Username cannot be empty."
-        }
-        return nil
-    }
-
-    private var emailError: String? {
-        guard emailTouched else { return nil }
-        if email.trimmingCharacters(in: .whitespaces).isEmpty {
-            return "Email cannot be empty."
-        }
-        if !authViewModel.isValidEmail(email) {
-            return "Please enter a valid email address."
-        }
-        return nil
-    }
-
-    private var passwordError: String? {
-        guard passwordTouched else { return nil }
-        if password.isEmpty {
-            return "Password cannot be empty."
-        }
-        if !authViewModel.isValidPassword(password) {
-            return "Minimum 8 characters & 1 special character required."
-        }
-        return nil
-    }
-
-    
-    private var isFormInvalid: Bool {
-        usernameError != nil ||
-        emailError != nil ||
-        passwordError != nil
-    }
-    
-    private func handleSignup() {
-        
-        guard !isFormInvalid else { return }
-        
-        let trimmedUsername = username.trimmingCharacters(in: .whitespaces)
-        let trimmedEmail = email.trimmingCharacters(in: .whitespaces)
-        
-        Task {
-            let success = await authViewModel.createUser(
-                email: trimmedEmail,
-                password: password,
-                username: trimmedUsername
-            )
-            
-            if success {
-                path = NavigationPath()
-            }
         }
     }
 }

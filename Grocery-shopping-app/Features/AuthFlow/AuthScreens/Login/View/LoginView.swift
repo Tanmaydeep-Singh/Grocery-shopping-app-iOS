@@ -11,14 +11,14 @@ struct LoginView: View {
 
     @Binding var path: NavigationPath
 
-    @State private var email = ""
-    @State private var password = ""
-    @State private var isPasswordVisible = false
-    @State private var showResetSuccessAlert = false
+    @State  var email = ""
+    @State  var password = ""
+    @State  var isPasswordVisible = false
+    @State  var showResetSuccessAlert = false
 
-    @FocusState private var focusedField: Field?
-    @State private var emailTouched = false
-    @State private var passwordTouched = false
+    @FocusState  var focusedField: Field?
+    @State  var emailTouched = false
+    @State  var passwordTouched = false
 
     enum Field {
         case email
@@ -60,7 +60,7 @@ struct LoginView: View {
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                             .focused($focusedField, equals: .email)
-                            .onChange(of: email) { _ in
+                            .onChange(of: email) {
                                 emailTouched = true
                             }
 
@@ -82,13 +82,13 @@ struct LoginView: View {
                             if isPasswordVisible {
                                 TextField("login_password_placeholder", text: $password)
                                     .focused($focusedField, equals: .password)
-                                    .onChange(of: password) { _ in
+                                    .onChange(of: password) {
                                         passwordTouched = true
                                     }
                             } else {
                                 SecureField("login_password_placeholder", text: $password)
                                     .focused($focusedField, equals: .password)
-                                    .onChange(of: password) { _ in
+                                    .onChange(of: password) { 
                                         passwordTouched = true
                                     }
                             }
@@ -171,78 +171,7 @@ struct LoginView: View {
     }
 }
 
-extension LoginView {
 
-    private var emailError: String? {
-        guard emailTouched else { return nil }
-
-        if email.trimmingCharacters(in: .whitespaces).isEmpty {
-            return "Email cannot be empty."
-        }
-
-        if !authViewModel.isValidEmail(email) {
-            return "Please enter a valid email address."
-        }
-
-        return nil
-    }
-
-    private var passwordError: String? {
-        guard passwordTouched else { return nil }
-
-        if password.isEmpty {
-            return "Password cannot be empty."
-        }
-
-        if !authViewModel.isValidPassword(password) {
-            return "Minimum 8 characters & 1 special character required."
-        }
-
-        return nil
-    }
-
-    private var isFormInvalid: Bool {
-        emailError != nil ||
-        passwordError != nil
-    }
-
-    private func handleLogin() {
-
-        guard !isFormInvalid else { return }
-
-        let trimmedEmail = email.trimmingCharacters(in: .whitespaces)
-
-        Task {
-            let success = await authViewModel.loginUser(
-                email: trimmedEmail,
-                password: password
-            )
-            if success {
-                path = NavigationPath()
-            }
-        }
-    }
-
-    private func handlePasswordReset() {
-        let trimmedEmail = email.trimmingCharacters(in: .whitespaces)
-
-        guard !trimmedEmail.isEmpty else {
-            authViewModel.errorMessage = "Email should be present"
-            authViewModel.isError = true
-            return
-        }
-
-        Task {
-            do {
-                try await authViewModel.resetPassword(email: trimmedEmail)
-                showResetSuccessAlert = true
-            } catch {
-                authViewModel.errorMessage = error.localizedDescription
-                authViewModel.isError = true
-            }
-        }
-    }
-}
 
 #Preview {
     LoginView(path: .constant(NavigationPath()))

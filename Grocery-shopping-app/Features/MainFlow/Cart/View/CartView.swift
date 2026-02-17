@@ -68,6 +68,7 @@ struct CartView: View {
                                                         itemId: Int(id),
                                                         quantity: newQuantity
                                                     )
+                                            
                                         },
                                         onRemove: {
                                             guard let cartId = authViewModel.user?.cartId else { return }

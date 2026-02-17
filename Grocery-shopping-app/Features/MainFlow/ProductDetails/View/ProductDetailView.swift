@@ -147,9 +147,6 @@ struct ProductDetailView: View {
                     }
                 }
                 
-                
-                
-                
                 PrimaryButton(
                     title: viewModel.isInCart ? "Go to Cart" : "Add to Cart"
                 ) {

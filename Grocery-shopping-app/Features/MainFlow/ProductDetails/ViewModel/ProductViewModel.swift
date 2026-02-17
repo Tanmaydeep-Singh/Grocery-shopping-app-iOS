@@ -132,7 +132,6 @@ final class ProductViewModel: ObservableObject {
 
         do {
            let cartRes = try await cartService.addItem(cartId: cartId, productId: productId)
-            
             if let productDetail = product {
                 cartProductsService.addCartProduct(product: product, cartProductId: cartRes.itemId)
             }
@@ -211,8 +210,8 @@ final class ProductViewModel: ObservableObject {
         isInCart = await cartProductsService.isProductInCart(productId: productId)
         
         if let product = await cartProductsService.getProductById(productId: productId) {
-            print("self.quantity: \(product.quantity) ")
             self.quantity = Int(product.quantity)
+            self.cartProductId = Int(product.cartProductId)
         } else {
             quantity = 1
         }

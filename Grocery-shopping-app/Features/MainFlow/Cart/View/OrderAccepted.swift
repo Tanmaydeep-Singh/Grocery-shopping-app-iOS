@@ -2,8 +2,10 @@ import SwiftUI
 
 struct OrderAcceptedView: View {
 
+    @EnvironmentObject private var router: AppRouter
     @State private var isAnimating = false
     @State private var isShining = false
+    @State private var goToTrackOrder = false
 
     var body: some View {
         ZStack {
@@ -58,11 +60,11 @@ struct OrderAcceptedView: View {
                 // MARK: Actions
                 VStack(spacing: 16) {
                     PrimaryButton(title: "Track Order") {
-                        // navigate to order tracking
+                        goToTrackOrder = true
                     }
 
                     Button("Back to home") {
-                        // navigate back to home
+                        router.selectedTab = .home
                     }
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.black)
@@ -73,6 +75,9 @@ struct OrderAcceptedView: View {
         }
         .onAppear {
             startMainAnimation()
+        }
+        .navigationDestination(isPresented: $goToTrackOrder) {
+            OrdersView()
         }
     }
 

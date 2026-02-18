@@ -26,5 +26,11 @@ protocol OrderServiceProtocol {
         userId: String,
         cartId: String
     ) async throws
+    
+    // get order by ID
+    func fetchOrderById(
+        userId: String,
+        orderId: String
+    ) async throws -> Order
 }
 

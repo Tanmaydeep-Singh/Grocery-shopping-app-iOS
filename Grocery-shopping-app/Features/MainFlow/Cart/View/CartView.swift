@@ -150,11 +150,6 @@ struct CartView: View {
             OrderAcceptedView()
         }
     }
-
-        
-        
-    
-
 }
 
 

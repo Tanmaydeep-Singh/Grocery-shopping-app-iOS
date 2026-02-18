@@ -139,7 +139,6 @@ final class CartViewModel: ObservableObject {
             )
             
             // Clear coredata
-            self.cartItems = []
             cartProductsService.clearCart()
             
             // Add new CartId to user.

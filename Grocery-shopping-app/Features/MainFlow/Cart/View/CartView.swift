@@ -141,6 +141,7 @@ struct CartView: View {
                             if success {
                                 showCheckout = false
                                 goToOrderAccepted = true
+                                
                             } else {
                             }
                         }

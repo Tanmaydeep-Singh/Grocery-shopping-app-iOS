@@ -48,14 +48,13 @@ struct ProductCard: View {
                     HStack(spacing: 10) {
                         // MINUS
                         Button {
-                            let cartId = authViewModel.user?.cartId ?? ""
                             
                             if viewModel.quantity > 1 {
                                 viewModel.quantity -= 1
-                                viewModel.updateLocalQuantity(cartId: cartId)
+                                viewModel.updateLocalQuantity()
                             } else {
                                 Task {
-                                    await viewModel.removeFromCart(cartId: cartId)
+                                    await viewModel.removeFromCart()
                                     withAnimation {
                                         viewModel.isInCart = false
                                         viewModel.quantity = 0
@@ -77,9 +76,8 @@ struct ProductCard: View {
                         
                         // PLUS
                         Button {
-                            let cartId = authViewModel.user?.cartId ?? ""
                             viewModel.quantity += 1
-                            viewModel.updateLocalQuantity(cartId: cartId)
+                            viewModel.updateLocalQuantity()
                             
                         } label: {
                             Image(systemName: "plus")
@@ -98,8 +96,7 @@ struct ProductCard: View {
                     PrimaryButton(icon: "plus", height: 44, width: 44, cornerRadius: 14){
                         
                         Task{
-                            let cartId = authViewModel.user?.cartId ?? ""
-                            await viewModel.addToCart2(cartId: cartId, product: product)
+                            await viewModel.addToCart2( product: product)
                             withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
                                 viewModel.isInCart = true
                             }

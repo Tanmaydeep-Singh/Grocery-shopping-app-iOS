@@ -135,6 +135,12 @@ final class CartViewModel: ObservableObject {
                 items: itemsToOrder,
                 totalPrice: totalItemsPrice
             )
+            
+            // Clear coredata
+            cartProductsService.clearCart()
+            
+            // Add new CartId to user.
+
             return true
         } catch {
             print("Order creation failed: \(error)")

@@ -9,18 +9,22 @@ import Foundation
 
 protocol OrderServiceProtocol {
 
+    // create order
     func createOrder(
-        cartId: String,
-        customerName: String
-    ) async throws -> Order
+        userId: String,
+        items: [CartProductDTO],
+        totalPrice: Double
+    ) async throws -> Bool
 
-    func fetchAllOrders() async throws -> [Order]
+    // fetch all orders
+    func fetchAllOrders(
+        userId: String
+    ) async throws -> [Order]
 
-    func updateOrder(
-        orderId: String,
-        customerName: String,
-        comment: String
-    ) async throws -> Order
+    // update cartId
+    func updateUserCartId(
+        userId: String,
+        cartId: String
+    ) async throws
 }
-
 

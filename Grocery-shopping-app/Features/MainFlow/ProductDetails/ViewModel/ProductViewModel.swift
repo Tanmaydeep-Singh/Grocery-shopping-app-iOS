@@ -23,6 +23,8 @@ final class ProductViewModel: ObservableObject {
     private let cartService: CartServiceProtocol = CartServices()
     private let cartProductsService: CartProductsService = CartProductsService()
     
+    private let authViewModel: AuthViewModel = AuthViewModel()
+    
     
     func fetchProductDetail(productId: Int, userId:  String) async {
         isLoading = true
@@ -94,9 +96,13 @@ final class ProductViewModel: ObservableObject {
     
     
     // Add item to cart:
-    func addToCart(cartId: String) async {
+    func addToCart() async {
         
         guard let productId = productDetail?.id else {
+            print("Error: Product ID is missing")
+            return
+        }
+        guard let cartId = authViewModel.user?.cartId else {
             print("Error: Product ID is missing")
             return
         }
@@ -124,15 +130,20 @@ final class ProductViewModel: ObservableObject {
     }
     
     // Add to cart through Product card
-    func addToCart2(cartId: String, product: Product?) async {
+    func addToCart2( product: Product?) async {
         
         guard let productId = product?.id else {
+            return
+        }
+        
+        guard let cartId = authViewModel.user?.cartId else {
+            print("Error: Product ID is missing")
             return
         }
 
         do {
            let cartRes = try await cartService.addItem(cartId: cartId, productId: productId)
-            if let productDetail = product {
+            if product != nil {
                 cartProductsService.addCartProduct(product: product, cartProductId: cartRes.itemId)
             }
             self.cartProductId = cartRes.itemId
@@ -149,7 +160,12 @@ final class ProductViewModel: ObservableObject {
     private var debounceTasks: [Int: Task<Void, Never>] = [:]
     
     // Helper func for decounce
-    func updateLocalQuantity(cartId: String) {
+    func updateLocalQuantity() {
+        
+        guard let cartId = authViewModel.user?.cartId else {
+            print("Error: Product ID is missing")
+            return
+        }
         
         guard let id = cartProductId else { return }
         
@@ -190,8 +206,13 @@ final class ProductViewModel: ObservableObject {
     
     
     // Remove from cart
-    func removeFromCart(cartId: String) async {
+    func removeFromCart() async {
         guard let itemId = cartProductId else {
+            print("Error: Product ID is missing")
+            return
+        }
+        
+        guard let cartId = authViewModel.user?.cartId else {
             print("Error: Product ID is missing")
             return
         }

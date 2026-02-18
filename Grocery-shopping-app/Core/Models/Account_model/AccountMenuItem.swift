@@ -11,4 +11,17 @@ struct AccountMenuItem: Identifiable {
     let id = UUID()
     let title: String
     let icon: String
+    let destination: AccountDestination?
+}
+
+
+enum AccountDestination {
+    case orders
+    case myDetails
+    case deliveryAddress
+    case paymentMethods
+    case promoCard
+    case notifications
+    case help
+    case about
 }

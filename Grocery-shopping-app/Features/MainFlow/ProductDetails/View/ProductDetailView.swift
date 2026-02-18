@@ -74,14 +74,13 @@ struct ProductDetailView: View {
                                     HStack {
                                         
                                         Button(action: {
-                                            let cartId = authViewModel.user?.cartId ?? ""
                                             if viewModel.quantity > 1 {
                                                 viewModel.quantity -= 1
-                                                viewModel.updateLocalQuantity(cartId: cartId)
+                                                viewModel.updateLocalQuantity()
                                             }
                                             else if viewModel.quantity == 1 {
                                                 Task{
-                                                    await viewModel.removeFromCart(cartId:cartId)
+                                                    await viewModel.removeFromCart()
                                                 }
                                                 }
                                         }) {
@@ -93,10 +92,9 @@ struct ProductDetailView: View {
                                             .frame(width: 30)
                                         
                                         Button(action: {
-                                            let cartId = authViewModel.user?.cartId ?? ""
                                             if viewModel.quantity < detail.currentStock {
                                                 viewModel.quantity += 1
-                                                viewModel.updateLocalQuantity(cartId: cartId)
+                                                viewModel.updateLocalQuantity()
                                             }
                                         }) {
                                             Image(systemName: "plus")
@@ -151,13 +149,11 @@ struct ProductDetailView: View {
                     title: viewModel.isInCart ? "Go to Cart" : "Add to Cart"
                 ) {
                     Task {
-                        let cartId = authViewModel.user?.cartId ?? ""
-                        
                         if viewModel.isInCart {
                             router.selectedTab = .cart
 
                         } else {
-                            await viewModel.addToCart(cartId: cartId)
+                            await viewModel.addToCart()
                             withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
                                 viewModel.isInCart = true
                             }

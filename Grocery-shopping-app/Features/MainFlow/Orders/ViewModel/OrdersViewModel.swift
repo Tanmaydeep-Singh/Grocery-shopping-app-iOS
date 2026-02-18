@@ -6,60 +6,33 @@
 //
 
 import Foundation
+import Combine
 
-struct DummyOrder: Identifiable {
-    let id: String
-    let createdOn: Date
-    let items: [DummyOrderItem]
-    let totalPrice: Double
-}
-
-struct DummyOrderItem {
-    let productId: Int
-    let name: String
-    let price: Double
-    let quantity: Int
-    let imageName: String
-}
-
-extension DummyOrder {
+@MainActor
+final class OrdersViewModel: ObservableObject {
     
-    static let sampleOrders: [DummyOrder] = [
-        DummyOrder(
-            id: "1",
-            createdOn: Date(),
-            items: [
-                DummyOrderItem(
-                    productId: 1,
-                    name: "Organic Bananas",
-                    price: 120,
-                    quantity: 2,
-                    imageName: "banana"
-                ),
-                DummyOrderItem(
-                    productId: 2,
-                    name: "Fresh Milk",
-                    price: 60,
-                    quantity: 1,
-                    imageName: "milk"
-                )
-            ],
-            totalPrice: 300
-        ),
+    @Published var orders: [Order] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    
+    private let ordersService: OrderServiceProtocol
+    
+    init(service: OrderServiceProtocol = OrderService()) {
+        self.ordersService = service
+    }
+    
+    func fetchOrders(userId: String) async {
+        guard !userId.isEmpty else { return }
         
-        DummyOrder(
-            id: "2",
-            createdOn: Date().addingTimeInterval(-86400),
-            items: [
-                DummyOrderItem(
-                    productId: 3,
-                    name: "Brown Bread",
-                    price: 45,
-                    quantity: 3,
-                    imageName: "bread"
-                )
-            ],
-            totalPrice: 135
-        )
-    ]
+        isLoading = true
+        errorMessage = nil
+        
+        do {
+            self.orders = try await ordersService.fetchAllOrders(userId: userId)
+            isLoading = false
+        } catch {
+            self.errorMessage = "Failed to fetch orders: \(error.localizedDescription)"
+            isLoading = false
+        }
+    }
 }

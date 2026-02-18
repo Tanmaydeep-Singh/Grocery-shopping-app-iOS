@@ -25,6 +25,7 @@ struct OrdersView: View {
                     VStack(spacing: 16) {
                         ForEach(viewModel.orders) { order in
                             OrderRowView(order: order)
+                            Divider()
                         }
                     }
                     .padding()

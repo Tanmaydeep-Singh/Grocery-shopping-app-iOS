@@ -37,6 +37,8 @@ struct OrderRowView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(firstItem?.name ?? "Order")
                     .font(.headline)
+                    .lineLimit(2)
+
                 
                 Text("\(totalQuantity) items")
                     .font(.subheadline)

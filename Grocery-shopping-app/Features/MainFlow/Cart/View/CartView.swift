@@ -17,6 +17,9 @@ struct CartView: View {
     private var cartId: String? {
         authViewModel.user?.cartId
     }
+    private var userId: String? {
+        authViewModel.user?.id
+    }
 
     var body: some View {
         NavigationStack {
@@ -133,10 +136,15 @@ struct CartView: View {
                 CheckoutView(
                     totalCost: cartViewModel.totalPrice,
                     onOrderPlaced: {
-                        showCheckout = false
-                        goToOrderAccepted = true
-                    }
-                )
+                        Task {
+                            let success = await cartViewModel.createOrder(userId: userId ?? "")
+                            if success {
+                                showCheckout = false
+                                goToOrderAccepted = true
+                            } else {
+                            }
+                        }
+                    }                )
             }
             .presentationDetents([.fraction(0.65)])
             .presentationDragIndicator(.hidden)

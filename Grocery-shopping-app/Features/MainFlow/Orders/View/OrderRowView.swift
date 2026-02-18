@@ -4,16 +4,17 @@
 //
 //  Created by tanmaydeep on 18/02/26.
 //
+
 import SwiftUI
 
 struct OrderRowView: View {
     let order: Order
     
-    var firstItem: CartProduct? {
+    var firstItem: CartProductDTO? {
         order.items.first
     }
     
-    var totalQuantity: Int64 {
+    var totalQuantity: Int {
         order.items.reduce(0) { $0 + $1.quantity }
     }
     
@@ -48,7 +49,7 @@ struct OrderRowView: View {
             
             Spacer()
             
-            Text("₹\(Int(order.totalPrice))")
+            Text("$\(String(format: "%.2f", order.totalPrice))")
                 .font(.headline)
                 .bold()
         }

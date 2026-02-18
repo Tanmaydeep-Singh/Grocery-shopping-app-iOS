@@ -28,7 +28,10 @@ final class OrdersViewModel: ObservableObject {
         errorMessage = nil
         
         do {
+            print("Called to fetch order...")
             self.orders = try await ordersService.fetchAllOrders(userId: userId)
+            print("Called to fetch order... \(self.orders.count)")
+
             isLoading = false
         } catch {
             self.errorMessage = "Failed to fetch orders: \(error.localizedDescription)"

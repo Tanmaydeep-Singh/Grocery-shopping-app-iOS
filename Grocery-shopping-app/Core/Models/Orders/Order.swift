@@ -11,6 +11,6 @@ import Foundation
 struct Order: Identifiable {
     var id: String
     var createdOn: Date
-    var items: [CartProduct]
+    var items: [CartProductDTO]
     var totalPrice: Double
 }

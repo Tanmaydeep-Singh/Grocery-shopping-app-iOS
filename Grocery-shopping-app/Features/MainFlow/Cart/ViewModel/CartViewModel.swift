@@ -14,16 +14,19 @@ final class CartViewModel: ObservableObject {
     @Published var cartItems: [CartProduct] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
+    var totalItemsPrice: Double = 0;
 
     private let cartService: CartServiceProtocol
     private let productService: ProductServiceProtocol
     private let cartProductsService : CartProductsService
+    private let orderService: OrderServiceProtocol
     private var cartId: String?
 
     init() {
         self.cartService = CartServices()
         self.productService = ProductService()
         self.cartProductsService = CartProductsService()
+        self.orderService = OrderService()
     }
 
     
@@ -65,6 +68,7 @@ final class CartViewModel: ObservableObject {
             let quantity = Double(item.quantity)
             price += itemPrice * quantity
         }
+        totalItemsPrice = price
         return price
     }
 
@@ -107,5 +111,34 @@ final class CartViewModel: ObservableObject {
             print(error)
         }
         
+    }
+    
+    // Create Order.
+    func createOrder(userId: String) async -> Bool {
+        guard !userId.isEmpty else { return false }
+        
+        let itemsToOrder = cartItems.map { item in
+            CartProductDTO(
+                id: item.id,
+                name: item.name ?? "Unknown",
+                price: item.price,
+                quantity: Int(item.quantity),
+                imageName: item.imageName ?? "",
+                category: item.category ?? "General",
+                cartProductId: item.cartProductId
+            )
+        }
+        
+        do {
+            _ = try await orderService.createOrder(
+                userId: userId,
+                items: itemsToOrder,
+                totalPrice: totalItemsPrice
+            )
+            return true
+        } catch {
+            print("Order creation failed: \(error)")
+            return false
+        }
     }
 }

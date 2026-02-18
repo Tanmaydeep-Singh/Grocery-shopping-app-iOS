@@ -11,7 +11,7 @@ protocol OrderServiceProtocol {
 
     func createOrder(
         userId: String,
-        items: [CartProduct],
+        items: [CartProductDTO],
         totalPrice: Double
     ) async throws -> Bool
 

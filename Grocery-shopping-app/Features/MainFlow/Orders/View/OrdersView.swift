@@ -34,9 +34,11 @@ struct OrdersView: View {
         .navigationTitle("My Orders")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .task {
-            let userId = authViewModel.user?.id ?? ""
-            await viewModel.fetchOrders(userId: userId)
+        .onAppear() {
+            Task{
+                let userId = authViewModel.user?.id ?? ""
+                await viewModel.fetchOrders(userId: userId)
+            }
         }
     }
 }

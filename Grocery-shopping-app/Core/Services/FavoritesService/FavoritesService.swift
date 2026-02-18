@@ -44,7 +44,6 @@ final class FavoritesService: FavoritesServiceProtocol {
         try await docRef.setData(data)
     }
     
-    // Get favoriteTask 15: "Unsupported type: __SwiftValue (found in field category)"
     func getFavorites(userId: String) async throws -> [FavouriteItem] {
         
         let snapshot = try await favoritesRef(userId: userId).getDocuments()

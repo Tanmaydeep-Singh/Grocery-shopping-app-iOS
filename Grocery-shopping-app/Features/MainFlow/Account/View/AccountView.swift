@@ -45,22 +45,37 @@ struct AccountView: View {
                 .background(Color.gray.opacity(0.9))
                 .frame(height: 2)
 
-//             MARK: - Options List
             ScrollView {
                 VStack(spacing: 0) {
                     ForEach(viewModel.menuItems) { item in
+                        
                         VStack(spacing: 0) {
-                            AccountRowView(item: item)
-                                .padding(.vertical, 13)
-                                .padding(.horizontal, 16)
+                            
+                            if let destination = item.destination {
+                                
+                                NavigationLink {
+                                    destinationView(for: destination)
+                                } label: {
+                                    AccountRowView(item: item)
+                                        .padding(.vertical, 13)
+                                        .padding(.horizontal, 16)
+                                }
+                                .buttonStyle(.plain)
+                                
+                            } else {
+                                
+                                AccountRowView(item: item)
+                                    .padding(.vertical, 13)
+                                    .padding(.horizontal, 16)
+                            }
 
                             Divider()
-//                                .padding(.leading, 56)
                         }
                         .background(Color.white)
                     }
                 }
             }
+
             
         
             
@@ -82,6 +97,39 @@ struct AccountView: View {
         .navigationTitle("Account")
     }
 }
+
+/// Helper builder func
+@ViewBuilder
+private func destinationView(for destination: AccountDestination) -> some View {
+    
+    switch destination {
+        
+    case .orders:
+        OrdersView()
+        
+    case .myDetails:
+        Text("My Details View")
+        
+    case .deliveryAddress:
+        Text("Delivery Address View")
+        
+    case .paymentMethods:
+        Text("Payment Methods View")
+        
+    case .promoCard:
+        Text("Promo Card View")
+        
+    case .notifications:
+        Text("Notifications View")
+        
+    case .help:
+        Text("Help View")
+        
+    case .about:
+        Text("About View")
+    }
+}
+
 
 #Preview {
     AccountView()

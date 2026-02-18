@@ -33,14 +33,17 @@ final class CartServices: CartServiceProtocol {
         productId: Int
     ) async throws -> AddCartItemResponse {
 
-        let request = AddCartItemRequest(productId: productId)
-
-        return try await client.request(
-            endpoint: CartEndpoints.addItemToCart(
-                cartId: cartId,
-                body: request 
+        print("CARTID: \(cartId)")
+                do {
+            let request = AddCartItemRequest(productId: productId)
+            
+            return try await client.request(
+                endpoint: CartEndpoints.addItemToCart(
+                    cartId: cartId,
+                    body: request
+                )
             )
-        )
+        }
     }
 
     

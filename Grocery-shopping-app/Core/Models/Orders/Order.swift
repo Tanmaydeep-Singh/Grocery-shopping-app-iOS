@@ -7,8 +7,10 @@
 
 import Foundation
 
-struct Order: Identifiable, Codable {
-    let id: String
-    let name: String
-    let price: Double
+
+struct Order: Identifiable {
+    var id: String
+    var createdOn: Date
+    var items: [CartProductDTO]
+    var totalPrice: Double
 }

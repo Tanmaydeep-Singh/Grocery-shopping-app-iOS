@@ -39,8 +39,6 @@ final class AuthViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Validation
-
     func isValidEmail(_ email: String) -> Bool {
         let emailRegex =
         "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
@@ -247,4 +245,18 @@ final class AuthViewModel: ObservableObject {
         self.isError = false
         self.errorMessage = nil
     }
+    
+    func updateLocalUserCartId(newCartId: String) {
+        guard var currentUser = self.user else { return }
+        print("CURRENT USER: \(currentUser)")
+        print("New Cart ID: \(newCartId)")
+
+        currentUser.cartId = newCartId
+        self.user = currentUser
+        print("NEW CURRENT USER: \(currentUser)")
+        print("NEW CURRENT USER: \(self.user!)")
+
+
+    }
+    
 }

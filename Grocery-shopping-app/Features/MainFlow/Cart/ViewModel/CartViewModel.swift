@@ -14,23 +14,31 @@ final class CartViewModel: ObservableObject {
     @Published var cartItems: [CartProduct] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
+    var totalItemsPrice: Double = 0;
 
     private let cartService: CartServiceProtocol
     private let productService: ProductServiceProtocol
     private let cartProductsService : CartProductsService
+    private let orderService: OrderServiceProtocol
+    private let authViewModel: AuthViewModel
     private var cartId: String?
+    
+
 
     init() {
         self.cartService = CartServices()
         self.productService = ProductService()
         self.cartProductsService = CartProductsService()
+        self.orderService = OrderService()
+        self.authViewModel = AuthViewModel()
     }
 
     
     //Get cart item
-    func getCartItem(cartId: String) async {
+    func getCartItem() async {
         isLoading = true
         defer { isLoading = false }
+        
         print(" CALLED TO GET CART DATA")
         do {
             let products = await cartProductsService.getProducts()
@@ -41,7 +49,12 @@ final class CartViewModel: ObservableObject {
 
     
 
-    func removeItem(cartId: String, itemId: Int) async {
+    func removeItem( itemId: Int) async {
+        guard let cartId = authViewModel.user?.cartId else {
+            print("Error: Product ID is missing")
+            return
+        }
+        
         do {
             print("itemId:  \(itemId)")
 
@@ -65,6 +78,7 @@ final class CartViewModel: ObservableObject {
             let quantity = Double(item.quantity)
             price += itemPrice * quantity
         }
+        totalItemsPrice = price
         return price
     }
 
@@ -73,7 +87,11 @@ final class CartViewModel: ObservableObject {
     private var debounceTasks: [Int: Task<Void, Never>] = [:]
     
     // Helper func for decounce
-    func updateLocalQuantity(cartId: String, itemId: Int, quantity: Int) {
+    func updateLocalQuantity( itemId: Int, quantity: Int) {
+        guard let cartId = authViewModel.user?.cartId else {
+            print("Error: Product ID is missing")
+            return
+        }
 
            if let index = cartItems.firstIndex(where: { $0.cartProductId == itemId }) {
                cartItems[index].quantity =  Int64(quantity)
@@ -108,4 +126,45 @@ final class CartViewModel: ObservableObject {
         }
         
     }
+    
+    // Create Order.
+    func createOrder(userId: String) async -> Bool {
+        guard !userId.isEmpty else { return false }
+        
+        let itemsToOrder = cartItems.map { item in
+            CartProductDTO(
+                id: item.id,
+                name: item.name ?? "Unknown",
+                price: item.price,
+                quantity: Int(item.quantity),
+                imageName: item.imageName ?? "",
+                category: item.category ?? "General",
+                cartProductId: item.cartProductId
+            )
+        }
+        
+        do {
+            _ = try await orderService.createOrder(
+                userId: userId,
+                items: itemsToOrder,
+                totalPrice: totalItemsPrice
+            )
+            
+          
+            
+            // Add new CartId to user.
+            let res = try await cartService.createCart()
+            try await orderService.updateUserCartId(userId:userId , cartId: res.cartId )
+            authViewModel.updateLocalUserCartId(newCartId: res.cartId)
+            
+            // Clear coredata
+            cartProductsService.clearCart()
+            
+            return true
+        } catch {
+            print("Order creation failed: \(error)")
+            return false
+        }
+    }
+    
 }

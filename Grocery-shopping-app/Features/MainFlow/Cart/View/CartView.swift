@@ -58,7 +58,6 @@ struct CartView: View {
                                             guard let cartId = authViewModel.user?.cartId else { return }
                                             let id = Int(item.cartProductId)
                                             cartViewModel.updateLocalQuantity(
-                                                        cartId: cartId,
                                                         itemId: Int(id),
                                                         quantity: newQuantity
                                                     )                                      },
@@ -67,7 +66,6 @@ struct CartView: View {
                                             guard let cartId = authViewModel.user?.cartId else { return }
                                             let id = Int(item.cartProductId)
                                                     cartViewModel.updateLocalQuantity(
-                                                        cartId: cartId,
                                                         itemId: Int(id),
                                                         quantity: newQuantity
                                                     )
@@ -79,7 +77,6 @@ struct CartView: View {
 
                                             Task {
                                                 await cartViewModel.removeItem(
-                                                    cartId: cartId,
                                                     itemId: Int(id)
                                                 )
                                             }
@@ -107,7 +104,7 @@ struct CartView: View {
             .background(Color.white)
             .task {
                 guard let cartId else { return }
-                await cartViewModel.getCartItem(cartId: cartId)
+                await cartViewModel.getCartItem()
             }
         }
     }
@@ -141,7 +138,6 @@ struct CartView: View {
                             if success {
                                 showCheckout = false
                                 goToOrderAccepted = true
-                                
                             } else {
                             }
                         }

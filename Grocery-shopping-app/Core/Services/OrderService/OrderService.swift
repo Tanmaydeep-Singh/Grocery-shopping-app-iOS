@@ -12,7 +12,7 @@ import FirebaseFirestore
 
 
 final class OrderService: OrderServiceProtocol {
-    
+        
     private let db = Firestore.firestore()
     
     private func ordersRef(userId: String) -> CollectionReference {
@@ -101,5 +101,14 @@ final class OrderService: OrderServiceProtocol {
                 totalPrice: totalPrice
             )
         }
+    }
+    
+    // upate user cartId
+    func updateUserCartId(userId: String, cartId: String) async throws {
+        let db = Firestore.firestore()
+        try await db.collection("users").document(userId).updateData([
+            "cartId": cartId
+        ])
+
     }
 }

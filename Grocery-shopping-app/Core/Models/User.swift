@@ -13,5 +13,5 @@ struct User : Codable {
     let email: String
     let username: String
     let token: String?
-    let cartId: String?
+    var cartId: String?
 }

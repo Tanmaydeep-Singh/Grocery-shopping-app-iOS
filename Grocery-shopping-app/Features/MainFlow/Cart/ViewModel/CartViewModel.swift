@@ -20,6 +20,7 @@ final class CartViewModel: ObservableObject {
     private let productService: ProductServiceProtocol
     private let cartProductsService : CartProductsService
     private let orderService: OrderServiceProtocol
+    private let authViewModel: AuthViewModel
     private var cartId: String?
 
     init() {
@@ -27,6 +28,7 @@ final class CartViewModel: ObservableObject {
         self.productService = ProductService()
         self.cartProductsService = CartProductsService()
         self.orderService = OrderService()
+        self.authViewModel = AuthViewModel()
     }
 
     
@@ -137,10 +139,13 @@ final class CartViewModel: ObservableObject {
             )
             
             // Clear coredata
+            self.cartItems = []
             cartProductsService.clearCart()
             
             // Add new CartId to user.
-
+            let res = try await cartService.createCart()
+            try await orderService.updateUserCartId(userId:userId , cartId: res.cartId )
+            authViewModel.updateLocalUserCartId(newCartId: res.cartId)
             return true
         } catch {
             print("Order creation failed: \(error)")

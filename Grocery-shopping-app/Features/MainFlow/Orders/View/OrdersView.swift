@@ -24,7 +24,13 @@ struct OrdersView: View {
                 ScrollView {
                     VStack(spacing: 16) {
                         ForEach(viewModel.orders) { order in
-                            OrderRowView(order: order)
+                            NavigationLink {
+                                OrderDetailsView(order: order)                            } label: {
+                                OrderRowView(order: order)
+                                    .padding(.vertical, 13)
+                                    .padding(.horizontal, 16)
+                            }
+                            .buttonStyle(.plain)
                             Divider()
                         }
                     }

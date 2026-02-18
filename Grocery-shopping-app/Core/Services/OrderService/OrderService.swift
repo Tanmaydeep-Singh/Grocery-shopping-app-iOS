@@ -111,4 +111,59 @@ final class OrderService: OrderServiceProtocol {
         ])
 
     }
+    
+    // fetch order by ID
+    func fetchOrderById(
+        userId: String,
+        orderId: String
+    ) async throws -> Order {
+        
+        let db = Firestore.firestore()
+        
+        let document = try await db
+            .collection("users")
+            .document(userId)
+            .collection("orders")
+            .document(orderId)
+            .getDocument()
+        
+        guard let data = document.data() else {
+            throw NSError(
+                domain: "OrderService",
+                code: 404,
+                userInfo: [NSLocalizedDescriptionKey: "Order not found"]
+            )
+        }
+        
+        let timestamp = data["createdOn"] as? FirebaseFirestore.Timestamp
+        let date = timestamp?.dateValue() ?? Date()
+        
+        let itemsData = data["items"] as? [[String: Any]] ?? []
+        let orderItems: [CartProductDTO] = itemsData.compactMap { itemData in
+            return CartProductDTO(
+                id: itemData["id"] as? Int64 ?? 0,
+                name: itemData["name"] as? String ?? "Unknown Item",
+                price: itemData["price"] as? Double ?? 0.0,
+                quantity: itemData["quantity"] as? Int ?? 0,
+                imageName: itemData["imageName"] as? String ?? "",
+                category: itemData["category"] as? String ?? "General",
+                cartProductId: itemData["cartProductId"] as? Int64 ?? 0
+            )
+        }
+        
+        guard let totalPrice = data["totalPrice"] as? Double else {
+            throw NSError(
+                domain: "OrderService",
+                code: 500,
+                userInfo: [NSLocalizedDescriptionKey: "Invalid order data structure"]
+            )
+        }
+        
+        return Order(
+            id: data["id"] as? String ?? orderId,
+            createdOn: date,
+            items: orderItems,
+            totalPrice: totalPrice
+        )
+    }
 }

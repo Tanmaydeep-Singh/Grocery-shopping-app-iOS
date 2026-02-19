@@ -76,9 +76,6 @@ struct AccountView: View {
                 }
             }
 
-            
-        
-            
             PrimaryButton(
                 title: "Log Out",
                 icon: "arrow.backward.square",
@@ -91,8 +88,6 @@ struct AccountView: View {
                 }
             }
             .padding(20)
-
-
         }
         .navigationTitle("Account")
     }

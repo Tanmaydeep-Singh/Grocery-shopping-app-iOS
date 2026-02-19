@@ -12,9 +12,8 @@ struct OfferBannerView: View {
                 Image(viewModel.bannerImages[index])
                     .resizable()
                     .scaledToFill()
-                    .frame(height: 140)
-                    .clipped()
-                    .cornerRadius(16)
+                    .frame(height: 140, alignment: .top)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
                     .padding(.horizontal)
                     .tag(index)
             }

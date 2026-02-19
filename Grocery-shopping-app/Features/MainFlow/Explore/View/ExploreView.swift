@@ -55,8 +55,6 @@ struct ExploreView: View {
                         }
                     }
                 }
-
-
                 Spacer()
             }
             .padding(.horizontal)

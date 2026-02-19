@@ -1,62 +1,81 @@
-//
-//  OrderRowView.swift
-//  Nectar
-//
-//  Created by tanmaydeep on 18/02/26.
-//
-
 import SwiftUI
 
 struct OrderRowView: View {
+    
     let order: Order
     
-    var firstItem: CartProductDTO? {
-        order.items.first
-    }
-    
-    var totalQuantity: Int {
-        order.items.reduce(0) { $0 + $1.quantity }
-    }
-    
-    var formattedDate: String {
+    private var formattedDate: String {
         order.createdOn.formatted(date: .abbreviated, time: .omitted)
     }
     
     var body: some View {
-        HStack(spacing: 16) {
-            if let imageName = firstItem?.imageName {
-                Image(imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 70, height: 70)
-                    .padding(8)
-                    .background(Color.white)
-                    .cornerRadius(12)
+        VStack(alignment: .leading, spacing: 0) {
+                        
+            HStack(alignment: .center) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Order #\(order.id.suffix(6).uppercased())")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.primary)
+                    
+                    Text(formattedDate)
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color(.tertiaryLabel))
+                }
+                
+                Spacer()
+                
+                Text("$\(String(format: "%.2f", order.totalPrice))")
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(.primary)
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 12)
+            
+            Divider()
+                .padding(.horizontal, 16)
+                        
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(order.items.prefix(4)) { item in
+                        Image(item.imageName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 44, height: 44)
+                            .padding(6)
+                            .background(Color(.systemGroupedBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    if order.items.count > 4 {
+                        Text("+\(order.items.count - 4)")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(Color(.secondaryLabel))
+                            .frame(width: 44, height: 44)
+                            .background(Color(.systemGroupedBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
             }
             
-            VStack(alignment: .leading, spacing: 6) {
-                Text(firstItem?.name ?? "Order")
-                    .font(.headline)
-                    .lineLimit(2)
-
-                
-                Text("\(totalQuantity) items")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                
-                Text(formattedDate)
-                    .font(.caption)
-                    .foregroundColor(.gray)
+            Divider()
+                .padding(.horizontal, 16)
+                        
+            HStack(spacing: 10) {
+                OrderActionButton(title: "Rate", style: .standard) { }
+                OrderActionButton(title: "Order Again", style: .destructive) { }
             }
-            
-            Spacer()
-            
-            Text("$\(String(format: "%.2f", order.totalPrice))")
-                .font(.headline)
-                .bold()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color(.separator).opacity(0.5), lineWidth: 1)
+        )
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
     }
 }

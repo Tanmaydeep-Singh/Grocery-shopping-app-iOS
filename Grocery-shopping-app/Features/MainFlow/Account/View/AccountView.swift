@@ -103,7 +103,7 @@ private func destinationView(for destination: AccountDestination) -> some View {
         OrdersView()
         
     case .myDetails:
-        Text("My Details View")
+        MyDetailsView()
         
     case .deliveryAddress:
         Text("Delivery Address View")
@@ -121,7 +121,7 @@ private func destinationView(for destination: AccountDestination) -> some View {
         Text("Help View")
         
     case .about:
-        Text("About View")
+        AboutView()
     }
 }
 

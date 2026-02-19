@@ -1,58 +1,76 @@
-//
-//  OrdersView.swift
-//  Nectar
-//
-//  Created by tanmaydeep on 18/02/26.
-//
 import SwiftUI
 
 struct OrdersView: View {
+    
     @EnvironmentObject private var authViewModel: AuthViewModel
     @StateObject private var viewModel = OrdersViewModel()
-
+    
     var body: some View {
         ZStack {
-            if viewModel.isLoading {
-                ProgressView()
-                    .scaleEffect(1.5)
-            } else if viewModel.orders.isEmpty {
-                VStack(spacing: 12) {
-                    Text("No Orders Yet")
-                        .font(.headline)
-                }
-            } else {
-                ScrollView {
-                    VStack(spacing: 16) {
-                        ForEach(viewModel.orders) { order in
-                            NavigationLink {
-                                OrderDetailsView(order: order)                            } label: {
-                                OrderRowView(order: order)
-                                    .padding(.vertical, 13)
-                                    .padding(.horizontal, 16)
-                            }
-                            .buttonStyle(.plain)
-                            Divider()
-                        }
-                    }
-                    .padding()
-                }
-            }
+            
+            Color(.systemBackground)
+                .ignoresSafeArea()
+            
+            content
         }
-        .navigationTitle("My Orders")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Orders")
+        .navigationBarTitleDisplayMode(.large)
         .toolbar(.hidden, for: .tabBar)
-        .onAppear() {
-            Task{
-                let userId = authViewModel.user?.id ?? ""
-                await viewModel.fetchOrders(userId: userId)
-            }
+        .task {
+            let userId = authViewModel.user?.id ?? ""
+            await viewModel.fetchOrders(userId: userId)
         }
     }
-}
-
-#Preview {
-    NavigationStack {
-        OrdersView()
-            .environmentObject(AuthViewModel())
+    
+    @ViewBuilder
+    private var content: some View {
+        
+        if viewModel.isLoading {
+            
+            VStack(spacing: 12) {
+                ProgressView()
+                Text("Loading your orders...")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.secondary)
+            }
+        }
+        
+        else if viewModel.orders.isEmpty {
+            
+            VStack(spacing: 12) {
+                Image(systemName: "cart")
+                    .font(.system(size: 36))
+                    .foregroundStyle(.secondary)
+                
+                Text("No Orders Yet")
+                    .font(.system(size: 16, weight: .semibold))
+                
+                Text("Your completed orders will appear here.")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.secondary)
+            }
+            .multilineTextAlignment(.center)
+            .padding()
+        }
+        
+        else {
+            
+            ScrollView {
+                LazyVStack(spacing: 14) {
+                    
+                    ForEach(viewModel.orders) { order in
+                        
+                        NavigationLink {
+                            OrderDetailsView(order: order)
+                        } label: {
+                            OrderRowView(order: order)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 18)
+            }
+        }
     }
 }

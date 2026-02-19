@@ -72,7 +72,7 @@ struct FilterView: View {
                 }
                 .padding()
             }
-            .frame(maxWidth: .infinity, maxHeight: 791)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 Color("FilterBackground")
             )

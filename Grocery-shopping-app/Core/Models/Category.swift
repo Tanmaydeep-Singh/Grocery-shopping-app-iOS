@@ -11,17 +11,13 @@ struct Category: Identifiable {
         switch value {
         case ProductCategory.freshProduce.rawValue:   // Vaibhav - try to use from the product category only or add these colors in the product category
             return Color(hex: "#EAF3EC")
-        case "fresh-produce":
-            return Color(hex: "#EAF3EC")
-        case "meat-seafood":
+        case ProductCategory.meatSeafood.rawValue:
             return Color(hex: "#F8E6E6")
-        case "dairy":
+        case ProductCategory.dairy.rawValue:
             return Color(hex: "#F8F3E6")
-        case "cooking-oil":
+        case ProductCategory.candy.rawValue:
             return Color(hex: "#FCEFE6")
-        case "beverages":
-            return Color(hex: "#E6F0F8")
-        case "bread-bakery":
+        case ProductCategory.breadBakery.rawValue:
             return Color(hex: "#F3ECF8")
         default:
             return Color.gray.opacity(0.1)

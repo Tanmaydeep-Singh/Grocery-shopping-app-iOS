@@ -1,62 +1,88 @@
-//
-//  OrderRowView.swift
-//  Nectar
-//
-//  Created by tanmaydeep on 18/02/26.
-//
-
 import SwiftUI
 
 struct OrderRowView: View {
+    
     let order: Order
     
-    var firstItem: CartProductDTO? {
-        order.items.first
-    }
-    
-    var totalQuantity: Int {
-        order.items.reduce(0) { $0 + $1.quantity }
-    }
-    
-    var formattedDate: String {
+    private var formattedDate: String {
         order.createdOn.formatted(date: .abbreviated, time: .omitted)
     }
     
     var body: some View {
-        HStack(spacing: 16) {
-            if let imageName = firstItem?.imageName {
-                Image(imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 70, height: 70)
-                    .padding(8)
-                    .background(Color.white)
-                    .cornerRadius(12)
+        
+        VStack(alignment: .leading, spacing: 14) {
+            
+            // MARK: - Header
+            
+            HStack {
+                Text("Order #\(order.id.suffix(6))")
+                    .font(.system(size: 15, weight: .semibold))
+                
+                Spacer()
+                
+                Text("$\(String(format: "%.2f", order.totalPrice))")
+                    .font(.system(size: 16, weight: .semibold))
             }
             
-            VStack(alignment: .leading, spacing: 6) {
-                Text(firstItem?.name ?? "Order")
-                    .font(.headline)
-                    .lineLimit(2)
-
-                
-                Text("\(totalQuantity) items")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                
-                Text(formattedDate)
-                    .font(.caption)
-                    .foregroundColor(.gray)
+            Text(formattedDate)
+                .font(.system(size: 13))
+                .foregroundStyle(.secondary)
+            
+            Divider()
+            
+            
+            // MARK: - Horizontal Item Images (Zepto Style)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    
+                    ForEach(order.items.prefix(4)) { item in
+                        Image(item.imageName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 42, height: 42)
+                            .padding(6)
+                            .background(Color(.tertiarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                    
+                    if order.items.count > 4 {
+                        Text("+\(order.items.count - 4)")
+                            .font(.system(size: 12, weight: .semibold))
+                            .frame(width: 42, height: 42)
+                            .background(Color(.tertiarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                }
             }
             
-            Spacer()
+            Divider()
             
-            Text("$\(String(format: "%.2f", order.totalPrice))")
-                .font(.headline)
-                .bold()
+            
+            // MARK: - Actions
+            
+            HStack(spacing: 10) {
+                
+                Button("Rate") { }
+                    .font(.system(size: 14, weight: .medium))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color(.tertiarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                
+                Button("Order Again") { }
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.red)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color(.tertiarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
+        .padding(14)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.secondarySystemBackground))
+        )
     }
 }

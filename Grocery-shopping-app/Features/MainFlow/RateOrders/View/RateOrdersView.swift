@@ -128,8 +128,7 @@ struct RateOrdersView: View {
         .task {
             if rating == 0 {
                 rating = order.rating ?? 0
-                print(rating)
-                print(order.rating)
+
             }
            
         }

@@ -85,7 +85,11 @@ struct OrderDetailsView: View {
                 .cardStyle()
                                 
                 VStack(spacing: 10) {
-                    OrderActionButton(title: "Rate Order", style: .standard) { }
+                    NavigationLink {
+                         RateOrdersView(order: order)
+                    } label: {
+                        OrderActionButton(title: "Rate Order", style: .standard) { }
+                    }
                     OrderActionButton(title: "Order Again", style: .destructive) { }
                 }
                 .padding(16)

@@ -13,11 +13,12 @@ struct AccountView: View {
             
             HStack(spacing: 14) {
 
-                Image(systemName: "person.crop.circle.fill")
+                Image("person.crop.circle.fill")
                     .resizable()
                     .foregroundColor(.green)
                     .frame(width: 64, height: 64)
                     .clipShape(Circle())
+             
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {

@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct OrderRowView: View {
+    @State private var goToCart: Bool = false
+    private let cartService = CartProductsService.shared
     
     let order: Order
     
@@ -65,7 +67,10 @@ struct OrderRowView: View {
                         
             HStack(spacing: 10) {
                 OrderActionButton(title: "Rate", style: .standard) { }
-                OrderActionButton(title: "Order Again", style: .destructive) { }
+                OrderActionButton(title: "Order Again", style: .destructive) {
+                    cartService.reorder(order: order)
+                    goToCart = true
+                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -77,5 +82,8 @@ struct OrderRowView: View {
                 .stroke(Color(.separator).opacity(0.5), lineWidth: 1)
         )
         .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
+        .navigationDestination(isPresented: $goToCart) {
+            CartView()
+        }
     }
 }

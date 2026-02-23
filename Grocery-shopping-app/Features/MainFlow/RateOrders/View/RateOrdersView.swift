@@ -11,6 +11,7 @@ struct RateOrdersView: View {
     let order: Order
     
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var authViewModel: AuthViewModel
     @State private var rating: Int = 0
     @State private var showSuccessAlert = false
     
@@ -115,30 +116,38 @@ struct RateOrdersView: View {
                 LinearGradient(colors: [Color(.systemGroupedBackground).opacity(0), Color(.systemGroupedBackground)], startPoint: .top, endPoint: .bottom)
                     .frame(height: 120)
             )
-            
-            if showSuccessAlert {
-                OrderRatedAlert {
-                    showSuccessAlert = false
-                        dismiss()
-                }
-                .zIndex(1)
-            }
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Rate Order")
         .navigationBarTitleDisplayMode(.inline)
+        .alert("Review Submitted!", isPresented: $showSuccessAlert) {
+            Button("OK") { dismiss() }
+        } message: {
+            Text("Thanks for sharing your experience. It helps us improve Nectar for you.")
+        }
         .task {
-            if rating == 0 {
-                rating = order.rating ?? 0
-
+            guard let userId = authViewModel.user?.id else {
+                print("No user ID found")
+                return
             }
-           
+            
+            if let fetched = await rateOrderViewModel.fetchRating(userId: userId, orderId: order.id) {
+                await MainActor.run {
+                    print("fetch rating successful: \(fetched)")
+                    self.rating = fetched
+                }
+            }
         }
     }
     
     private func submitReview() {
         Task {
-            _ = await rateOrderViewModel.updateOrderRating(orderId: order.id, rating: rating)
+            guard let userId = authViewModel.user?.id else {
+                print("No user ID found")
+                return
+            }
+            
+            _ = await rateOrderViewModel.updateOrderRating(userId: userId, orderId: order.id, rating: rating)
             await MainActor.run {
                 showSuccessAlert = true
             }

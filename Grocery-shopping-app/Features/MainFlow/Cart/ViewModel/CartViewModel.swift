@@ -91,6 +91,7 @@ final class CartViewModel: ObservableObject {
 
            if let index = cartItems.firstIndex(where: { $0.cartProductId == itemId }) {
                cartItems[index].quantity =  Int64(quantity)
+               cartItems = cartItems
            }
 
            debounceTasks[itemId]?.cancel()

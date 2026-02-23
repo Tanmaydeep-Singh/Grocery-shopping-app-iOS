@@ -23,8 +23,6 @@ final class CartViewModel: ObservableObject {
     private let authViewModel: AuthViewModel
     private var cartId: String?
     
-
-
     init() {
         self.cartService = CartServices()
         self.productService = ProductService()
@@ -33,7 +31,6 @@ final class CartViewModel: ObservableObject {
         self.authViewModel = AuthViewModel()
     }
 
-    
     //Get cart item
     func getCartItem() async {
         isLoading = true
@@ -68,7 +65,6 @@ final class CartViewModel: ObservableObject {
             print("Failed to remove item:", error)
         }
     }
-
 
     var totalPrice: Double {
         var price: Double = 0
@@ -150,8 +146,6 @@ final class CartViewModel: ObservableObject {
                 totalPrice: totalItemsPrice
             )
             
-          
-            
             // Add new CartId to user.
             let res = try await cartService.createCart()
             try await orderService.updateUserCartId(userId:userId , cartId: res.cartId )
@@ -166,5 +160,7 @@ final class CartViewModel: ObservableObject {
             return false
         }
     }
+    
+
     
 }

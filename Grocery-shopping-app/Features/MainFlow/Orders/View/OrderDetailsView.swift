@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct OrderDetailsView: View {
-    
+//    @Environment(\.dismiss) private var dismiss
+    private let cartService = CartProductsService.shared
+    @State private var goToCart = false;
     let order: Order
     
     var body: some View {
@@ -86,7 +88,10 @@ struct OrderDetailsView: View {
                                 
                 VStack(spacing: 10) {
                     OrderActionButton(title: "Rate Order", style: .standard) { }
-                    OrderActionButton(title: "Order Again", style: .destructive) { }
+                    OrderActionButton(title: "Order Again", style: .destructive) {
+                        cartService.reorder(order: order)
+                        goToCart = true
+                    }
                 }
                 .padding(16)
                 .cardStyle()
@@ -97,6 +102,9 @@ struct OrderDetailsView: View {
         .background(Color(.systemBackground))
         .navigationTitle("Order Details")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(isPresented: $goToCart){
+            CartView()
+        }
     }
 }
 

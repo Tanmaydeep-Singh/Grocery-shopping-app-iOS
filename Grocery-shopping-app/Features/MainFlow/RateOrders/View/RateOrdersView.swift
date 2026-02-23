@@ -116,15 +116,28 @@ struct RateOrdersView: View {
                 LinearGradient(colors: [Color(.systemGroupedBackground).opacity(0), Color(.systemGroupedBackground)], startPoint: .top, endPoint: .bottom)
                     .frame(height: 120)
             )
+            
+            if showSuccessAlert {
+                OrderRatedAlert {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                        showSuccessAlert = false
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                        dismiss()
+                    }
+                }
+                .transition(.asymmetric(
+                    insertion: .scale(scale: 0.8).combined(with: .opacity),
+                    removal: .scale(scale: 0.6).combined(with: .opacity)
+                ))
+                .zIndex(1)
+            }
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Rate Order")
         .navigationBarTitleDisplayMode(.inline)
-        .alert("Review Submitted!", isPresented: $showSuccessAlert) {
-            Button("OK") { dismiss() }
-        } message: {
-            Text("Thanks for sharing your experience. It helps us improve Nectar for you.")
-        }
+       
         .task {
             guard let userId = authViewModel.user?.id else {
                 print("No user ID found")

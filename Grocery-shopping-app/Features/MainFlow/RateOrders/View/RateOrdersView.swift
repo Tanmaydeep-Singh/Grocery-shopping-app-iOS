@@ -14,6 +14,8 @@ struct RateOrdersView: View {
     @State private var rating: Int = 0
     @State private var showSuccessAlert = false
     
+    @StateObject private var rateOrderViewModel = RateOrdersViewModel()
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             ScrollView {
@@ -30,9 +32,9 @@ struct RateOrdersView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 32, height: 32)
-                                    .foregroundColor(index <= rating ? .yellow : .gray.opacity(0.5))
+                                    .foregroundColor(index <= rating ? .yellow : .gray.opacity(0.3))
                                     .onTapGesture {
-                                        withAnimation(.spring()) {
+                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                                             rating = index
                                         }
                                     }
@@ -67,6 +69,7 @@ struct RateOrdersView: View {
                         
                         ForEach(Array(order.items.enumerated()), id: \.element.id) { index, item in
                             if index > 0 { Divider().padding(.horizontal, 16) }
+                            
                             HStack(spacing: 12) {
                                 Image(item.imageName)
                                     .resizable()
@@ -92,7 +95,6 @@ struct RateOrdersView: View {
                         }
                     }
                     .cardStyle()
-                    
 
                     Color.clear.frame(height: 100)
                 }
@@ -101,34 +103,45 @@ struct RateOrdersView: View {
             }
             
             VStack {
-                Spacer()
                 PrimaryButton(title: "Submit Review") {
                     submitReview()
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 10)
+                .disabled(rating == 0)
+                .opacity(rating == 0 ? 0.6 : 1.0)
             }
-            .disabled(rating == 0)
+            .background(
+                LinearGradient(colors: [Color(.systemGroupedBackground).opacity(0), Color(.systemGroupedBackground)], startPoint: .top, endPoint: .bottom)
+                    .frame(height: 120)
+            )
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Rate Order")
         .navigationBarTitleDisplayMode(.inline)
-        .alert( Text("Review Submitted!")
-            .font(.system(size: 20, weight: .bold)), isPresented: $showSuccessAlert) {
+        // Alert Fix: Text in Alert Title shouldn't have modifiers like .font
+        .alert("Review Submitted!", isPresented: $showSuccessAlert) {
             Button("OK") { dismiss() }
         } message: {
+            Text("Thanks for sharing your experience. It helps us improve Nectar for you.")
+        }
+        .task {
+            if rating == 0 {
+                rating = order.rating ?? 0
+                print(rating)
+                print(order.rating)
+            }
            
-                                    
-                                    Text("Thanks for sharing your experience. It helps us improve Nectar for you.")
-                                        .font(.system(size: 14))
-                                        .foregroundColor(.secondary)
-                                        .multilineTextAlignment(.center)
-                                        .padding(.horizontal, 20)
         }
     }
     
     private func submitReview() {
-        showSuccessAlert = true
+        Task {
+            _ = await rateOrderViewModel.updateOrderRating(orderId: order.id, rating: rating)
+            await MainActor.run {
+                showSuccessAlert = true
+            }
+        }
     }
 }
 
@@ -139,7 +152,7 @@ private extension View {
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color(.separator), lineWidth: 1)
+                    .stroke(Color(.separator), lineWidth: 0.5)
             )
     }
 }

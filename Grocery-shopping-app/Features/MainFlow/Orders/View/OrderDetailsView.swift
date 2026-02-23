@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct OrderDetailsView: View {
-    
+    private let cartService = CartProductsService.shared
+    @State private var showCartSheet = false;
     let order: Order
     
     var body: some View {
@@ -90,7 +91,10 @@ struct OrderDetailsView: View {
                     } label: {
                         OrderActionButton(title: "Rate Order", style: .standard) { }
                     }
-                    OrderActionButton(title: "Order Again", style: .destructive) { }
+                    OrderActionButton(title: "Order Again", style: .destructive) {
+                        cartService.reorder(order: order)
+                        showCartSheet = true
+                    }
                 }
                 .padding(16)
                 .cardStyle()
@@ -101,6 +105,11 @@ struct OrderDetailsView: View {
         .background(Color(.systemBackground))
         .navigationTitle("Order Details")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showCartSheet) {
+                    CartView()
+                }
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
     }
 }
 

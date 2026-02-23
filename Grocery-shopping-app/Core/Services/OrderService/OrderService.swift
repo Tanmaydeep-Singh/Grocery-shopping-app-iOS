@@ -53,7 +53,8 @@ final class OrderService: OrderServiceProtocol {
             "id": docRef.documentID,
             "createdOn": Timestamp(date: Date()),
             "items": itemsMap,
-            "totalPrice": totalPrice
+            "totalPrice": totalPrice,
+            "rating" : 0
         ]
         
         try await docRef.setData(data)
@@ -93,12 +94,15 @@ final class OrderService: OrderServiceProtocol {
                 let id = data["id"] as? String,
                 let totalPrice = data["totalPrice"] as? Double
             else { return nil }
+                let rating = data["rating"] as? Int
             
             return Order(
                 id: id,
                 createdOn: date,
                 items: orderItems,
-                totalPrice: totalPrice
+                totalPrice: totalPrice,
+                rating : rating
+
             )
         }
     }
@@ -109,7 +113,6 @@ final class OrderService: OrderServiceProtocol {
         try await db.collection("users").document(userId).updateData([
             "cartId": cartId
         ])
-
     }
     
     // fetch order by ID
@@ -159,11 +162,23 @@ final class OrderService: OrderServiceProtocol {
             )
         }
         
+        let rating = data["rating"] as? Int ?? 0
+        
         return Order(
             id: data["id"] as? String ?? orderId,
             createdOn: date,
             items: orderItems,
-            totalPrice: totalPrice
+            totalPrice: totalPrice,
+            rating: rating
         )
     }
+    
+    // upate order rating
+    func updateOrderRating(userId: String, orderId: String, rating: Int) async throws {
+
+        try await ordersRef(userId: userId).document(orderId).updateData([
+            "rating": rating
+        ])
+    }
+    
 }

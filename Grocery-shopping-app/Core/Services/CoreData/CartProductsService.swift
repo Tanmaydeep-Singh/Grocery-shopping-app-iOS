@@ -172,6 +172,7 @@ func getProductsCount() async -> Int {
             print("error removing item:", error.localizedDescription)
         }
     }
+    
     // Inside CartProductsService.swift
     func syncCart(products: [Product]) {
         clearCart()
@@ -202,6 +203,18 @@ func getProductsCount() async -> Int {
            }
        }
     
-    
-
+    func reorder(order: Order) {
+        clearCart()
+        for item in order.items {
+            let cartProduct = CartProduct(context: context)
+            
+            cartProduct.id = Int64(item.id)
+            cartProduct.name = item.name
+            cartProduct.price = item.price
+            cartProduct.inStock = item.quantity == 0 ? false : true
+            cartProduct.imageName = item.imageName
+            cartProduct.cartProductId = Int64(Int.random(in: 1000...999999))
+            cartProduct.quantity = Int64(item.quantity)
+        }
+    }
 }

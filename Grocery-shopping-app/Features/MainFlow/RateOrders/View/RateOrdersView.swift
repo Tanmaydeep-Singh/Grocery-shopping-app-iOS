@@ -115,16 +115,18 @@ struct RateOrdersView: View {
                 LinearGradient(colors: [Color(.systemGroupedBackground).opacity(0), Color(.systemGroupedBackground)], startPoint: .top, endPoint: .bottom)
                     .frame(height: 120)
             )
+            
+            if showSuccessAlert {
+                OrderRatedAlert {
+                    showSuccessAlert = false
+                        dismiss()
+                }
+                .zIndex(1)
+            }
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Rate Order")
         .navigationBarTitleDisplayMode(.inline)
-        // Alert Fix: Text in Alert Title shouldn't have modifiers like .font
-        .alert("Review Submitted!", isPresented: $showSuccessAlert) {
-            Button("OK") { dismiss() }
-        } message: {
-            Text("Thanks for sharing your experience. It helps us improve Nectar for you.")
-        }
         .task {
             if rating == 0 {
                 rating = order.rating ?? 0

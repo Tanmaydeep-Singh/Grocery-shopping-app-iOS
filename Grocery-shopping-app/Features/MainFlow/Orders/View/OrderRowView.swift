@@ -64,7 +64,13 @@ struct OrderRowView: View {
                 .padding(.horizontal, 16)
                         
             HStack(spacing: 10) {
-                OrderActionButton(title: "Rate", style: .standard) { }
+                
+                NavigationLink {
+                     RateOrdersView(order: order)
+                } label: {
+                    OrderActionButton(title: "Rate", style: .standard) { }
+                }
+                
                 OrderActionButton(title: "Order Again", style: .destructive) { }
             }
             .padding(.horizontal, 16)

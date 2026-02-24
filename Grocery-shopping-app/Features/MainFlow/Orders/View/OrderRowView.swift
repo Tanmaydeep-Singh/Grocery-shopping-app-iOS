@@ -68,15 +68,18 @@ struct OrderRowView: View {
             HStack(spacing: 10) {
                 
                 NavigationLink {
-                     RateOrdersView(order: order)
+                    RateOrdersView(order: order)
                 } label: {
-                    OrderActionButton(title: "Rate", style: .standard) { }
+                    OrderActionButton(title: "Rate", style: .standard)
                 }
                 
-                OrderActionButton(title: "Order Again", style: .destructive) {
+                Button {
                     cartService.reorder(order: order)
                     showCartSheet = true
+                } label: {
+                    OrderActionButton(title: "Order Again", style: .destructive)
                 }
+                .buttonStyle(.plain)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -90,8 +93,10 @@ struct OrderRowView: View {
         .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
         .sheet(isPresented: $showCartSheet) {
                     CartView()
+
+                .presentationDetents([.fraction(0.8), .large])
+                .presentationDragIndicator(.visible)
                 }
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
+       
     }
 }

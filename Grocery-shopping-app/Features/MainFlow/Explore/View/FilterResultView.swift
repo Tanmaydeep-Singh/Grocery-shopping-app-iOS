@@ -16,26 +16,47 @@ struct FilterResultView: View {
 
     var body: some View {
         ScrollView {
+
             if isLoading {
+
                 ProgressView()
                     .padding(.top, 40)
-            }
-            LazyVGrid(columns: gridLayout.columns,spacing: 16) {
-                ForEach(
-                    products
-                        /*.filter { $0.category.rawValue == category.title }*/,
-                    id: \.id
-                ) { product in
-                    NavigationLink {
-                        ProductDetailView(productId: product.id)
-                    } label: {
-                        ProductCard(product: product)
-                            .frame(width: 180)
-                    }
-                    .buttonStyle(.plain)
+
+            } else if products.isEmpty {
+
+                VStack(spacing: 12) {
+
+                    Image(systemName: "cart.badge.questionmark")
+                        .font(.system(size: 48))
+                        .foregroundColor(.gray.opacity(0.6))
+
+                    Text("No products found")
+                        .font(.headline)
+                        .foregroundColor(.gray)
+
+                    Text("Try changing filters or category")
+                        .font(.subheadline)
+                        .foregroundColor(.gray.opacity(0.7))
                 }
+                .frame(maxWidth: .infinity)
+                .padding(.top, 60)
+
+            } else {
+
+                LazyVGrid(columns: gridLayout.columns, spacing: 16) {
+
+                    ForEach(products, id: \.id) { product in
+                        NavigationLink {
+                            ProductDetailView(productId: product.id)
+                        } label: {
+                            ProductCard(product: product)
+                                .frame(width: 180)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding()
             }
-            .padding()
         }
         .toolbar {
             ToolbarItem(placement: .principal) {

@@ -9,7 +9,11 @@ import SwiftUI
 
 struct DiscountOptionsView: View {
     var body: some View {
-        Text("DiscountOptionsView")
+        VStack{
+            Text("DiscountOptionsView")
+            Text("Coming soon")
+        }
+        
     }
 }
 

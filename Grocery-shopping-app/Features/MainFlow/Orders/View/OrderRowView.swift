@@ -91,12 +91,11 @@ struct OrderRowView: View {
                 .stroke(Color(.separator).opacity(0.5), lineWidth: 1)
         )
         .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
-        .sheet(isPresented: $showCartSheet) {
-                    CartView()
-
+        .sheet(isPresented: $showCartSheet, onDismiss: {cartService.clearCart()}) {
+            CartView()
                 .presentationDetents([.fraction(0.8), .large])
                 .presentationDragIndicator(.visible)
-                }
+        }
        
     }
 }

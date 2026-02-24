@@ -108,7 +108,7 @@ struct OrderDetailsView: View {
         .background(Color(.systemBackground))
         .navigationTitle("Order Details")
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showCartSheet) {
+        .sheet(isPresented: $showCartSheet, onDismiss: {cartService.clearCart()}) {
                     CartView()
                 .presentationDetents([.fraction(0.8), .large])
                 .presentationDragIndicator(.visible)

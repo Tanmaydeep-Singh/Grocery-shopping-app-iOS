@@ -2,6 +2,7 @@ import SwiftUI
 
 struct OrderRowView: View {
     @State private var showCartSheet: Bool = false
+    @State private var didPlaceOrder = false
     private let cartService = CartProductsService.shared
     
     let order: Order
@@ -74,6 +75,7 @@ struct OrderRowView: View {
                 }
                 
                 Button {
+                    cartService.backupCart()
                     cartService.reorder(order: order)
                     showCartSheet = true
                 } label: {
@@ -91,12 +93,24 @@ struct OrderRowView: View {
                 .stroke(Color(.separator).opacity(0.5), lineWidth: 1)
         )
         .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
-        .sheet(isPresented: $showCartSheet) {
-                    CartView()
+        .sheet(
+            isPresented: $showCartSheet,
+            onDismiss: {
+                if didPlaceOrder {
+                    cartService.clearBackup()
+                } else {
+                    cartService.restoreCartFromBackup()
+                }
 
+            didPlaceOrder = false
+        }) {
+            CartView(
+                onOrderPlaced: {
+                    didPlaceOrder = true
+                })
                 .presentationDetents([.fraction(0.8), .large])
                 .presentationDragIndicator(.visible)
-                }
+        }
        
     }
 }

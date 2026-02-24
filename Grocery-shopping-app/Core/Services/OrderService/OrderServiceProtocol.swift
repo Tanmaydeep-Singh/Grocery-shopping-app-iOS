@@ -32,5 +32,13 @@ protocol OrderServiceProtocol {
         userId: String,
         orderId: String
     ) async throws -> Order
+    
+    // update order rating
+    func updateOrderRating(
+        userId: String,
+        orderId: String,
+        rating: Int
+    ) async throws
+    
 }
 

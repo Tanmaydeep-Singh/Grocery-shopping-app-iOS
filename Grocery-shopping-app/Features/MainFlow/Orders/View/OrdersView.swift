@@ -63,7 +63,15 @@ struct OrdersView: View {
                                     NavigationLink {
                                         OrderDetailsView(order: order)
                                     } label: {
-                                        OrderRowView(order: order)
+                                        OrderRowView(
+                                            order: order,
+                                            onOrderPlaced: {
+                                                Task {
+                                                    guard let userId = authViewModel.user?.id else { return }
+                                                    await viewModel.fetchOrders(userId: userId)
+                                                }
+                                            }
+                                        )
                                     }
                                     .buttonStyle(.plain)
                                 }

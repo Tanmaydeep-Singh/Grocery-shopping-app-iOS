@@ -1,11 +1,14 @@
 import SwiftUI
 
 struct OrderRowView: View {
+    
     @State private var showCartSheet: Bool = false
     @State private var didPlaceOrder = false
     private let cartService = CartProductsService.shared
     
     let order: Order
+    let onOrderPlaced: (() -> Void)?
+
     
     private var formattedDate: String {
         order.createdOn.formatted(date: .abbreviated, time: .omitted)
@@ -98,6 +101,7 @@ struct OrderRowView: View {
             onDismiss: {
                 if didPlaceOrder {
                     cartService.clearBackup()
+                    onOrderPlaced?() 
                 } else {
                     cartService.restoreCartFromBackup()
                 }

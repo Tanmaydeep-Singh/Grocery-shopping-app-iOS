@@ -87,14 +87,17 @@ struct OrderDetailsView: View {
                                 
                 VStack(spacing: 10) {
                     NavigationLink {
-                         RateOrdersView(order: order)
+                        RateOrdersView(order: order)
                     } label: {
-                        OrderActionButton(title: "Rate Order", style: .standard) { }
+                        OrderActionButton(title: "Rate", style: .standard)
                     }
-                    OrderActionButton(title: "Order Again", style: .destructive) {
+                    Button {
                         cartService.reorder(order: order)
                         showCartSheet = true
+                    } label: {
+                        OrderActionButton(title: "Order Again", style: .destructive)
                     }
+                    .buttonStyle(.plain)
                 }
                 .padding(16)
                 .cardStyle()
@@ -107,9 +110,10 @@ struct OrderDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showCartSheet) {
                     CartView()
+                .presentationDetents([.fraction(0.8), .large])
+                .presentationDragIndicator(.visible)
                 }
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
+
     }
 }
 

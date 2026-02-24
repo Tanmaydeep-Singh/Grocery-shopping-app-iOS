@@ -40,5 +40,10 @@ protocol OrderServiceProtocol {
         rating: Int
     ) async throws
     
+    //get order rating
+    func getOrderRating(
+        userId: String,
+        orderId: String
+    ) async throws -> Int?
 }
 

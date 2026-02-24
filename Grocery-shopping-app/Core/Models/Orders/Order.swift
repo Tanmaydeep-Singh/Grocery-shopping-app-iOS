@@ -13,4 +13,5 @@ struct Order: Identifiable {
     var createdOn: Date
     var items: [CartProductDTO]
     var totalPrice: Double
+    var rating: Int?
 }

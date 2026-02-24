@@ -15,15 +15,31 @@ struct MyDetailsView: View {
     @State private var username: String = ""
     @State private var email: String = ""
 
+    @State private var showAvatarOptions = false
+    @State private var showAvatarSheet = false
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
 
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .frame(width: 90, height: 90)
-                    .foregroundColor(.green)
-                    .padding(.top, 20)
+                Button {
+                    showAvatarOptions = true
+                } label: {
+                    if let avatar = authViewModel.user?.avatar, !avatar.isEmpty {
+                        Image(avatar)
+                            .resizable()
+                            .frame(width: 90, height: 90)
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(Color.green, lineWidth: 2))
+                            .padding(.top, 20)
+                    } else {
+                        Image(systemName: "person.crop.circle.fill")
+                            .resizable()
+                            .frame(width: 90, height: 90)
+                            .clipShape(Circle())
+                            .padding(.top, 20)
+                    }
+                }
 
                 VStack(spacing: 16) {
 
@@ -53,6 +69,29 @@ struct MyDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             loadUserData()
+        }
+        .confirmationDialog(
+            "Profile Photo",
+            isPresented: $showAvatarOptions,
+            titleVisibility: .visible
+        ) {
+            Button("Select Avatar") {
+                showAvatarSheet = true
+            }
+            
+            if authViewModel.user?.avatar != nil {
+                Button("Remove Avatar", role: .destructive) {
+                    Task {
+                        await authViewModel.updateAvatar(avatarName: nil)
+                    }
+                }
+            }
+            
+            Button("Cancel", role: .cancel) {}
+        }
+        .sheet(isPresented: $showAvatarSheet) {
+            AvatarPickerSheet()
+                .environmentObject(authViewModel)
         }
     }
 

@@ -181,4 +181,26 @@ final class OrderService: OrderServiceProtocol {
         ])
     }
     
+    // get order rating
+    func getOrderRating(userId: String, orderId: String) async throws -> Int? {
+        
+        print("called service: \(userId), \(orderId)")
+
+           let document = try await ordersRef(userId: userId)
+               .document(orderId)
+               .getDocument()
+           
+           guard let data = document.data(),
+                 let rawRating = data["rating"] else {
+               return nil
+           }
+           
+           if let rating = rawRating as? Int {
+               print("oder ratinf: \(rating)")
+               return rating
+           }
+           return nil
+       }
+       
+    
 }

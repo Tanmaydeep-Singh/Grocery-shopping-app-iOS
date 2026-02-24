@@ -107,19 +107,39 @@ private func destinationView(for destination: AccountDestination) -> some View {
         MyDetailsView()
         
     case .deliveryAddress:
-        Text("Delivery Address View")
+        VStack {
+            Text("Delivery Address View")
+            Text("Coming soon...")
+        }
+        
         
     case .paymentMethods:
-        Text("Payment Methods View")
+        VStack{
+            Text("Payment Methods View")
+            Text("Coming soon...")
+        }
+        
         
     case .promoCard:
-        Text("Promo Card View")
+        VStack{
+            Text("Promo Card View")
+            Text("Coming soon...")
+        }
+       
         
     case .notifications:
-        Text("Notifications View")
+        VStack{
+            Text("Notifications View")
+            Text("Coming soon...")
+        }
+        
         
     case .help:
-        Text("Help View")
+        VStack{
+            Text("Help View")
+            Text("Coming soon...")
+        }
+        
         
     case .about:
         AboutView()

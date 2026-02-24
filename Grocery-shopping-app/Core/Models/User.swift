@@ -14,4 +14,5 @@ struct User : Codable {
     let username: String
     let token: String?
     var cartId: String?
+    var avatar: String?
 }

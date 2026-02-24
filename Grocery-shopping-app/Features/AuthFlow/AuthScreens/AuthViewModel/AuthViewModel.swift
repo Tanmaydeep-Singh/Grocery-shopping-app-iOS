@@ -259,4 +259,29 @@ final class AuthViewModel: ObservableObject {
 
     }
     
+    func updateAvatar(avatarName: String?) async {
+        guard let uid = user?.id else { return }
+
+        do {
+            if let avatarName = avatarName {
+                try await firestore
+                    .collection("users")
+                    .document(uid)
+                    .updateData(["avatar": avatarName])
+
+                self.user?.avatar = avatarName
+
+            } else {
+                try await firestore
+                    .collection("users")
+                    .document(uid)
+                    .updateData(["avatar": FieldValue.delete()])
+
+                self.user?.avatar = nil
+            }
+
+        } catch {
+            handleAuthError(error)
+        }
+    }
 }

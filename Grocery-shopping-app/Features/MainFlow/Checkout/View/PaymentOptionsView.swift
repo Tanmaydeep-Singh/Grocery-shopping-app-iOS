@@ -9,7 +9,11 @@ import SwiftUI
 
 struct PaymentOptionsView: View {
     var body: some View {
-        Text("PaymentOptionsView")
+        VStack{
+            Text("PaymentOptionsView")
+            Text("Coming soon")
+        }
+        
     }
 }
 

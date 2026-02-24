@@ -10,8 +10,8 @@ final class OrdersViewModel: ObservableObject {
     
     private let ordersService: OrderServiceProtocol
     
-    init(service: OrderServiceProtocol = OrderService()) {
-        self.ordersService = service
+    init() {
+        self.ordersService = OrderService()
     }
     
     func fetchOrders(userId: String) async {

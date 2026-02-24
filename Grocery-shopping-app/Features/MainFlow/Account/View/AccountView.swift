@@ -7,18 +7,27 @@ struct AccountView: View {
     @EnvironmentObject private var authViewModel: AuthViewModel
     @EnvironmentObject var router: AppRouter
 
-    
+ 
     var body: some View {
         VStack(spacing: 0) {
             
             HStack(spacing: 14) {
-
-                Image(systemName: "person.crop.circle.fill")
-                                    .resizable()
-                                    .foregroundColor(.green)
-                                    .frame(width: 64, height: 64)
-                                    .clipShape(Circle())
-             
+                if let avatar = authViewModel.user?.avatar, !avatar.isEmpty {
+                    Image(avatar)
+                        .resizable()
+                        .frame(width: 64, height: 64)
+                        .padding(05)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.green, lineWidth: 2))
+                        .padding(.top, 20)
+                } else {
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.green)
+                        .frame(width: 64, height: 64)
+                        .clipShape(Circle())
+                }
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
@@ -107,19 +116,39 @@ private func destinationView(for destination: AccountDestination) -> some View {
         MyDetailsView()
         
     case .deliveryAddress:
-        Text("Delivery Address View")
+        VStack {
+            Text("Delivery Address View")
+            Text("Coming soon...")
+        }
+        
         
     case .paymentMethods:
-        Text("Payment Methods View")
+        VStack{
+            Text("Payment Methods View")
+            Text("Coming soon...")
+        }
+        
         
     case .promoCard:
-        Text("Promo Card View")
+        VStack{
+            Text("Promo Card View")
+            Text("Coming soon...")
+        }
+       
         
     case .notifications:
-        Text("Notifications View")
+        VStack{
+            Text("Notifications View")
+            Text("Coming soon...")
+        }
+        
         
     case .help:
-        Text("Help View")
+        VStack{
+            Text("Help View")
+            Text("Coming soon...")
+        }
+        
         
     case .about:
         AboutView()

@@ -12,3 +12,13 @@ struct CartItem: Codable, Identifiable {
     let productId: Int
     let quantity: Int
 }
+
+struct CartBackupItem {
+    let id: Int64
+    let name: String?
+    let price: Double
+    let inStock: Bool
+    let imageName: String?
+    let cartProductId: Int64
+    let quantity: Int64
+}

@@ -7,18 +7,27 @@ struct AccountView: View {
     @EnvironmentObject private var authViewModel: AuthViewModel
     @EnvironmentObject var router: AppRouter
 
-    
+ 
     var body: some View {
         VStack(spacing: 0) {
             
             HStack(spacing: 14) {
-
-                Image(systemName: "person.crop.circle.fill")
-                                    .resizable()
-                                    .foregroundColor(.green)
-                                    .frame(width: 64, height: 64)
-                                    .clipShape(Circle())
-             
+                if let avatar = authViewModel.user?.avatar, !avatar.isEmpty {
+                    Image(avatar)
+                        .resizable()
+                        .frame(width: 64, height: 64)
+                        .padding(05)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.green, lineWidth: 2))
+                        .padding(.top, 20)
+                } else {
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.green)
+                        .frame(width: 64, height: 64)
+                        .clipShape(Circle())
+                }
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {

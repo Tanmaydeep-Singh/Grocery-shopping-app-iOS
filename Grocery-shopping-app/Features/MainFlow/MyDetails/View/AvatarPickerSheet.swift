@@ -13,8 +13,8 @@ struct AvatarPickerSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     let avatars = [
-        "avatar_b_1","avatar_b_2","avatar_b_3","avatar_b_4",
-        "avatar_b_5","avatar_g_1","avatar_g_2","avatar_g_3","avatar_g_4","avatar_g_5"
+        "avatar_b_6","avatar_b_7","avatar_b_8","avatar_b_9",
+        "avatar_b_10","avatar_b_11","avatar_b_12","avatar_g_1","avatar_g_2","avatar_g_3","avatar_g_4","avatar_g_5","avatar_g_6"
     ]
 
     @State private var selectedAvatar: String?
@@ -46,10 +46,15 @@ struct AvatarPickerSheet: View {
                 }
                 .padding()
                 
+                Divider()
+                    .frame(height: 1)
+                    .background(Color.gray)
+                    .padding(.horizontal)
+                
                 ScrollView {
 
                     LazyVGrid(
-                        columns: [GridItem(.adaptive(minimum: 80), spacing: 30)],
+                        columns: [GridItem(.adaptive(minimum: 80), spacing: 20)],
                         spacing: 20
                     ) {
 
@@ -57,8 +62,8 @@ struct AvatarPickerSheet: View {
                             Image(avatar)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 80, height: 80)
-                                .padding(10)
+                                .frame(width: 70, height: 70)
+                                .padding(15)
                                 .background(
                                     Circle().fill(Color(.systemBackground))
                                 )

@@ -28,7 +28,8 @@ struct MyDetailsView: View {
                     if let avatar = authViewModel.user?.avatar, !avatar.isEmpty {
                         Image(avatar)
                             .resizable()
-                            .frame(width: 90, height: 90)
+                            .frame(width: 70, height: 70)
+                            .padding(15)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color.green, lineWidth: 2))
                             .padding(.top, 20)

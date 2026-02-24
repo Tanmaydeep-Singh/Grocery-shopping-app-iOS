@@ -7,6 +7,7 @@
 
 import SwiftUI
 struct CartView: View {
+    var onOrderPlaced: (() -> Void)?
     @StateObject private var cartViewModel = CartViewModel()
     @EnvironmentObject private var authViewModel: AuthViewModel
     
@@ -136,6 +137,7 @@ struct CartView: View {
                         Task {
                             let success = await cartViewModel.createOrder(userId: userId ?? "")
                             if success {
+                                onOrderPlaced?()
                                 showCheckout = false
                                 goToOrderAccepted = true
                             } else {

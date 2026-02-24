@@ -12,6 +12,7 @@ final class CartProductsService {
     
     static let shared = CartProductsService()
     private let context = PersistenceManager.shared.context
+    private var cartBackup: [CartBackupItem] = []
     
     func addCartProduct(
         productDetails: ProductDetail? = nil,
@@ -216,5 +217,50 @@ func getProductsCount() async -> Int {
             cartProduct.cartProductId = Int64(Int.random(in: 1000...999999))
             cartProduct.quantity = Int64(item.quantity)
         }
+    }
+    
+    func backupCart() {
+        let request: NSFetchRequest<CartProduct> = CartProduct.fetchRequest()
+        
+        do {
+            let items = try context.fetch(request)
+            
+            cartBackup = items.map {
+                CartBackupItem(
+                id: $0.id,
+                name: $0.name,
+                price: $0.price,
+                inStock: $0.inStock,
+                imageName: $0.imageName,
+                cartProductId: $0.cartProductId,
+                quantity: $0.quantity
+                )
+            }
+        } catch {
+            print("Backup failed: ", error)
+        }
+    }
+    
+    func restoreCartFromBackup() {
+        clearCart()
+        guard !cartBackup.isEmpty else { return }
+        
+        for item in cartBackup {
+            let cartProduct = CartProduct(context: context)
+            
+            cartProduct.id = item.id
+            cartProduct.name = item.name
+            cartProduct.price = item.price
+            cartProduct.inStock = item.inStock
+            cartProduct.imageName = item.imageName
+            cartProduct.cartProductId = item.cartProductId
+            cartProduct.quantity = item.quantity
+        }
+        
+        save()
+    }
+    
+    func clearBackup() {
+        cartBackup.removeAll()
     }
 }

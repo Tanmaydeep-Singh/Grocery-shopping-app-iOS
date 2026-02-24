@@ -3,6 +3,7 @@ import SwiftUI
 struct OrderDetailsView: View {
     private let cartService = CartProductsService.shared
     @State private var showCartSheet = false;
+    @State private var didPlaceOrder = false
     let order: Order
     
     var body: some View {
@@ -108,11 +109,23 @@ struct OrderDetailsView: View {
         .background(Color(.systemBackground))
         .navigationTitle("Order Details")
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showCartSheet, onDismiss: {cartService.clearCart()}) {
-                    CartView()
+        .sheet(isPresented: $showCartSheet, onDismiss: {
+            if didPlaceOrder {
+                cartService.clearBackup()
+            } else {
+                cartService.restoreCartFromBackup()
+            }
+
+            didPlaceOrder = false})
+        {
+            CartView(
+                onOrderPlaced: {
+                    didPlaceOrder = true
+                }
+            )
                 .presentationDetents([.fraction(0.8), .large])
                 .presentationDragIndicator(.visible)
-                }
+        }
 
     }
 }

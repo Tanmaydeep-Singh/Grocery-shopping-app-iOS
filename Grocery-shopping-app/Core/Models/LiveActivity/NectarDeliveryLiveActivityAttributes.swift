@@ -1,3 +1,4 @@
+
 //
 //  NectarDeliveryLiveActivityAttributes.swift
 //  Nectar
@@ -5,16 +6,21 @@
 //  Created by tanmaydeep on 25/02/26.
 //
 
-
 import ActivityKit
 import Foundation
-import Combine
 
-struct NectarDeliveryLiveActivityAttributes : ActivityAttributes {
+struct NectarDeliveryLiveActivityAttributes: ActivityAttributes {
     
     public struct ContentState: Codable, Hashable {
-        var endDate: Date
+        var estimatedEndDate: Date?
+        var deliveryState: DeliveryState
     }
-
+    
     var startDate: Date
+    
+    enum DeliveryState: String, Codable, Hashable {
+        case preparing
+        case outForDelivery
+        case delivered
+    }
 }

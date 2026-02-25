@@ -21,7 +21,6 @@ final class CartViewModel: ObservableObject {
     private let cartProductsService : CartProductsService
     private let orderService: OrderServiceProtocol
     private let authViewModel: AuthViewModel
-    private let liveActivityService : LiveActivityService
     private var cartId: String?
     
     init() {
@@ -30,7 +29,6 @@ final class CartViewModel: ObservableObject {
         self.cartProductsService = CartProductsService()
         self.orderService = OrderService()
         self.authViewModel = AuthViewModel()
-        self.liveActivityService = LiveActivityService.shared
     }
 
     //Get cart item
@@ -158,7 +156,9 @@ final class CartViewModel: ObservableObject {
             cartProductsService.clearCart()
             
             // Start Live Action Timer:
-            try await liveActivityService.startFiveMinuteTimer()
+            Task.detached {
+                try? await LiveActivityService.shared.start()
+            }
 
             
             return true

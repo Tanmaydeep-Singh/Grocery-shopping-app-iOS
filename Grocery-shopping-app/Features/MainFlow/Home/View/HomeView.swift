@@ -9,7 +9,9 @@ struct HomeView: View {
                 ScrollView {
                     VStack(spacing: 28) {
                         HomeHeaderView()
-                        SearchBarView(text: $viewModel.searchText)
+//                        SearchBarView(text: $viewModel.searchText)
+                        UnifiedSearchBar(text: $viewModel.searchText)
+                            .padding(.horizontal)
                         
                         if viewModel.isSearching {
                             if let error = viewModel.searchError {

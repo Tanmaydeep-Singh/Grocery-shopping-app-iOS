@@ -3,14 +3,14 @@ import SwiftUI
 struct UnifiedSearchBar: View {
     @Binding var text: String
     var placeholderItems: [String] = [
-        "Search for categories...",
-        "Search for dairy...",
-        "Search for bakery...",
-        "Search for coffee...",
-        "Search for candy...",
-        "Search for fresh produce...",
-        "Search for meat & seafood...",
-    ]
+                "Search for categories...",
+                "Search for dairy...",
+                "Search for bakery...",
+                "Search for coffee...",
+                "Search for candy...",
+                "Search for fresh produce...",
+                "Search for meat & seafood...",
+            ]
     var onSubmit: (() -> Void)? = nil
     var onFiltersApplied: ((Set<String>, Set<String>) -> Void)? = nil
 
@@ -18,7 +18,7 @@ struct UnifiedSearchBar: View {
     @State private var showFilter: Bool = false
     @State private var currentPlaceholderIndex: Int = 0
     @State private var displayedPlaceholder: String = ""
-    @State private var isAnimating: Bool = false
+    @State private var placeholderTimer: Timer? = nil
 
     var body: some View {
         HStack(spacing: 12) {
@@ -30,8 +30,10 @@ struct UnifiedSearchBar: View {
                     Text(displayedPlaceholder)
                         .foregroundColor(Color("SearchIcon").opacity(0.6))
                         .font(.system(size: 16))
-                        .transition(.asymmetric( insertion: .offset(y: 40).combined(with: .opacity),
-                                                 removal: .offset(y: -40).combined(with: .opacity) ))
+                        .transition(.asymmetric(
+                            insertion: .offset(y: 40).combined(with: .opacity),
+                            removal: .offset(y: -40).combined(with: .opacity)
+                        ))
                         .id(currentPlaceholderIndex)
                         .allowsHitTesting(false)
                 }
@@ -83,16 +85,25 @@ struct UnifiedSearchBar: View {
             displayedPlaceholder = placeholderItems.first ?? ""
             startPlaceholderCycle()
         }
+        .onDisappear {
+            stopPlaceholderCycle()
+        }
     }
 
     private func startPlaceholderCycle() {
-        Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { _ in
+        stopPlaceholderCycle()
+        placeholderTimer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { _ in
             guard !isFocused, text.isEmpty else { return }
             withAnimation(.easeInOut(duration: 0.2)) {
                 currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholderItems.count
                 displayedPlaceholder = placeholderItems[currentPlaceholderIndex]
             }
         }
+    }
+
+    private func stopPlaceholderCycle() {
+        placeholderTimer?.invalidate()
+        placeholderTimer = nil
     }
 }
 
@@ -107,4 +118,3 @@ struct UnifiedSearchBar: View {
     }
     .padding()
 }
-

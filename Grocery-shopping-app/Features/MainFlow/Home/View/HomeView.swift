@@ -21,7 +21,9 @@ struct HomeView: View {
                             } else {
                                 ProductGridView(title: nil, products: viewModel.categoryProducts, isLoading: viewModel.isLoading)
                             }
-                        } else {
+                        }
+                    
+                        else {
                             OfferBannerView()
                             
                             ProductGridView(title: HomeSectionType.exclusiveOffer.title, products: viewModel.products, isLoading: viewModel.isLoading)

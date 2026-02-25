@@ -91,14 +91,12 @@ final class LiveActivityService {
        
        private func mockDeliveryProcess() async {
            
-           // Preparing (5s)
+           // Preparing (2 min)
            print("Preparing")
-           try? await Task.sleep(nanoseconds: 5_000_000_000)
+           try? await Task.sleep(for: .seconds(120)) // 2  min
            
+           // Delivery time.
            let endDate = Date().addingTimeInterval(300)
-           
-           print("Out for delivery")
-           // Out for delivery (10s countdown)
            await update(
                state: .outForDelivery,
                endDate: endDate
@@ -106,11 +104,11 @@ final class LiveActivityService {
            
            try? await Task.sleep(for: .seconds(300)) // 5 min
            
-           print("Delivery")
+           
            // Delivered
            await update(state: .delivered)
            
-           try? await Task.sleep(nanoseconds: 3_000_000_000)
+           try? await Task.sleep(for: .seconds(60)) // 1min
            
            await end()
        }

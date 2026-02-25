@@ -64,6 +64,7 @@ struct DeliveryTrackingView: View {
             MapOrderDetailsSheet()
                 .presentationDetents([.fraction(0.4), .medium, .large])
                 .presentationDragIndicator(.visible)
+                .interactiveDismissDisabled(true) // Prevent sheet from dismiss
         }
     }
     

@@ -9,7 +9,9 @@ struct HomeView: View {
                 ScrollView {
                     VStack(spacing: 28) {
                         HomeHeaderView()
-                        SearchBarView(text: $viewModel.searchText)
+//                        SearchBarView(text: $viewModel.searchText)
+                        UnifiedSearchBar(text: $viewModel.searchText)
+                            .padding(.horizontal)
                         
                         if viewModel.isSearching {
                             if let error = viewModel.searchError {
@@ -19,7 +21,9 @@ struct HomeView: View {
                             } else {
                                 ProductGridView(title: nil, products: viewModel.categoryProducts, isLoading: viewModel.isLoading)
                             }
-                        } else {
+                        }
+                    
+                        else {
                             OfferBannerView()
                             
                             ProductGridView(title: HomeSectionType.exclusiveOffer.title, products: viewModel.products, isLoading: viewModel.isLoading)

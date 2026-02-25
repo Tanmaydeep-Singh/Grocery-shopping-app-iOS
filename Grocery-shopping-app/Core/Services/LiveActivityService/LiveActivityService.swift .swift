@@ -16,6 +16,7 @@ final class LiveActivityService {
     
     func startFiveMinuteTimer() async throws {
         
+        print("Called Timer:")
         let startDate = Date()
         let endDate = startDate.addingTimeInterval(300)
         

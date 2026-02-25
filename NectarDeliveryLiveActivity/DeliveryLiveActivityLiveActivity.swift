@@ -40,30 +40,54 @@ struct DeliveryLiveActivityLiveActivity: Widget {
                 switch context.state.deliveryState {
                     
                 case .preparing:
-                    Text("🧑‍🍳 Preparing your order")
-                        .font(.headline)
                     
-                    ProgressView()
-                    
+                    HStack(alignment: .center, spacing: 16) {
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            
+                            Text("Preparing your order")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Text("We are preparing your order")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            
+                            ProgressView()
+                                .progressViewStyle(.linear)
+                                .tint(Color("Splash"))
+                                .frame(height: 4)
+                                .padding(.top, 6)
+                        }
+                        
+                        Spacer()
+                        
+                        Image("Basket")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 60, height: 60)
+                            .background(
+                                RoundedRectangle(cornerRadius: 18)
+                                    .fill(Color("Splash").opacity(0.2))
+                            )
+                    }
+        
+
                 case .outForDelivery:
-                    Text("🚚 Out for Delivery")
+                    Text("🚚Out for Delivery")
                         .font(.headline)
                     
                     if let endDate = context.state.estimatedEndDate {
                         
-                        Text(
-                            timerInterval: Date()...endDate,
-                            countsDown: true
-                        )
-                        .font(.system(size: 42, weight: .bold, design: .rounded))
-                        .monospacedDigit()
+                       
                         
                         ProgressView(
                             timerInterval: context.attributes.startDate...endDate,
                             countsDown: true
                         )
+                        .tint(Color("Splash"))
                         .progressViewStyle(.linear)
-                    }
+                                         }
                     
                 case .delivered:
                     Text("🎉 Order Delivered")
@@ -71,9 +95,13 @@ struct DeliveryLiveActivityLiveActivity: Widget {
                         .foregroundColor(.green)
                 }
             }
-            .padding()
-            .activityBackgroundTint(.black)
-            .activitySystemActionForegroundColor(.white)
+            .padding(20)
+            .background(
+                RoundedRectangle(cornerRadius: 18)
+                    .fill(Color("Splash").opacity(0.2))
+            )
+            .activityBackgroundTint(.white)
+            .activitySystemActionForegroundColor(.black)
             
         } dynamicIsland: { context in
             
@@ -137,6 +165,6 @@ struct DeliveryLiveActivityLiveActivity: Widget {
 } contentStates: {
     NectarDeliveryLiveActivityAttributes.ContentState(
         estimatedEndDate: .now.addingTimeInterval(300),
-        deliveryState: .outForDelivery
+        deliveryState: .preparing
     )
 }

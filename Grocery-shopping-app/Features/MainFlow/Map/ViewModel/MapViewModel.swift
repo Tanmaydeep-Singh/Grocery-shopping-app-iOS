@@ -27,4 +27,6 @@ final class MapViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
+    
 }

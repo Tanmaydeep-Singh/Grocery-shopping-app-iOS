@@ -146,11 +146,9 @@ struct DeliveryLiveActivityLiveActivity: Widget {
             }
             .padding(20)
             .background(
-                RoundedRectangle(cornerRadius: 18)
+                RoundedRectangle(cornerRadius: 20)
                     .fill(Color("Splash").opacity(0.2))
             )
-            .activityBackgroundTint(.white)
-            .activitySystemActionForegroundColor(.black)
             
         } dynamicIsland: { context in
             

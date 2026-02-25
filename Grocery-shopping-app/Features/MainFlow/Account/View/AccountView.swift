@@ -1,13 +1,10 @@
 import SwiftUI
 
 struct AccountView: View {
-    
-
     @StateObject private var viewModel = AccountViewModel()
     @EnvironmentObject private var authViewModel: AuthViewModel
     @EnvironmentObject var router: AppRouter
 
- 
     var body: some View {
         VStack(spacing: 0) {
             
@@ -34,16 +31,13 @@ struct AccountView: View {
                         Text(authViewModel.user?.username ?? "guest user")
                             .font(.title3)
                             .fontWeight(.semibold)
-                        
-
-                        Image(systemName: "pencil")
-                            .foregroundColor(.green)
                     }
 
                     Text(authViewModel.user?.email ?? "guest@gmail.com")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
+                .padding(.top, 20)
 
                 Spacer()
             }

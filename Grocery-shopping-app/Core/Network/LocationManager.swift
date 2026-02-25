@@ -14,8 +14,10 @@ final class LocationManager: NSObject, ObservableObject {
     private let manager = CLLocationManager()
     private let geocoder = CLGeocoder()
     
+    
     @Published var locationName: String = "Detecting..."
     @Published var authorizationStatus: CLAuthorizationStatus?
+    @Published var userCoordinate: CLLocationCoordinate2D?
     
     override init() {
         super.init()
@@ -40,6 +42,8 @@ extension LocationManager: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
+        
+        self.userCoordinate = location.coordinate
         
         geocoder.reverseGeocodeLocation(location){ [weak self] placemarks, error in
             guard let self = self else { return }

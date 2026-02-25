@@ -1,36 +1,52 @@
-//
-//  UnifiedSearchBar.swift
-//  Nectar
-//
-//  Created by rentamac on 2/24/26.
-//
-
 import SwiftUI
 
 struct UnifiedSearchBar: View {
     @Binding var text: String
-    var placeholder: String = "Search Store"
+    var placeholderItems: [String] = [
+        "Search for categories...",
+        "Search for dairy...",
+        "Search for bakery...",
+        "Search for coffee...",
+        "Search for candy...",
+        "Search for fresh produce...",
+        "Search for meat & seafood...",
+    ]
     var onSubmit: (() -> Void)? = nil
     var onFiltersApplied: ((Set<String>, Set<String>) -> Void)? = nil
-    
+
     @FocusState private var isFocused: Bool
     @State private var showFilter: Bool = false
-    
+    @State private var currentPlaceholderIndex: Int = 0
+    @State private var displayedPlaceholder: String = ""
+    @State private var isAnimating: Bool = false
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(Color("SearchIcon"))
-            
-            TextField(placeholder, text: $text)
-                .focused($isFocused)
-                .foregroundColor(Color("SearchText"))
-                .font(.system(size: 16))
-                .submitLabel(.search)
-                .autocorrectionDisabled()
-                .onSubmit {
-                    onSubmit?()
+
+            ZStack(alignment: .leading) {
+                if text.isEmpty && !isFocused {
+                    Text(displayedPlaceholder)
+                        .foregroundColor(Color("SearchIcon").opacity(0.6))
+                        .font(.system(size: 16))
+                        .transition(.asymmetric( insertion: .offset(y: 40).combined(with: .opacity),
+                                                 removal: .offset(y: -40).combined(with: .opacity) ))
+                        .id(currentPlaceholderIndex)
+                        .allowsHitTesting(false)
                 }
-            
+
+                TextField("", text: $text)
+                    .focused($isFocused)
+                    .foregroundColor(Color("SearchText"))
+                    .font(.system(size: 16))
+                    .submitLabel(.search)
+                    .autocorrectionDisabled()
+                    .onSubmit {
+                        onSubmit?()
+                    }
+            }
+
             if !text.isEmpty {
                 Button {
                     text = ""
@@ -39,9 +55,9 @@ struct UnifiedSearchBar: View {
                         .foregroundColor(Color("SearchIcon"))
                 }
                 .transition(.opacity)
-                .animation(.easeInOut(duration: 0.2), value: text.isEmpty)
+                .animation(.easeInOut(duration: 0.1), value: text.isEmpty)
             }
-            
+
             if onFiltersApplied != nil {
                 Button {
                     isFocused = false
@@ -63,6 +79,20 @@ struct UnifiedSearchBar: View {
                 }
             }
         }
+        .onAppear {
+            displayedPlaceholder = placeholderItems.first ?? ""
+            startPlaceholderCycle()
+        }
+    }
+
+    private func startPlaceholderCycle() {
+        Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { _ in
+            guard !isFocused, text.isEmpty else { return }
+            withAnimation(.easeInOut(duration: 0.2)) {
+                currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholderItems.count
+                displayedPlaceholder = placeholderItems[currentPlaceholderIndex]
+            }
+        }
     }
 }
 
@@ -77,3 +107,4 @@ struct UnifiedSearchBar: View {
     }
     .padding()
 }
+

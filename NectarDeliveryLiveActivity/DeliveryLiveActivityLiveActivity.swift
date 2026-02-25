@@ -74,20 +74,43 @@ struct DeliveryLiveActivityLiveActivity: Widget {
         
 
                 case .outForDelivery:
-                    Text("🚚Out for Delivery")
-                        .font(.headline)
+                    HStack(alignment: .center, spacing: 16) {
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            
+                            Text("🚚 Out for Delivery")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Text("Your order is out for delivery")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            
+                            if let endDate = context.state.estimatedEndDate {
+                                
+                                ProgressView(
+                                    timerInterval: context.attributes.startDate...endDate,
+                                    countsDown: true
+                                )
+                                .tint(Color("Splash"))
+                                .progressViewStyle(.linear)
+                                                 }
+                        }
+                        
+                        Spacer()
+                        
+                        Image("Basket")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 60, height: 60)
+                            .background(
+                                RoundedRectangle(cornerRadius: 18)
+                                    .fill(Color("Splash").opacity(0.2))
+                            )
+                    }
                     
-                    if let endDate = context.state.estimatedEndDate {
-                        
-                       
-                        
-                        ProgressView(
-                            timerInterval: context.attributes.startDate...endDate,
-                            countsDown: true
-                        )
-                        .tint(Color("Splash"))
-                        .progressViewStyle(.linear)
-                                         }
+                    
+                   
                     
                 case .delivered:
                     Text("🎉 Order Delivered")
@@ -165,6 +188,6 @@ struct DeliveryLiveActivityLiveActivity: Widget {
 } contentStates: {
     NectarDeliveryLiveActivityAttributes.ContentState(
         estimatedEndDate: .now.addingTimeInterval(300),
-        deliveryState: .preparing
+        deliveryState: .outForDelivery
     )
 }

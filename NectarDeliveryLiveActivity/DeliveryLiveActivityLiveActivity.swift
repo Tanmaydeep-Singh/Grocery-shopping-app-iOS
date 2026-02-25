@@ -71,8 +71,8 @@ struct DeliveryLiveActivityLiveActivity: Widget {
                                     .fill(Color("Splash").opacity(0.2))
                             )
                     }
-        
-
+                    
+                    
                 case .outForDelivery:
                     HStack(alignment: .center, spacing: 16) {
                         
@@ -94,7 +94,7 @@ struct DeliveryLiveActivityLiveActivity: Widget {
                                 )
                                 .tint(Color("Splash"))
                                 .progressViewStyle(.linear)
-                                                 }
+                            }
                         }
                         
                         Spacer()
@@ -110,12 +110,38 @@ struct DeliveryLiveActivityLiveActivity: Widget {
                     }
                     
                     
-                   
+                    
                     
                 case .delivered:
-                    Text("🎉 Order Delivered")
-                        .font(.headline)
-                        .foregroundColor(.green)
+                    HStack(alignment: .center, spacing: 16) {
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            
+                            Text("🎉 Order Delivered")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Text("Your order has been delivered")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            
+                                
+                             
+                
+                        }
+                        
+                        Spacer()
+                        
+                        Image("Basket")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 60, height: 60)
+                            .background(
+                                RoundedRectangle(cornerRadius: 18)
+                                    .fill(Color("Splash").opacity(0.2))
+                            )
+                    }
+                    
                 }
             }
             .padding(20)
@@ -188,6 +214,6 @@ struct DeliveryLiveActivityLiveActivity: Widget {
 } contentStates: {
     NectarDeliveryLiveActivityAttributes.ContentState(
         estimatedEndDate: .now.addingTimeInterval(300),
-        deliveryState: .outForDelivery
+        deliveryState: .delivered
     )
 }

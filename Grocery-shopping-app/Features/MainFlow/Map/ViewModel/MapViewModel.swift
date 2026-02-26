@@ -11,6 +11,7 @@ import SwiftUI
 
 @MainActor
 final class MapViewModel: ObservableObject {
+    static let shared = MapViewModel()
     
     private let defaultLocation = CLLocationCoordinate2D(
         latitude: 25.22596,
@@ -56,6 +57,7 @@ final class MapViewModel: ObservableObject {
             userLocation: userLocation,
             onUpdate: { [weak self] newLocation in
                 guard let self else { return }
+                
                 
                 withAnimation(.linear(duration: 4.5)) {
                     self.driverLocation = newLocation

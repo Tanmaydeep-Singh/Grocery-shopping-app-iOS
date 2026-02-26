@@ -10,6 +10,8 @@ import SwiftUI
 
 struct MapOrderDetailsSheet: View {
     
+    @StateObject private var deliveryStore = DeliveryStateStore.shared
+    
     var body: some View {
         VStack(spacing: 0) {
             Capsule()
@@ -36,23 +38,11 @@ struct MapOrderDetailsSheet: View {
                 .padding(.top, 10)
 
                 VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text("Out for Delivery")
-                            .font(.headline)
-                        Spacer()
-                        Text("75%")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    ProgressView(value: 0.75)
-                        .tint(.green)
-                        .scaleEffect(x: 1, y: 2, anchor: .center)
-                        .clipShape(Capsule())
-                    
-                    Text("Your order is on the way")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                    OrderStatus(
+                        state: deliveryStore.state!,
+                        startDate: deliveryStore.startDate ?? .now,
+                        estimatedEndDate: deliveryStore.estimatedEndDate
+                    )
                 }
                 
                 Divider()

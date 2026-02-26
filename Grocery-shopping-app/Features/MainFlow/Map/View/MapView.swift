@@ -9,18 +9,7 @@ import MapKit
 struct DeliveryTrackingView: View {
     @StateObject private var viewModel = MapViewModel.shared
     
-       @State private var position = MapCameraPosition.region(
-           MKCoordinateRegion(
-               center: CLLocationCoordinate2D(
-                   latitude: 25.22596,
-                   longitude: 75.89851
-               ),
-               span: MKCoordinateSpan(
-                   latitudeDelta: 0.02,
-                   longitudeDelta: 0.02
-               )
-           )
-       )
+        @State private var position: MapCameraPosition = .automatic
        @StateObject private var deliveryStore = DeliveryStateStore.shared
     
     var body: some View {
@@ -71,7 +60,7 @@ struct DeliveryTrackingView: View {
                         )
                     )
                 )
-                
+            
                 if deliveryStore.state ==  NectarDeliveryLiveActivityAttributes.DeliveryState.preparing {
                     viewModel.driverLocation = nil
                     viewModel.fetchRoute()

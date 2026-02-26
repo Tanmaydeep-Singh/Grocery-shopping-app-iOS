@@ -7,6 +7,7 @@
 
 import MapKit
 import Combine
+import SwiftUI
 
 @MainActor
 final class MapViewModel: ObservableObject {
@@ -16,14 +17,18 @@ final class MapViewModel: ObservableObject {
         longitude: 75.89851
     )
     
+    
     @Published var userLocation: CLLocationCoordinate2D
+    @Published var driverLocation: CLLocationCoordinate2D?
     @Published var route: MKRoute?
     
+    
     private var cancellables = Set<AnyCancellable>()
+    private let simulationHelper = DriverSimulation()
+    
     
     init(locationManager: LocationManager) {
         
-        // Start with default
         self.userLocation = defaultLocation
         
         locationManager.$userCoordinate
@@ -40,26 +45,62 @@ final class MapViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    /// Delivery partner is slightly behind user location
-    var deliveryPartnerLocation: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(
-            latitude: userLocation.latitude - 0.01,
-            longitude: userLocation.longitude - 0.01
+    
+    func startDriverSimulation() {
+        
+        simulationHelper.startSimulation(
+            userLocation: userLocation,
+            onUpdate: { [weak self] newLocation in
+                guard let self else { return }
+                
+                withAnimation(.linear(duration: 4.5)) {
+                    self.driverLocation = newLocation
+                }
+                
+                self.fetchRoute()
+            },
+            onCompletion: {
+                print("Driver reached destination")
+            }
         )
     }
     
-    /// Fetch route between delivery partner and user
+    func stopDriverSimulation() {
+        simulationHelper.stop()
+    }
+    
+    
     func fetchRoute() {
+        
+        if driverLocation == nil {
+               driverLocation = CLLocationCoordinate2D(
+                   latitude: userLocation.latitude - 0.025,
+                   longitude: userLocation.longitude - 0.025
+               )
+           }
+           
+           guard let driverLocation else { return }
+        
         let request = MKDirections.Request()
         
-        request.source = MKMapItem(
-            placemark: MKPlacemark(coordinate: deliveryPartnerLocation)
+        let sourceItem = MKMapItem(
+            location: CLLocation(
+                latitude: driverLocation.latitude,
+                longitude: driverLocation.longitude
+            ),
+            address: nil
         )
         
-        request.destination = MKMapItem(
-            placemark: MKPlacemark(coordinate: userLocation)
+        let destinationItem = MKMapItem(
+            location: CLLocation(
+                latitude: userLocation.latitude,
+                longitude: userLocation.longitude
+            ),
+            address: nil
         )
         
+        request.source = sourceItem
+        request.destination = destinationItem
         request.transportType = .automobile
         
         let directions = MKDirections(request: request)
@@ -68,7 +109,9 @@ final class MapViewModel: ObservableObject {
             guard let self else { return }
             
             if let route = response?.routes.first {
-                self.route = route
+                DispatchQueue.main.async {
+                    self.route = route
+                }
             } else if let error {
                 print("Route error:", error.localizedDescription)
             }

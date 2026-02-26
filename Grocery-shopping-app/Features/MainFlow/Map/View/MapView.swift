@@ -39,8 +39,8 @@ struct DeliveryTrackingView: View {
                     Annotation("", coordinate: driver) {
                         Image(systemName: "car.fill")
                             .resizable()
-                            .frame(width: 40, height: 40)
-                            .foregroundStyle(.blue)
+                            .frame(width: 25, height: 25)
+                            .foregroundStyle(.black)
                             .shadow(radius: 5)
                     }
                 }

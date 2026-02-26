@@ -7,32 +7,21 @@ import SwiftUI
 import MapKit
 
 struct DeliveryTrackingView: View {
-    
-    @StateObject private var viewModel: MapViewModel
-    @State private var position: MapCameraPosition
-    @StateObject private var deliveryStore = DeliveryStateStore.shared
+    @StateObject private var viewModel = MapViewModel()
 
-    
-    
-    init(locationManager: LocationManager
-         ) {
-        
-        let vm = MapViewModel(locationManager: locationManager)
-        _viewModel = StateObject(wrappedValue: vm)
-        
-        
-        _position = State(
-            initialValue: .region(
-                MKCoordinateRegion(
-                    center: vm.userLocation,
-                    span: MKCoordinateSpan(
-                        latitudeDelta: 0.02,
-                        longitudeDelta: 0.02
-                    )
-                )
-            )
-        )
-    }
+       @State private var position = MapCameraPosition.region(
+           MKCoordinateRegion(
+               center: CLLocationCoordinate2D(
+                   latitude: 25.22596,
+                   longitude: 75.89851
+               ),
+               span: MKCoordinateSpan(
+                   latitudeDelta: 0.02,
+                   longitudeDelta: 0.02
+               )
+           )
+       )
+       @StateObject private var deliveryStore = DeliveryStateStore.shared
     
     var body: some View {
         
@@ -64,17 +53,22 @@ struct DeliveryTrackingView: View {
                     viewModel.fetchRoute()
                 
             }
-            .onChange(of: deliveryStore.state) { oldState, newState in
+            .onChange(of: viewModel.userLocation.latitude) { _, _ in
+                let newLocation = viewModel.userLocation
                 
-                guard let newState else { return }
-                
-                if newState == NectarDeliveryLiveActivityAttributes.DeliveryState.outForDelivery {
-                    viewModel.startDriverSimulation()
-                }
-                
-                if newState == NectarDeliveryLiveActivityAttributes.DeliveryState.delivered {
-                    viewModel.stopDriverSimulation()
-                }
+                print("Camera updating to:", newLocation)
+
+                position = .region(
+                    MKCoordinateRegion(
+                        center: newLocation,
+                        span: MKCoordinateSpan(
+                            latitudeDelta: 0.02,
+                            longitudeDelta: 0.02
+                        )
+                    )
+                )
+                viewModel.driverLocation = nil
+                viewModel.fetchRoute()
             }
             
             // Bottom Sheet

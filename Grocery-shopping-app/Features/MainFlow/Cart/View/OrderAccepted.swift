@@ -77,10 +77,7 @@ struct OrderAcceptedView: View {
             startMainAnimation()
         }
         .navigationDestination(isPresented: $goToTrackOrder) {
-            DeliveryTrackingView(
-                locationManager: LocationManager()
-            )
-        }
+            DeliveryTrackingView()        }
     }
 
     // MARK: - Animated Image

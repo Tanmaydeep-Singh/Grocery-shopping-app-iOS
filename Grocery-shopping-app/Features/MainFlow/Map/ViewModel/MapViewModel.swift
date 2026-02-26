@@ -27,15 +27,19 @@ final class MapViewModel: ObservableObject {
     private let simulationHelper = DriverSimulation()
     
     
-    init(locationManager: LocationManager) {
-        
+    private let locationManager = LocationManager.shared
+
+    init() {
         self.userLocation = defaultLocation
-        
+
+        print("userlocation : \(locationManager.$locationName)")
+        print("userlocation : \(locationManager.$userCoordinate)")
+
         locationManager.$userCoordinate
             .receive(on: DispatchQueue.main)
             .sink { [weak self] coordinate in
                 guard let self else { return }
-                
+
                 if let coordinate {
                     self.userLocation = coordinate
                 } else {
@@ -80,6 +84,9 @@ final class MapViewModel: ObservableObject {
            }
            
            guard let driverLocation else { return }
+        
+        print("🚗 Driver location:", driverLocation as Any)
+        print("👤 User location:", userLocation)
         
         let request = MKDirections.Request()
         

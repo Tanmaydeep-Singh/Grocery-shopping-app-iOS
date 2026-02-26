@@ -5,98 +5,88 @@
 
 import SwiftUI
 import MapKit
+import SwiftUI
+import MapKit
 
 struct DeliveryTrackingView: View {
     
-    
-    @State private var route: MKRoute?
+    @StateObject private var viewModel: MapViewModel
     @State private var showOrderSheet = true
+    @State private var position: MapCameraPosition
     
-    @State private var position = MapCameraPosition.region(
-        MKCoordinateRegion(
-            center: CLLocationCoordinate2D(
-                latitude: 25.22596,
-                longitude: 75.89851
-            ),
-            span: MKCoordinateSpan(
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01
+    init(locationManager: LocationManager) {
+        let vm = MapViewModel(locationManager: locationManager)
+        _viewModel = StateObject(wrappedValue: vm)
+        
+        _position = State(
+            initialValue: .region(
+                MKCoordinateRegion(
+                    center: vm.userLocation,
+                    span: MKCoordinateSpan(
+                        latitudeDelta: 0.01,
+                        longitudeDelta: 0.01
+                    )
+                )
             )
         )
-    )
-    
-    
-     let userLocation = CLLocationCoordinate2D(
-        latitude: 25.22596,
-        longitude: 75.89851
-    )
-    
-     let deliveryPartnerLocation = CLLocationCoordinate2D(
-        latitude: 25.23596,
-        longitude: 75.88851
-    )
-    
+    }
     
     var body: some View {
         Map(position: $position) {
             
-            // User Location
+            // User Marker
             Marker("Your Location",
-                   coordinate: userLocation)
+                   coordinate: viewModel.userLocation)
                 .tint(.green)
             
-            // Delivery Partner
+            // Delivery Partner Marker
             Marker("Delivery Partner",
-                   coordinate: deliveryPartnerLocation)
+                   coordinate: viewModel.deliveryPartnerLocation)
                 .tint(.blue)
             
-            // Road Route
-            if let route {
+            // Route
+            if let route = viewModel.route {
                 MapPolyline(route.polyline)
                     .stroke(.blue, lineWidth: 5)
             }
         }
         .ignoresSafeArea()
         .onAppear {
-            fetchRoute()
+            viewModel.fetchRoute()
         }
+//        .onChange(of: viewModel.userLocation) { _, newLocation in
+//            withAnimation {
+//                position = .region(
+//                    MKCoordinateRegion(
+//                        center: newLocation,
+//                        span: MKCoordinateSpan(
+//                            latitudeDelta: 0.01,
+//                            longitudeDelta: 0.01
+//                        )
+//                    )
+//                )
+//            }
+//            viewModel.fetchRoute()
+//        }
         .sheet(isPresented: $showOrderSheet) {
             MapOrderDetailsSheet()
                 .padding(.top, 20)
                 .presentationDetents([.fraction(0.4), .medium, .large])
                 .presentationDragIndicator(.visible)
-                .interactiveDismissDisabled(true) // Prevent sheet from dismiss
-        }
-    }
-    
-    private func fetchRoute() {
-        let request = MKDirections.Request()
-        
-        let sourcePlacemark = MKPlacemark(coordinate: deliveryPartnerLocation)
-        let destinationPlacemark = MKPlacemark(coordinate: userLocation)
-        
-        request.source = MKMapItem(placemark: sourcePlacemark)
-        request.destination = MKMapItem(placemark: destinationPlacemark)
-        
-        request.transportType = .automobile
-        
-        let directions = MKDirections(request: request)
-        
-        directions.calculate { response, error in
-            if let route = response?.routes.first {
-                self.route = route
-                
-//                withAnimation {
-//                                self.position = .rect(route.polyline.boundingMapRect)
-//                            }
-              
-            } else if let error {
-                print("Route error:", error.localizedDescription)
-            }
+             .presentationBackgroundInteraction(.enabled(upThrough: .fraction(0.4)))
         }
     }
 }
 
 #Preview {
-    DeliveryTrackingView()
+    DeliveryTrackingView(
+        locationManager: {
+            let manager = LocationManager()
+            manager.userCoordinate = CLLocationCoordinate2D(
+                latitude: 25.22596,
+                longitude: 75.89851
+            )
+            return manager
+        }()
+    )
 }

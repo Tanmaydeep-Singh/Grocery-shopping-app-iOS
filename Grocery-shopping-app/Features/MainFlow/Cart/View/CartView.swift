@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import CoreLocation
+
 struct CartView: View {
     var onOrderPlaced: (() -> Void)?
     @StateObject private var cartViewModel = CartViewModel()
@@ -14,6 +16,12 @@ struct CartView: View {
     //Checkout flow variables
     @State private var showCheckout = false
     @State private var goToOrderAccepted = false
+    
+    //Location Manager:
+    @StateObject private var locationManager = LocationManager()
+
+    @State private var showPermissionAlert = false
+    
 
     private var cartId: String? {
         authViewModel.user?.cartId
@@ -114,8 +122,28 @@ struct CartView: View {
         PrimaryButton(
             title: "Go To Checkout",
             action: {
-                showCheckout = true
-            }
+                    
+                    let status = locationManager.authorizationStatus
+                    
+                    if status == .authorizedWhenInUse || status == .authorizedAlways {
+                        
+                        if locationManager.userCoordinate != nil {
+                            showCheckout = true
+                        } else {
+                            locationManager.requestLocation()
+                        }
+                        
+                    } else if status == .denied || status == .restricted {
+                        
+                        print("ACCESS DENIED")
+                        showPermissionAlert = true
+
+                        
+                    } else {
+                        
+                        locationManager.checkPermissionAndRequest()
+                    }
+                }
         )
         .padding()
         .overlay(alignment: .trailing) {
@@ -150,6 +178,19 @@ struct CartView: View {
         }
         .navigationDestination(isPresented: $goToOrderAccepted) {
             OrderAcceptedView()
+        }
+        .alert("Location Permission Required", isPresented: $showPermissionAlert) {
+            
+            Button("Open Settings") {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            
+            Button("Cancel", role: .cancel) { }
+            
+        } message: {
+            Text("Please enable location access in Settings to proceed to checkout.")
         }
     }
 }

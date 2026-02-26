@@ -32,48 +32,43 @@ struct DeliveryTrackingView: View {
     }
     
     var body: some View {
-        Map(position: $position) {
+        
+        ZStack(alignment: .bottom) {
             
-            // User Marker
-            Marker("Your Location",
-                   coordinate: viewModel.userLocation)
+            Map(position: $position) {
+                
+                Marker("Your Location",
+                       coordinate: viewModel.userLocation)
                 .tint(.green)
-            
-            // Delivery Partner Marker
-            Marker("Delivery Partner",
-                   coordinate: viewModel.deliveryPartnerLocation)
+                
+                Marker("Delivery Partner",
+                       coordinate: viewModel.deliveryPartnerLocation)
                 .tint(.blue)
-            
-            // Route
-            if let route = viewModel.route {
-                MapPolyline(route.polyline)
-                    .stroke(.blue, lineWidth: 5)
+                
+                if let route = viewModel.route {
+                    MapPolyline(route.polyline)
+                        .stroke(.green, lineWidth: 5)
+                }
             }
-        }
-        .ignoresSafeArea()
-        .onAppear {
-            viewModel.fetchRoute()
-        }
-//        .onChange(of: viewModel.userLocation) { _, newLocation in
-//            withAnimation {
-//                position = .region(
-//                    MKCoordinateRegion(
-//                        center: newLocation,
-//                        span: MKCoordinateSpan(
-//                            latitudeDelta: 0.01,
-//                            longitudeDelta: 0.01
-//                        )
-//                    )
-//                )
-//            }
-//            viewModel.fetchRoute()
-//        }
-        .sheet(isPresented: $showOrderSheet) {
+            .ignoresSafeArea()
+            .onAppear {
+                viewModel.fetchRoute()
+            }
+            
             MapOrderDetailsSheet()
-                .padding(.top, 20)
-                .presentationDetents([.fraction(0.4), .medium, .large])
-                .presentationDragIndicator(.visible)
-             .presentationBackgroundInteraction(.enabled(upThrough: .fraction(0.4)))
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxHeight: 300, alignment: .center )
+
+                .background(
+                    UnevenRoundedRectangle(
+                        topLeadingRadius: 30,
+                        topTrailingRadius: 30,
+                        style: .continuous
+                    )
+                    .fill(.ultraThinMaterial)
+                    .shadow(color: .black.opacity(0.15), radius: 20, y: -5)                    
+                    .ignoresSafeArea(edges: .bottom)
+                )
         }
     }
 }

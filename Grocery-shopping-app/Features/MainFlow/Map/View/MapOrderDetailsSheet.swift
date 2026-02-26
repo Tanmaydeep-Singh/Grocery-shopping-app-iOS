@@ -6,78 +6,105 @@
 //
 
 import SwiftUI
+import SwiftUI
 
 struct MapOrderDetailsSheet: View {
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 0) {
+            Capsule()
+                .fill(Color.secondary.opacity(0.3))
+                .frame(width: 40, height: 5)
+                .padding(.top, 12)
             
-            
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 24) {
                 
-                Text("Order #12345")
-                    .font(.headline)
-                
-                Text("Arriving in 12 minutes")
-                    .font(.subheadline)
-                    .foregroundColor(.green)
-            }
-            .padding(.top, 12)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
-            
-            
-            VStack(alignment: .leading, spacing: 16) {
-                
-                Text("Out for Delivery")
-                    .font(.headline)
-                
-                Text("Your order is on the way")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                ProgressView(value: 0.8)
-                    .tint(.green)
-            }
-            .padding()
-            
-            
-            
-            
-            HStack(spacing: 14) {
-                
-                Image(systemName: "person.crop.circle.fill")
-                    .font(.system(size: 48))
-                    .foregroundColor(.blue)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Rahul Sharma")
-                        .font(.headline)
+                HStack(alignment: .firstTextBaseline) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Order #12345")
+                            .font(.system(.title3, design: .rounded, weight: .bold))
+                        
+                        Text("Arriving in 12 minutes")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .foregroundColor(.green)
+                    }
                     
-                    Text("Delivery Partner")
-                        .font(.caption)
+                    Spacer()
+                    
+                }
+                .padding(.top, 10)
+
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Out for Delivery")
+                            .font(.headline)
+                        Spacer()
+                        Text("75%")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    ProgressView(value: 0.75)
+                        .tint(.green)
+                        .scaleEffect(x: 1, y: 2, anchor: .center)
+                        .clipShape(Capsule())
+                    
+                    Text("Your order is on the way")
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
                 
-                Spacer()
-                
-                Button {
-                    print("Call Rider")
-                } label: {
-                    Image(systemName: "phone.fill")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.blue)
-                        .padding(12)
+                Divider()
+
+                HStack(spacing: 16) {
+                    ZStack {
+                        Image(systemName: "person.crop.circle.fill")
+                            .resizable()
+                            .frame(width: 52, height: 52)
+                            .foregroundColor(.gray.opacity(0.3))
                         
+                        Circle()
+                            .fill(.green)
+                            .frame(width: 14, height: 14)
+                            .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                            .offset(x: 18, y: 18)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Rahul Sharma")
+                            .font(.headline)
+                        
+                        Label("4.9 ★ Delivery Partner", systemImage: "star.fill")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .symbolRenderingMode(.multicolor)
+                    }
+                    
+                    Spacer()
+                    
+                    Button {
+                        print("Call Rider")
+                    } label: {
+                        Image(systemName: "phone.fill")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(width: 50, height: 50)
+                            .background(
+                                Circle()
+                                    .fill(LinearGradient(colors: [.green, .green.opacity(0.8)], startPoint: .top, endPoint: .bottom))
+                            )
+                            .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
+                    }
                 }
             }
-            .padding()
-            
-            
-            Spacer(minLength: 10)
+            .padding(.horizontal, 25)
+            .padding(.bottom, 30)
+                        
         }
-        .padding(.horizontal)
-        .padding(.top, 16)
+        .frame(maxWidth: .infinity)
+        .ignoresSafeArea(edges: .bottom)
+
     }
 }
 

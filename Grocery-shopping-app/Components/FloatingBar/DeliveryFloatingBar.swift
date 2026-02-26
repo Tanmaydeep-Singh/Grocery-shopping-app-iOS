@@ -29,9 +29,14 @@ struct DeliveryFloatingBar: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
-                    ProgressView()
+                    if let endDate = estimatedEndDate {
+                        ProgressView(
+                            timerInterval: startDate...endDate,
+                            countsDown: true
+                        )
                         .progressViewStyle(.linear)
                         .tint(Color("Splash"))
+                    }
                     
                 case .outForDelivery:
                     
@@ -53,12 +58,18 @@ struct DeliveryFloatingBar: View {
                     
                 case .delivered:
                     
-                    Text("🎉 Order Delivered")
-                        .font(.headline)
-                    
-                    Text("Enjoy your groceries!")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    VStack(alignment: .leading, spacing: 6) {
+                            
+                            Text("🎉 Order Delivered")
+                                .font(.headline)
+                            
+                            Text("Enjoy your groceries!")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
                 }
             }
             
@@ -75,7 +86,7 @@ struct DeliveryFloatingBar: View {
 
 #Preview("Preparing") {
     DeliveryFloatingBar(
-        state: .outForDelivery,
+        state: .delivered,
         startDate: .now,
         estimatedEndDate: .now.addingTimeInterval(600)
     )

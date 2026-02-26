@@ -109,13 +109,13 @@ struct CheckoutView: View {
         
         // Internal navigation inside sheet
         .navigationDestination(isPresented: $goToDelivery) {
-            DeliveryOptionsView()
+            ComingSoonView()
         }
         .navigationDestination(isPresented: $goToPayment) {
-            PaymentOptionsView()
+            ComingSoonView()
         }
         .navigationDestination(isPresented: $goToDiscount) {
-            DiscountOptionsView()
+            ComingSoonView()
         }
     }
 }

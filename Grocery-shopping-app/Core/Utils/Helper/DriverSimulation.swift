@@ -5,7 +5,6 @@
 //  Created by tanmaydeep on 26/02/26.
 //
 
-
 import MapKit
 import Combine
 
@@ -14,6 +13,7 @@ final class DriverSimulation {
     private var timer: Timer?
     private var currentStep = 0
     private let totalSteps = 100
+    private let stepInterval: TimeInterval = 3.0
     
     func startSimulation(
         userLocation: CLLocationCoordinate2D,
@@ -21,9 +21,11 @@ final class DriverSimulation {
         onCompletion: (() -> Void)? = nil
     ) {
         
+        stop() // 🔥 Prevent duplicate timers
+        
         let startLocation = CLLocationCoordinate2D(
-            latitude: userLocation.latitude - 0.025,
-            longitude: userLocation.longitude - 0.025
+            latitude: userLocation.latitude - 0.02,
+            longitude: userLocation.longitude - 0.02
         )
         
         currentStep = 0
@@ -32,30 +34,33 @@ final class DriverSimulation {
         let latStep = (userLocation.latitude - startLocation.latitude) / Double(totalSteps)
         let lonStep = (userLocation.longitude - startLocation.longitude) / Double(totalSteps)
         
-        timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] _ in
+        timer = Timer(timeInterval: stepInterval, repeats: true) { [weak self] _ in
             
-            guard let self = self else { return }
+            guard let self else { return }
             
-            if self.currentStep >= self.totalSteps {
-                self.timer?.invalidate()
+            self.currentStep += 1
+            
+            if self.currentStep > self.totalSteps {
+                self.stop()
+                onUpdate(userLocation)   // 🔥 ensure exact final location
                 onCompletion?()
                 return
             }
-            
-            self.currentStep += 1
             
             let newLocation = CLLocationCoordinate2D(
                 latitude: startLocation.latitude + latStep * Double(self.currentStep),
                 longitude: startLocation.longitude + lonStep * Double(self.currentStep)
             )
             
-            DispatchQueue.main.async {
-                onUpdate(newLocation)
-            }
+            onUpdate(newLocation)
         }
+        
+        RunLoop.main.add(timer!, forMode: .common)
     }
     
     func stop() {
         timer?.invalidate()
+        timer = nil
+        currentStep = 0
     }
 }

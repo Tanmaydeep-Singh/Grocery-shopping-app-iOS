@@ -53,11 +53,15 @@ struct DeliveryLiveActivityLiveActivity: Widget {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
-                            ProgressView()
-                                .progressViewStyle(.linear)
+                            if let endDate = context.state.estimatedEndDate {
+                                
+                                ProgressView(
+                                    timerInterval: context.attributes.startDate...endDate,
+                                    countsDown: true
+                                )
                                 .tint(Color("Splash"))
-                                .frame(height: 4)
-                                .padding(.top, 6)
+                                .progressViewStyle(.linear)
+                            }
                         }
                         
                         Spacer()

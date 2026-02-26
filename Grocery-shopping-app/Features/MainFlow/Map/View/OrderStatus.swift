@@ -29,9 +29,14 @@ struct OrderStatus: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
-                    ProgressView()
+                    if let endDate = estimatedEndDate {
+                        ProgressView(
+                            timerInterval: startDate...endDate,
+                            countsDown: true
+                        )
                         .progressViewStyle(.linear)
                         .tint(Color("Splash"))
+                    }
                     
                 case .outForDelivery:
                     

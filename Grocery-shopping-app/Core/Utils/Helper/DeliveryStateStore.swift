@@ -19,10 +19,10 @@ final class DeliveryStateStore: ObservableObject {
     
     private init() {}
     
-    func start() {
+    func start(preparationEndDate: Date) {
         state = .preparing
         startDate = Date()
-        estimatedEndDate = nil
+        estimatedEndDate = preparationEndDate
     }
     
     func update(state: NectarDeliveryLiveActivityAttributes.DeliveryState,

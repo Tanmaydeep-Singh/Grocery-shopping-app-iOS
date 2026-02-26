@@ -155,6 +155,12 @@ final class CartViewModel: ObservableObject {
             // Clear coredata
             cartProductsService.clearCart()
             
+            // Start Live Action Timer:
+            Task.detached {
+                try? await LiveActivityService.shared.start()
+            }
+
+            
             return true
         } catch {
             print("Order creation failed: \(error)")

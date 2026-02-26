@@ -33,9 +33,7 @@ final class MapViewModel: ObservableObject {
     init() {
         self.userLocation = defaultLocation
 
-        print("userlocation : \(locationManager.$locationName)")
-        print("userlocation : \(locationManager.$userCoordinate)")
-
+    
         locationManager.$userCoordinate
             .receive(on: DispatchQueue.main)
             .sink { [weak self] coordinate in
@@ -59,7 +57,7 @@ final class MapViewModel: ObservableObject {
                 guard let self else { return }
                 
                 
-                withAnimation(.linear(duration: 4.5)) {
+                withAnimation(.linear(duration: 0.3)) {
                     self.driverLocation = newLocation
                 }
                 
@@ -86,9 +84,7 @@ final class MapViewModel: ObservableObject {
            }
            
            guard let driverLocation else { return }
-        
-        print("🚗 Driver location:", driverLocation as Any)
-        print("👤 User location:", userLocation)
+    
         
         let request = MKDirections.Request()
         

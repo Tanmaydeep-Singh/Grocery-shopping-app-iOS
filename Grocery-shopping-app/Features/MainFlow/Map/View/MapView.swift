@@ -7,8 +7,8 @@ import SwiftUI
 import MapKit
 
 struct DeliveryTrackingView: View {
-    @StateObject private var viewModel = MapViewModel()
-
+    @StateObject private var viewModel = MapViewModel.shared
+    
        @State private var position = MapCameraPosition.region(
            MKCoordinateRegion(
                center: CLLocationCoordinate2D(
@@ -67,9 +67,27 @@ struct DeliveryTrackingView: View {
                         )
                     )
                 )
-                viewModel.driverLocation = nil
-                viewModel.fetchRoute()
+                
+                if deliveryStore.state ==  NectarDeliveryLiveActivityAttributes.DeliveryState.preparing {
+                    viewModel.driverLocation = nil
+                    viewModel.fetchRoute()
+                }
+                
             }
+            .onChange(of: deliveryStore.state) { oldState, newState in
+                           
+                           guard let newState else { return }
+                           
+                           if newState == NectarDeliveryLiveActivityAttributes.DeliveryState.outForDelivery {
+                               viewModel.startDriverSimulation()
+                           }
+                           
+                           if newState == NectarDeliveryLiveActivityAttributes.DeliveryState.delivered {
+                               viewModel.stopDriverSimulation()
+                           }
+                
+                       }
+
             
             // Bottom Sheet
             MapOrderDetailsSheet()
@@ -90,4 +108,3 @@ struct DeliveryTrackingView: View {
         }
     }
 }
-

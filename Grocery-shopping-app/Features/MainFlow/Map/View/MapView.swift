@@ -36,9 +36,13 @@ struct DeliveryTrackingView: View {
                 
                 // Driver Marker (Dynamic)
                 if let driver = viewModel.driverLocation {
-                    Marker("Delivery Partner",
-                           coordinate: driver)
-                        .tint(.blue)
+                    Annotation("", coordinate: driver) {
+                        Image(systemName: "car.fill")
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                            .foregroundStyle(.blue)
+                            .shadow(radius: 5)
+                    }
                 }
                 
                 // Route

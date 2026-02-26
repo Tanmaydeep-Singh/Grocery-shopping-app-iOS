@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We use your location to detect your area and show nearby stores.</string>
 	<key>API_BASE_URL</key>
 	<string>$(API_BASE_URL)</string>
 	<key>CFBundleURLTypes</key>
@@ -15,6 +13,12 @@
 			<array>
 				<string>com.googleusercontent.apps.749047941324-euiup9da4a49teap4unbv8i301isp4f7</string>
 			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array/>
 		</dict>
 	</array>
 </dict>

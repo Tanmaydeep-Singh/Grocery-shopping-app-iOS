@@ -21,7 +21,7 @@ final class DriverSimulation {
         onCompletion: (() -> Void)? = nil
     ) {
         
-        stop() // 🔥 Prevent duplicate timers
+        stop() 
         
         let startLocation = CLLocationCoordinate2D(
             latitude: userLocation.latitude - 0.02,
@@ -42,7 +42,7 @@ final class DriverSimulation {
             
             if self.currentStep > self.totalSteps {
                 self.stop()
-                onUpdate(userLocation)   // 🔥 ensure exact final location
+                onUpdate(userLocation)  
                 onCompletion?()
                 return
             }

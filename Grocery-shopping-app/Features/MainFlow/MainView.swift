@@ -90,9 +90,7 @@ struct MainView: View {
                 }
             }
             .navigationDestination(isPresented: $showDeliveryTracking) {
-                DeliveryTrackingView(
-                    locationManager: LocationManager()
-                )
+                DeliveryTrackingView()
             }
         }
         .environmentObject(router)

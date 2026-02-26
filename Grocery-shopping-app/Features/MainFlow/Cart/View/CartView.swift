@@ -18,8 +18,8 @@ struct CartView: View {
     @State private var goToOrderAccepted = false
     
     //Location Manager:
-    @StateObject private var locationManager = LocationManager()
-
+    @ObservedObject private var locationManager = LocationManager.shared
+    
     @State private var showPermissionAlert = false
     
 

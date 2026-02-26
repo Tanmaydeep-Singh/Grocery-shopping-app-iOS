@@ -11,6 +11,9 @@ import Combine
 
 @MainActor
 final class LocationManager: NSObject, ObservableObject {
+    
+    static let shared = LocationManager()  
+
     private let manager = CLLocationManager()
     private let geocoder = CLGeocoder()
     

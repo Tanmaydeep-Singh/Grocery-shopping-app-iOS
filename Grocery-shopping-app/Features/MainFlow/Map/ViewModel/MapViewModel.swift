@@ -74,8 +74,8 @@ final class MapViewModel: ObservableObject {
         
         if driverLocation == nil {
                driverLocation = CLLocationCoordinate2D(
-                   latitude: userLocation.latitude - 0.025,
-                   longitude: userLocation.longitude - 0.025
+                   latitude: userLocation.latitude - 0.02,
+                   longitude: userLocation.longitude - 0.02
                )
            }
            

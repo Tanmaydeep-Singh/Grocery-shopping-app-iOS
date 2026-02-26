@@ -21,7 +21,7 @@ struct MainView: View {
     )
     private var cartProducts: FetchedResults<CartProduct>
     
-    @State private var showFloatingBar = true
+    @StateObject private var deliveryStore = DeliveryStateStore.shared
     @State private var showDeliveryTracking = false
     
     var body: some View {
@@ -74,11 +74,12 @@ struct MainView: View {
                     .tag(Tab.account)
                 }
                 
-                if showFloatingBar  && router.selectedTab == .home {
+                if let state = deliveryStore.state,
+                   router.selectedTab == .home {
                     DeliveryFloatingBar(
-                        state: .outForDelivery,
-                        startDate: .now,
-                        estimatedEndDate: .now.addingTimeInterval(600)
+                        state: state,
+                        startDate: deliveryStore.startDate ?? .now,
+                        estimatedEndDate: deliveryStore.estimatedEndDate
                     )
                     .padding(.horizontal)
                     .padding(.bottom, 70)

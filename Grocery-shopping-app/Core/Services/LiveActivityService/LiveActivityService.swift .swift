@@ -16,7 +16,10 @@ final class LiveActivityService {
 
     // Start
     func start() async throws {
-        
+
+        //
+        DeliveryStateStore.shared.start()
+
         let attributes = NectarDeliveryLiveActivityAttributes(
             startDate: Date()
         )
@@ -46,6 +49,14 @@ final class LiveActivityService {
         endDate: Date? = nil
     ) async {
         
+        //
+        await MainActor.run {
+            DeliveryStateStore.shared.update(
+                state: state,
+                endDate: endDate
+            )
+        }
+        
         for activity in Activity<NectarDeliveryLiveActivityAttributes>.activities {
             
             let updatedState = NectarDeliveryLiveActivityAttributes.ContentState(
@@ -67,6 +78,10 @@ final class LiveActivityService {
     func end(
            finalState: NectarDeliveryLiveActivityAttributes.DeliveryState = .delivered
        ) async {
+           
+           await MainActor.run {
+               DeliveryStateStore.shared.end()
+           }
            
            for activity in Activity<NectarDeliveryLiveActivityAttributes>.activities {
                

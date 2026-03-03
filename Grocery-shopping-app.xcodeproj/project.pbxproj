@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14C3DFAE2F4ED7FF001DEDCC /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C3DFAD2F4ED7FF001DEDCC /* WidgetKit.framework */; };
+		14C3DFB02F4ED7FF001DEDCC /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C3DFAF2F4ED7FF001DEDCC /* SwiftUI.framework */; };
+		14C3DFC12F4ED800001DEDCC /* NectarDeliveryLiveActivityExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 14C3DFAC2F4ED7FF001DEDCC /* NectarDeliveryLiveActivityExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		244C9DD52F3DE22F009C6023 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 244C9DD42F3DE22F009C6023 /* Secrets.xcconfig */; };
 		246AA5422F4C201B0057919B /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 246AA5412F4C201B0057919B /* Secrets.xcconfig */; };
 		24CCB5DF2F39E224003E8383 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 24CCB5DE2F39E224003E8383 /* FirebaseAuth */; };
@@ -16,17 +19,62 @@
 		24CCB5E82F39E301003E8383 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 24CCB5E72F39E301003E8383 /* GoogleSignInSwift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		14C3DFBF2F4ED800001DEDCC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 144EE8C12F3311E20030FBCA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 14C3DFAB2F4ED7FF001DEDCC;
+			remoteInfo = NectarDeliveryLiveActivityExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		14C3DFC22F4ED800001DEDCC /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				14C3DFC12F4ED800001DEDCC /* NectarDeliveryLiveActivityExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		144EE8C92F3311E20030FBCA /* Nectar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nectar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		14C3DFAC2F4ED7FF001DEDCC /* NectarDeliveryLiveActivityExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NectarDeliveryLiveActivityExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		14C3DFAD2F4ED7FF001DEDCC /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		14C3DFAF2F4ED7FF001DEDCC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		244C9DD42F3DE22F009C6023 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		246AA5412F4C201B0057919B /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		24853E7F2F3B000C002AD885 /* Nectar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Nectar-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		14C3DFC52F4ED800001DEDCC /* Exceptions for "NectarDeliveryLiveActivity" folder in "NectarDeliveryLiveActivityExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 14C3DFAB2F4ED7FF001DEDCC /* NectarDeliveryLiveActivityExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		144EE8CB2F3311E20030FBCA /* Grocery-shopping-app */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Grocery-shopping-app";
+			sourceTree = "<group>";
+		};
+		14C3DFB12F4ED7FF001DEDCC /* NectarDeliveryLiveActivity */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				14C3DFC52F4ED800001DEDCC /* Exceptions for "NectarDeliveryLiveActivity" folder in "NectarDeliveryLiveActivityExtension" target */,
+			);
+			path = NectarDeliveryLiveActivity;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -44,6 +92,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		14C3DFA92F4ED7FF001DEDCC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				14C3DFB02F4ED7FF001DEDCC /* SwiftUI.framework in Frameworks */,
+				14C3DFAE2F4ED7FF001DEDCC /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -53,6 +110,7 @@
 				244C9DD42F3DE22F009C6023 /* Secrets.xcconfig */,
 				24853E7F2F3B000C002AD885 /* Nectar-Info.plist */,
 				144EE8CB2F3311E20030FBCA /* Grocery-shopping-app */,
+				14C3DFB12F4ED7FF001DEDCC /* NectarDeliveryLiveActivity */,
 				24CCB5DD2F39E224003E8383 /* Frameworks */,
 				144EE8CA2F3311E20030FBCA /* Products */,
 				246AA5412F4C201B0057919B /* Secrets.xcconfig */,
@@ -63,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				144EE8C92F3311E20030FBCA /* Nectar.app */,
+				14C3DFAC2F4ED7FF001DEDCC /* NectarDeliveryLiveActivityExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +129,8 @@
 		24CCB5DD2F39E224003E8383 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				14C3DFAD2F4ED7FF001DEDCC /* WidgetKit.framework */,
+				14C3DFAF2F4ED7FF001DEDCC /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -84,10 +145,12 @@
 				144EE8C52F3311E20030FBCA /* Sources */,
 				144EE8C62F3311E20030FBCA /* Frameworks */,
 				144EE8C72F3311E20030FBCA /* Resources */,
+				14C3DFC22F4ED800001DEDCC /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				14C3DFC02F4ED800001DEDCC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				144EE8CB2F3311E20030FBCA /* Grocery-shopping-app */,
@@ -104,6 +167,28 @@
 			productReference = 144EE8C92F3311E20030FBCA /* Nectar.app */;
 			productType = "com.apple.product-type.application";
 		};
+		14C3DFAB2F4ED7FF001DEDCC /* NectarDeliveryLiveActivityExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 14C3DFC62F4ED800001DEDCC /* Build configuration list for PBXNativeTarget "NectarDeliveryLiveActivityExtension" */;
+			buildPhases = (
+				14C3DFA82F4ED7FF001DEDCC /* Sources */,
+				14C3DFA92F4ED7FF001DEDCC /* Frameworks */,
+				14C3DFAA2F4ED7FF001DEDCC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				14C3DFB12F4ED7FF001DEDCC /* NectarDeliveryLiveActivity */,
+			);
+			name = NectarDeliveryLiveActivityExtension;
+			packageProductDependencies = (
+			);
+			productName = NectarDeliveryLiveActivityExtension;
+			productReference = 14C3DFAC2F4ED7FF001DEDCC /* NectarDeliveryLiveActivityExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -115,6 +200,9 @@
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					144EE8C82F3311E20030FBCA = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					14C3DFAB2F4ED7FF001DEDCC = {
 						CreatedOnToolsVersion = 26.2;
 					};
 				};
@@ -138,6 +226,7 @@
 			projectRoot = "";
 			targets = (
 				144EE8C82F3311E20030FBCA /* Nectar */,
+				14C3DFAB2F4ED7FF001DEDCC /* NectarDeliveryLiveActivityExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -152,6 +241,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		14C3DFAA2F4ED7FF001DEDCC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -162,7 +258,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		14C3DFA82F4ED7FF001DEDCC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		14C3DFC02F4ED800001DEDCC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 14C3DFAB2F4ED7FF001DEDCC /* NectarDeliveryLiveActivityExtension */;
+			targetProxy = 14C3DFBF2F4ED800001DEDCC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		144EE8D22F3311E40030FBCA /* Debug */ = {
@@ -300,6 +411,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Nectar-Info.plist";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use your location to detect your area and show nearby stores.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -335,6 +448,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Nectar-Info.plist";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use your location to detect your area and show nearby stores.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -351,6 +466,66 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		14C3DFC32F4ED800001DEDCC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3TSGF4WN88;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NectarDeliveryLiveActivity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NectarDeliveryLiveActivity;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "iosDev.Grocery-shopping-app.NectarDeliveryLiveActivity";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		14C3DFC42F4ED800001DEDCC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3TSGF4WN88;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NectarDeliveryLiveActivity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NectarDeliveryLiveActivity;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "iosDev.Grocery-shopping-app.NectarDeliveryLiveActivity";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -375,6 +550,15 @@
 			buildConfigurations = (
 				144EE8D52F3311E40030FBCA /* Debug */,
 				144EE8D62F3311E40030FBCA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		14C3DFC62F4ED800001DEDCC /* Build configuration list for PBXNativeTarget "NectarDeliveryLiveActivityExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				14C3DFC32F4ED800001DEDCC /* Debug */,
+				14C3DFC42F4ED800001DEDCC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

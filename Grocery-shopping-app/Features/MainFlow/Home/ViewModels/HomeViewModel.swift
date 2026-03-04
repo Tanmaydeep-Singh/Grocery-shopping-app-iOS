@@ -80,6 +80,12 @@ final class HomeViewModel: ObservableObject {
     
     // Fetch Products through API
     func fetchProducts(category: ProductCategory? = nil) async {
+        if !products.isEmpty {
+            if let category {
+                categoryProducts = products.filter { $0.category == category }
+            }
+            return
+        }
         isLoading = true;
         do {
             let endpoint: ProductEndpoints = .allProducts
@@ -91,6 +97,10 @@ final class HomeViewModel: ObservableObject {
 //            if let category {
 //                dtos = dtos.filter { $0.category == category }
 //            }
+            let mappedProducts = dtos.map(Product.init)
+
+            self.products = mappedProducts
+            
             if let category{
                 categoryProducts = dtos
                     .filter { $0.category == category }

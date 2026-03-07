@@ -37,17 +37,10 @@ struct HomeView: View {
                                     .padding(.horizontal)
                                 
                                 CategorySectionView(
-                                    categories: viewModel.categories
-                                ) { category in
-                                    Task {
-                                        // Convert UI Category → ProductCategory
-                                        if let productCategory = ProductCategory.allCases.first(
-                                            where: { $0.title == category.title }
-                                        ) {
-                                            await viewModel.fetchProducts(category: productCategory)
-                                        }
-                                    }
-                                }
+                                    categories: viewModel.categories,
+                                    selectedCategory: viewModel.selectedCategory,
+                                    onCategorySelected: viewModel.handleCategorySelection
+                                )
                                 
                                 ProductGridView(title: nil, products: viewModel.categoryProducts.isEmpty ? viewModel.products : viewModel.categoryProducts, isLoading: viewModel.isLoading)
                             }

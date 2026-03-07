@@ -11,6 +11,7 @@ final class HomeViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var searchError: String?
     @Published var isSearching: Bool = false
+    @Published var selectedCategory: Category?
     
     let bannerImages: [String] = [
         "banner_1",
@@ -80,6 +81,14 @@ final class HomeViewModel: ObservableObject {
     
     // Fetch Products through API
     func fetchProducts(category: ProductCategory? = nil) async {
+        if !products.isEmpty {
+            if let category {
+                categoryProducts = products.filter { $0.category == category }
+            } else {
+                categoryProducts = products
+            }
+            return
+        }
         isLoading = true;
         do {
             let endpoint: ProductEndpoints = .allProducts
@@ -91,6 +100,10 @@ final class HomeViewModel: ObservableObject {
 //            if let category {
 //                dtos = dtos.filter { $0.category == category }
 //            }
+            let mappedProducts = dtos.map(Product.init)
+
+            self.products = mappedProducts
+            
             if let category{
                 categoryProducts = dtos
                     .filter { $0.category == category }
@@ -147,6 +160,26 @@ final class HomeViewModel: ObservableObject {
         guard !searchText.isEmpty else { return products }
         return products.filter {
             $0.name.lowercased().contains(searchText.lowercased())
+        }
+    }
+    
+    func handleCategorySelection(_ category: Category){
+        if selectedCategory?.id == category.id {
+            selectedCategory = nil
+             
+            Task {
+                await fetchProducts()
+            }
+            
+            return
+        }
+        
+        selectedCategory = category
+        
+        guard let productCategory = ProductCategory.allCases.first(where: { $0.title == category.title }) else { return }
+        
+        Task {
+            await fetchProducts(category: productCategory)
         }
     }
 }

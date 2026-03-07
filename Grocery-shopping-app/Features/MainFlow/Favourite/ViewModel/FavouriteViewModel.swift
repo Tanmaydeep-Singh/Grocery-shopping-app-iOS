@@ -23,6 +23,7 @@ final class FavouriteViewModel: ObservableObject {
     }
 
     func loadFavorites(userId: String) async {
+        if !favouriteItems.isEmpty { return }
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }

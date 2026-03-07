@@ -18,6 +18,7 @@ final class ProductViewModel: ObservableObject {
     @Published var isInCart: Bool = false
     @Published var quantity: Int = 1
     @Published var cartProductId: Int?
+    private static var productCache: [Int: ProductDetail] = [:]
     
     private let favoritesService: FavoritesServiceProtocol = FavoritesService()
     private let cartService: CartServiceProtocol = CartServices()
@@ -27,11 +28,28 @@ final class ProductViewModel: ObservableObject {
     
     
     func fetchProductDetail(productId: Int, userId:  String) async {
-        isLoading = true
         errorMessage = nil
-        
+        if let cachedProduct = Self.productCache[productId] {
+            productDetail = cachedProduct
+        } else{
+            isLoading = true
+            
+            do {
+                let dto: ProductDetailDTO = try await NetworkClient.shared.request(endpoint: ProductEndpoints.product(id: String(productId), showLabel: true))
+                
+                let mappedProduct = ProductDetail(dto: dto)
+                
+                Self.productCache[productId] = mappedProduct
+                
+                productDetail = ProductDetail(dto: dto)
+                
+            }  catch {
+                errorMessage = "Failed to load product details"
+            }
+            
+            isLoading = false
+        }
         do {
-            let dto: ProductDetailDTO = try await NetworkClient.shared.request(endpoint: ProductEndpoints.product(id: String(productId), showLabel: true))
             isFavorite = try await favoritesService.isFavorite(userId: userId, itemId: productId)
             isInCart = await cartProductsService.isProductInCart(productId: productId)
             
@@ -40,14 +58,9 @@ final class ProductViewModel: ObservableObject {
                 self.quantity = Int(res?.quantity ?? 1)
                 self.cartProductId = Int(res?.cartProductId ?? 1)
             }
-            
-            productDetail = ProductDetail(dto: dto)
-            
-        }  catch {
-            errorMessage = "Failed to load product details"
+        } catch {
+            print(error)
         }
-        
-        isLoading = false
     }
     
     func addToFavorites(userId: String) {

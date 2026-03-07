@@ -3,7 +3,9 @@ import SwiftUI
 struct CategoryChipView: View {
 
     let category: Category
+    let isSelected: Bool
     let onTap: () -> Void
+    
     var body: some View {
         HStack(spacing: 12) {
 
@@ -22,11 +24,23 @@ struct CategoryChipView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
         .frame(width: 180)
-        .background(category.backgroundColor)
+        .background(
+            isSelected ? Color.green : category.backgroundColor
+        )
         .cornerRadius(16)
         .onTapGesture {
             onTap()
         }
 
+    }
+}
+
+#Preview {
+    VStack(spacing: 20) {
+        CategoryChipView(
+            category: MockProducts.dummyCategory,
+            isSelected: true,
+            onTap: {}
+        )
     }
 }
